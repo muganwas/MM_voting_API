@@ -28,16 +28,45 @@ async function createUser(body) {
     }
 }
 async function adminVerifyUser(body) {
-    const { uid, value } = body;
-    const verified = Boolean(value);
-    if (!uid) return { result: false, message: messages.NO_UID };
-    if (typeof verified !== 'boolean') return { result: false, message: messages.NO_VERIFICATION_VALUE };
-    const aAuth = admin.auth();
-    const response = await aAuth.updateUser(uid, { emailVerified: verified });
-    return { result: true, message: messages.VER_SUCCESS, data: response };
+    try {
+        const { uid, value } = body;
+        const verified = Boolean(value);
+        if (!uid) return { result: false, message: messages.NO_UID };
+        if (typeof verified !== 'boolean') return { result: false, message: messages.NO_VERIFICATION_VALUE };
+        const aAuth = admin.auth();
+        const response = await aAuth.updateUser(uid, { emailVerified: verified });
+        return { result: true, message: messages.VER_SUCCESS, data: response };
+    } catch (e) {
+        return { result: false, message: e.message };
+    }
+}
+async function retrieveUsers(query) {
+    try {
+        const { limit = 20, nextPageToken } = query;
+        const nLimit = Number(limit);
+        const aAuth = admin.auth();
+        const response = await aAuth.listUsers(nLimit, nextPageToken);
+        return { result: true, message: messages.USERS_RETRIEVED, data: response.users, metaData: { limit, nextPageToken: response.pageToken } };
+    } catch (e) {
+        return { result: false, message: e.message };
+    }
+}
+async function deleteUser(query) {
+    try {
+        const { uid } = query;
+        if (!uid) return { result: false, message: messages.NO_UID };
+        const aAuth = admin.auth();
+        // deleteUser method returns nothing
+        await aAuth.deleteUser(uid);
+        return { result: true, message: messages.USER_DELETED };
+    } catch (e) {
+        return { result: false, message: e.message };
+    }
 }
 module.exports = {
     authenticate,
     createUser,
-    adminVerifyUser
+    adminVerifyUser,
+    retrieveUsers,
+    deleteUser
 }

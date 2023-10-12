@@ -17,7 +17,9 @@ const messages = {
     REG_SUCCESS: 'User successfully created.',
     NO_UID: 'User id is required',
     NO_VERIFICATION_VALUE: 'Verification value should be boolean',
-    VER_SUCCESS: 'User verification updated.'
+    VER_SUCCESS: 'User verification updated.',
+    USERS_RETRIEVED: 'Users successfully retrieved',
+    USER_DELETED: 'User successfully deleted',
 }
 
 module.exports = {
