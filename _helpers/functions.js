@@ -17,7 +17,7 @@ module.exports.validateFirebaseAdmin = async (bearerToken) => {
     const idToken = bearerToken.split(" ")[1];
     try {
         const result = await admin.auth().verifyIdToken(idToken);
-        if (result.uid && result.email === process.env.ADMIN_EMAIL)
+        if (result.uid && result.email === process.env.FIREBASE_ADMIN_EMAIL)
             return true;
         return false;
     } catch (e) {

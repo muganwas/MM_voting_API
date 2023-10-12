@@ -3,14 +3,25 @@ const enums = {
     UNAUTHORIZED_ERROR: 'UNAUTHORIZED_ERROR'
 }
 
-const constants = {
+const regexes = {
+    EMAIL: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
+    PASSWORD: /[^\w\d]*(([0-9]+.*[A-Z]+.*)|[A-Z]+.*([0-9]+.*))/
+}
+
+const messages = {
     VALIDATION_MESSAGE: 'User cannot be validated',
     UNAUTHORIZED_MESSAGE: 'User is not authorized',
-    DEFAULT_ALPHA: 'UG',
-    DEFAULT_COUNTRY_CODE: '+256'
+    EMAIL_PASSWORD_REQUIRED: 'Both email and password are required',
+    NOT_EMAIL: 'Wrong email format',
+    PASSWORD_FORMAT: 'Password should have at least an uppercase letter, lowercase letter and a number.',
+    REG_SUCCESS: 'User successfully created.',
+    NO_UID: 'User id is required',
+    NO_VERIFICATION_VALUE: 'Verification value should be boolean',
+    VER_SUCCESS: 'User verification updated.'
 }
 
 module.exports = {
     enums,
-    constants
+    regexes,
+    messages
 } 
