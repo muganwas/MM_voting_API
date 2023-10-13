@@ -33,6 +33,7 @@ app.use(cors());
 
 // add controllers
 app.use('/api/v1/users', require('./controllers/users.controller'));
+app.use('/api/v1/companies', require('./controllers/companies.controller'));
 
 app.use(errorHandler);
 httpServer.listen(PORT, function () {

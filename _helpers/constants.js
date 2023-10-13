@@ -20,6 +20,16 @@ const messages = {
     VER_SUCCESS: 'User verification updated.',
     USERS_RETRIEVED: 'Users successfully retrieved',
     USER_DELETED: 'User successfully deleted',
+    COMP_CREATED: 'New company created successfully',
+    COMP_UPDATED: 'Company updated successfully',
+    COMP_DELETED: 'Company deleted successfully',
+    COMP_REQUIRED: 'Name and Email Address are required',
+    COMP_UPDATE_REQUIRED: 'Company id and details object are required',
+    NONEXISTENT_COMP: 'Company does not exist',
+    COMP_UPDATE_SUCCESS: 'Company was updated successfully',
+    COMPS_FETCHED: 'Companies fetched successfully',
+    COMP_FETCHED: 'Company information fetched successfully',
+    NO_COMPID: 'Company id is required',
 }
 
 module.exports = {

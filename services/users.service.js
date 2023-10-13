@@ -51,6 +51,17 @@ async function retrieveUsers(query) {
         return { result: false, message: e.message };
     }
 }
+async function retrieveUser(params) {
+    try {
+        const { uid } = params;
+        if (!uid) return { result: false, message: messages.NO_UID };
+        const aAuth = admin.auth();
+        const response = await aAuth.getUser(uid);
+        return { result: true, message: messages.USERS_RETRIEVED, data: response };
+    } catch (e) {
+        return { result: false, message: e.message };
+    }
+}
 async function deleteUser(query) {
     try {
         const { uid } = query;
@@ -68,5 +79,6 @@ module.exports = {
     createUser,
     adminVerifyUser,
     retrieveUsers,
+    retrieveUser,
     deleteUser
 }

@@ -27,6 +27,12 @@ async function retrieveUsers(req, res, next) {
     usersService.retrieveUsers(req.query).then(data => res.json(data)).catch(err => next(err));
 }
 
+async function retrieveUser(req, res, next) {
+    if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
+    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+    usersService.retrieveUser(req.params).then(data => res.json(data)).catch(err => next(err));
+}
+
 async function deleteUser(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
@@ -35,8 +41,9 @@ async function deleteUser(req, res, next) {
 
 router.post('/authenticate', authenticate);
 router.post('/create', createUser);
-router.post('/admin-verify-user', adminUserVerify);
+router.put('/admin-verify-user', adminUserVerify);
 router.get('/', retrieveUsers);
+router.get('/:uid', retrieveUser);
 router.delete('/', deleteUser);
 
 module.exports = router;
