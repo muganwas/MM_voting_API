@@ -20,6 +20,7 @@ const messages = {
     VER_SUCCESS: 'User verification updated.',
     USERS_RETRIEVED: 'Users successfully retrieved',
     USER_DELETED: 'User successfully deleted',
+    /** company messages */
     COMP_CREATED: 'New company created successfully',
     COMP_UPDATED: 'Company updated successfully',
     COMP_DELETED: 'Company deleted successfully',
@@ -29,7 +30,18 @@ const messages = {
     COMP_UPDATE_SUCCESS: 'Company was updated successfully',
     COMPS_FETCHED: 'Companies fetched successfully',
     COMP_FETCHED: 'Company information fetched successfully',
-    NO_COMPID: 'Company id is required',
+    NO_COMP_ID: 'Company id is required',
+    /** agency messages */
+    AGEN_CREATED: 'New agency created successfully',
+    AGEN_UPDATED: 'Agency updated successfully',
+    AGEN_DELETED: 'Agency deleted successfully',
+    AGEN_REQUIRED: 'Name and Email Address are required',
+    AGEN_UPDATE_REQUIRED: 'Agency id and details object are required',
+    NONEXISTENT_AGEN: 'Agency does not exist',
+    AGEN_UPDATE_SUCCESS: 'Agency was updated successfully',
+    AGENS_FETCHED: 'Agencies fetched successfully',
+    AGEN_FETCHED: 'Agency information fetched successfully',
+    NO_AGEN_ID: 'Agency id is required',
 }
 
 module.exports = {

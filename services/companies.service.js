@@ -69,7 +69,7 @@ async function retrieveCompanies(query) {
 async function retrieveCompany(params) {
     try {
         const { companyId } = params;
-        if (!companyId) return { result: false, message: messages.NO_COMPID };
+        if (!companyId) return { result: false, message: messages.NO_COMP_ID };
         const companyRef = db.ref(`companies/${companyId}`);
         const response = await companyRef.once('value');
         const data = response.val();
@@ -81,7 +81,7 @@ async function retrieveCompany(params) {
 async function deleteCompany(query) {
     try {
         const { companyId } = query;
-        if (!companyId) return { result: false, message: messages.NO_COMPID };
+        if (!companyId) return { result: false, message: messages.NO_COMP_ID };
         const companyRef = db.ref(`companies/${companyId}`);
         await companyRef.remove();
         return { result: true, message: messages.COMP_DELETED };

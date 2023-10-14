@@ -7,8 +7,12 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const errorHandler = require('./_helpers/error-handler');
-const httpServer = require('http').createServer({}, app);
 
+const httpServer = require('http').createServer({}, app);
+const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : (process.env.PORT || 8080);
+
+
+/** firebase */
 const serviceAccount = require("./adminSDK.js").vars;
 const jsonServiceAcount = JSON.parse(JSON.stringify(serviceAccount));
 const config = {
@@ -17,25 +21,24 @@ const config = {
     databaseURL: process.env.FIREBASE_DB_URL,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
 };
-
-/**firebase initialization */
 firebase.initializeApp(config);
 admin.initializeApp({
     credential: admin.credential.cert(jsonServiceAcount),
     databaseURL: process.env.FIREBASE_DB_URL
 });
 
-const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : (process.env.PORT || 8080);
-
+/** middleware */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(errorHandler);
 
-// add controllers
+/** controllers */
 app.use('/api/v1/users', require('./controllers/users.controller'));
 app.use('/api/v1/companies', require('./controllers/companies.controller'));
+app.use('/api/v1/agencies', require('./controllers/agencies.controller'));
+app.use('/api/v1/campaigns', require('./controllers/campaigns.controller'));
 
-app.use(errorHandler);
 httpServer.listen(PORT, function () {
     console.log('Server listening on port: ' + PORT);
 });
