@@ -8,31 +8,41 @@ const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_
 async function createAgency(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    agenciesService.createAgency(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { name, introduction, emailAddress } = req.body;
+    agenciesService.createAgency({ name, introduction, emailAddress }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateAgency(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    agenciesService.updateAgency(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { agencyId, details } = req.body;
+    agenciesService.updateAgency({ agencyId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveAgencies(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    agenciesService.retrieveAgencies(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { limit, page } = req.query;
+    agenciesService.retrieveAgencies({ limit, page }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveAgency(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    agenciesService.retrieveAgency(req.params).then(data => res.json(data)).catch(err => next(err));
+
+    const { agencyId } = req.params;
+    agenciesService.retrieveAgency({ agencyId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function deleteAgency(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    agenciesService.deleteAgency(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { agencyId } = req.query;
+    agenciesService.deleteAgency({ agencyId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 router.post('/create', createAgency);

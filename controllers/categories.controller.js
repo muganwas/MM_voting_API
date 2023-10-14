@@ -8,31 +8,41 @@ const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_
 async function createCategory(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    categoriesService.createCategory(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { name, desc } = req.query;
+    categoriesService.createCategory({ name, desc }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateCategory(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    categoriesService.updateCategory(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { categoryId, details } = req.body;
+    categoriesService.updateCategory({ categoryId, details }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCategories(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    categoriesService.retrieveCategories(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { limit, page } = req.query;
+    categoriesService.retrieveCategories({ limit, page }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCategory(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    categoriesService.retrieveCategory(req.params).then(data => res.json(data)).catch(err => next(err));
+
+    const { categoryId } = req.params;
+    categoriesService.retrieveCategory({ categoryId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function deleteCategory(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    categoriesService.deleteCategory(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { categoryId } = req.query;
+    categoriesService.deleteCategory({ categoryId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 router.post('/create', createCategory);

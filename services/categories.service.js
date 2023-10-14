@@ -4,9 +4,8 @@ const { messages } = require('../_helpers/constants');
 const { database } = require('firebase-admin');
 const db = database();
 
-async function createCategory(body) {
+async function createCategory({ name, desc }) {
     try {
-        const { name, desc } = body;
         if (!name || !desc) return { result: false, message: messages.CAT_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
@@ -25,9 +24,8 @@ async function createCategory(body) {
     }
 }
 
-async function updateCategory(body) {
+async function updateCategory({ categoryId, details }) {
     try {
-        const { categoryId, details } = body;
         if (!categoryId || !details || typeof details !== 'object') return { result: false, message: messages.CAT_UPDATE_REQUIRED };
         const ref = db.ref(`categories/${categoryId}`);
         const snapshot = await ref.once('value');
@@ -39,9 +37,8 @@ async function updateCategory(body) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveCategories(query) {
+async function retrieveCategories({ limit = 10, page = 1 }) {
     try {
-        const { limit = 10, page = 1 } = query;
         const nLimit = Number(limit);
         const nPage = Number(page);
         const categoriesRef = db.ref('categories');
@@ -66,9 +63,8 @@ async function retrieveCategories(query) {
     }
 }
 
-async function retrieveCategory(params) {
+async function retrieveCategory({ categoryId }) {
     try {
-        const { categoryId } = params;
         if (!categoryId) return { result: false, message: messages.NO_CAT_ID };
         const categoryRef = db.ref(`categories/${categoryId}`);
         const response = await categoryRef.once('value');
@@ -78,9 +74,8 @@ async function retrieveCategory(params) {
         return { result: false, message: e.message };
     }
 }
-async function deleteCategory(query) {
+async function deleteCategory({ categoryId }) {
     try {
-        const { categoryId } = query;
         if (!categoryId) return { result: false, message: messages.NO_CAT_ID };
         const categoryRef = db.ref(`categories/${categoryId}`);
         await categoryRef.remove();

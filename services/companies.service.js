@@ -4,9 +4,8 @@ const { messages } = require('../_helpers/constants');
 const { database } = require('firebase-admin');
 const db = database();
 
-async function createCompany(body) {
+async function createCompany({ name, brands = [], emailAddress }) {
     try {
-        const { name, brands = [], emailAddress } = body;
         if (!name || !emailAddress) return { result: false, message: messages.COMP_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
@@ -25,9 +24,8 @@ async function createCompany(body) {
     }
 }
 
-async function updateCompany(body) {
+async function updateCompany({ companyId, details }) {
     try {
-        const { companyId, details } = body;
         if (!companyId || !details || typeof details !== 'object') return { result: false, message: messages.COMP_UPDATE_REQUIRED };
         const ref = db.ref(`companies/${companyId}`);
         const snapshot = await ref.once('value');
@@ -39,9 +37,8 @@ async function updateCompany(body) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveCompanies(query) {
+async function retrieveCompanies({ limit = 10, page = 1 }) {
     try {
-        const { limit = 10, page = 1 } = query;
         const nLimit = Number(limit);
         const nPage = Number(page);
         const companiesRef = db.ref('companies');
@@ -66,9 +63,8 @@ async function retrieveCompanies(query) {
     }
 }
 
-async function retrieveCompany(params) {
+async function retrieveCompany({ companyId }) {
     try {
-        const { companyId } = params;
         if (!companyId) return { result: false, message: messages.NO_COMP_ID };
         const companyRef = db.ref(`companies/${companyId}`);
         const response = await companyRef.once('value');
@@ -78,9 +74,8 @@ async function retrieveCompany(params) {
         return { result: false, message: e.message };
     }
 }
-async function deleteCompany(query) {
+async function deleteCompany({ companyId }) {
     try {
-        const { companyId } = query;
         if (!companyId) return { result: false, message: messages.NO_COMP_ID };
         const companyRef = db.ref(`companies/${companyId}`);
         await companyRef.remove();

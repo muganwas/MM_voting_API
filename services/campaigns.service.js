@@ -4,9 +4,8 @@ const { messages } = require('../_helpers/constants');
 const { database } = require('firebase-admin');
 const db = database();
 
-async function createCampaign(body) {
+async function createCampaign({ name, companyId, brandName, agencyId, emailAddress }) {
     try {
-        const { name, companyId, brandName, agencyId, emailAddress } = body;
         if (!name || !emailAddress || !companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
@@ -25,9 +24,8 @@ async function createCampaign(body) {
     }
 }
 
-async function updateCampaign(body) {
+async function updateCampaign({ campaignId, details }) {
     try {
-        const { campaignId, details } = body;
         if (!campaignId || !details || typeof details !== 'object') return { result: false, message: messages.CAMP_UPDATE_REQUIRED };
         const ref = db.ref(`campaigns/${campaignId}`);
         const snapshot = await ref.once('value');
@@ -39,9 +37,8 @@ async function updateCampaign(body) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveCampaigns(query) {
+async function retrieveCampaigns({ limit = 10, page = 1 }) {
     try {
-        const { limit = 10, page = 1 } = query;
         const nLimit = Number(limit);
         const nPage = Number(page);
         const campaignsRef = db.ref('campaigns');
@@ -66,9 +63,8 @@ async function retrieveCampaigns(query) {
     }
 }
 
-async function retrieveCampaign(params) {
+async function retrieveCampaign({ campaignId }) {
     try {
-        const { campaignId } = params;
         if (!campaignId) return { result: false, message: messages.NO_CAMP_ID };
         const campaignRef = db.ref(`campaigns/${campaignId}`);
         const response = await campaignRef.once('value');
@@ -78,9 +74,8 @@ async function retrieveCampaign(params) {
         return { result: false, message: e.message };
     }
 }
-async function deleteCampaign(query) {
+async function deleteCampaign({ campaignId }) {
     try {
-        const { campaignId } = query;
         if (!campaignId) return { result: false, message: messages.NO_CAMP_ID };
         const campaignRef = db.ref(`campaigns/${campaignId}`);
         await campaignRef.remove();

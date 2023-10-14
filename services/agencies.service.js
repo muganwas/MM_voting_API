@@ -4,9 +4,8 @@ const { messages } = require('../_helpers/constants');
 const { database } = require('firebase-admin');
 const db = database();
 
-async function createAgency(body) {
+async function createAgency({ name, introduction, emailAddress }) {
     try {
-        const { name, introduction, emailAddress } = body;
         if (!name || !emailAddress || !introduction) return { result: false, message: messages.AGEN_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
@@ -25,9 +24,8 @@ async function createAgency(body) {
     }
 }
 
-async function updateAgency(body) {
+async function updateAgency({ agencyId, details }) {
     try {
-        const { agencyId, details } = body;
         if (!agencyId || !details || typeof details !== 'object') return { result: false, message: messages.AGEN_UPDATE_REQUIRED };
         const ref = db.ref(`agencies/${agencyId}`);
         const snapshot = await ref.once('value');
@@ -39,9 +37,8 @@ async function updateAgency(body) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveAgencies(query) {
+async function retrieveAgencies({ limit = 10, page = 1 }) {
     try {
-        const { limit = 10, page = 1 } = query;
         const nLimit = Number(limit);
         const nPage = Number(page);
         const agenciesRef = db.ref('agencies');
@@ -66,9 +63,8 @@ async function retrieveAgencies(query) {
     }
 }
 
-async function retrieveAgency(params) {
+async function retrieveAgency({ agencyId }) {
     try {
-        const { agencyId } = params;
         if (!agencyId) return { result: false, message: messages.NO_AGEN_ID };
         const agencyRef = db.ref(`agencies/${agencyId}`);
         const response = await agencyRef.once('value');
@@ -78,9 +74,8 @@ async function retrieveAgency(params) {
         return { result: false, message: e.message };
     }
 }
-async function deleteAgency(query) {
+async function deleteAgency({ agencyId }) {
     try {
-        const { agencyId } = query;
         if (!agencyId) return { result: false, message: messages.NO_AGEN_ID };
         const agencyRef = db.ref(`agencies/${agencyId}`);
         await agencyRef.remove();

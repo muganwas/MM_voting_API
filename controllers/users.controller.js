@@ -12,31 +12,41 @@ function authenticate(req, res, next) {
 async function createUser(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    usersService.createUser(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { email, password } = req.body;
+    usersService.createUser({ email, password }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function adminUserVerify(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    usersService.adminVerifyUser(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { uid, value } = req.body;
+    usersService.adminVerifyUser({ uid, value }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveUsers(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    usersService.retrieveUsers(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { limit, nextPageToken } = req.query;
+    usersService.retrieveUsers({ limit, nextPageToken }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveUser(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    usersService.retrieveUser(req.params).then(data => res.json(data)).catch(err => next(err));
+
+    const { uid } = req.params;
+    usersService.retrieveUser({ uid }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function deleteUser(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    usersService.deleteUser(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { uid } = req.query;
+    usersService.deleteUser({ uid }).then(data => res.json(data)).catch(err => next(err));
 }
 
 router.post('/authenticate', authenticate);

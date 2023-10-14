@@ -8,31 +8,41 @@ const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_
 async function createCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    campaignsService.createCampaign(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { name, companyId, brandName, agencyId, emailAddress } = req.body;
+    campaignsService.createCampaign({ name, companyId, brandName, agencyId, emailAddress }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    campaignsService.updateCampaign(req.body).then(data => res.json(data)).catch(err => next(err));
+
+    const { campaignId, details } = req.body;
+    campaignsService.updateCampaign({ campaignId, details }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCampaigns(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    campaignsService.retrieveCampaigns(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { limit, page } = req.query;
+    campaignsService.retrieveCampaigns({ limit, page }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    campaignsService.retrieveCampaign(req.params).then(data => res.json(data)).catch(err => next(err));
+
+    const { campaignId } = req.params;
+    campaignsService.retrieveCampaign({ campaignId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function deleteCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-    campaignsService.deleteCampaign(req.query).then(data => res.json(data)).catch(err => next(err));
+
+    const { campaignId } = req.query;
+    campaignsService.deleteCampaign({ campaignId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 router.post('/create', createCampaign);

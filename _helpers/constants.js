@@ -64,6 +64,18 @@ const messages = {
     CATS_FETCHED: 'Categories fetched successfully',
     CAT_FETCHED: 'Category information fetched successfully',
     NO_CAT_ID: 'Category ID is required',
+    /** nomination messages */
+    NOM_CREATED: 'New nomination created successfully',
+    NOM_UPDATED: 'Nomination updated successfully',
+    NOM_DELETED: 'Nomination deleted successfully',
+    NOM_REQUIRED: 'Judge ID, Campaign ID, Idea, Insight, Community Integration, KPIs & Impact, Execution, and Comment are all required',
+    NOM_RATING_FORMAT: 'Idea, Insight, Community Integration, KPIs & Impact, and Execution should be numbers',
+    NOM_UPDATE_REQUIRED: 'Nomination ID and details object are required',
+    NONEXISTENT_NOM: 'Nomination does not exist',
+    NOM_UPDATE_SUCCESS: 'Nomination was updated successfully',
+    NOMS_FETCHED: 'Nominations fetched successfully',
+    NOM_FETCHED: 'Nomination information fetched successfully',
+    NO_NOM_ID: 'Nomination ID is required',
 }
 
 module.exports = {
