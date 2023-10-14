@@ -6,19 +6,19 @@ const db = database();
 
 async function createAgency(body) {
     try {
-        const { name, emailAddress } = body;
-        if (!name || !emailAddress) return { result: false, message: messages.AGEN_REQUIRED };
+        const { name, introduction, emailAddress } = body;
+        if (!name || !emailAddress || !introduction) return { result: false, message: messages.AGEN_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
         if (baseVal && snapshot.hasChild('agencies')) {
             const agencyRef = baseRef.child('agencies');
-            agencyRef.push({ name, emailAddress, timeStamp })
+            agencyRef.push({ name, introduction, emailAddress, timeStamp })
         }
         else
-            baseRef.child('agencies').push({ name, emailAddress, timeStamp });
-        return { result: true, message: messages.AGEN_CREATED, data: { name, emailAddress, timeStamp } };
+            baseRef.child('agencies').push({ name, introduction, emailAddress, timeStamp });
+        return { result: true, message: messages.AGEN_CREATED, data: { name, introduction, emailAddress, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };
