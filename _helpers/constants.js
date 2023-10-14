@@ -53,6 +53,17 @@ const messages = {
     CAMPS_FETCHED: 'Campaigns fetched successfully',
     CAMP_FETCHED: 'Campaign information fetched successfully',
     NO_CAMP_ID: 'Campaign ID is required',
+    /** category messages */
+    CAT_CREATED: 'New category created successfully',
+    CAT_UPDATED: 'Category updated successfully',
+    CAT_DELETED: 'Category deleted successfully',
+    CAT_REQUIRED: 'Name and Description are required',
+    CAT_UPDATE_REQUIRED: 'Category ID and details object are required',
+    NONEXISTENT_CAT: 'Category does not exist',
+    CAT_UPDATE_SUCCESS: 'Category was updated successfully',
+    CATS_FETCHED: 'Categories fetched successfully',
+    CAT_FETCHED: 'Category information fetched successfully',
+    NO_CAT_ID: 'Category ID is required',
 }
 
 module.exports = {

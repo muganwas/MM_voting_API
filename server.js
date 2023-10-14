@@ -38,6 +38,7 @@ app.use('/api/v1/users', require('./controllers/users.controller'));
 app.use('/api/v1/companies', require('./controllers/companies.controller'));
 app.use('/api/v1/agencies', require('./controllers/agencies.controller'));
 app.use('/api/v1/campaigns', require('./controllers/campaigns.controller'));
+app.use('/api/v1/categories', require('./controllers/categories.controller'));
 
 httpServer.listen(PORT, function () {
     console.log('Server listening on port: ' + PORT);
