@@ -18,7 +18,7 @@ async function updateAgency(req, res, next) {
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
     const { agencyId, details } = req.body;
-    agenciesService.updateAgency({ agencyId }).then(data => res.json(data)).catch(err => next(err));
+    agenciesService.updateAgency({ agencyId, details }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveAgencies(req, res, next) {
