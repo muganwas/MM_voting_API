@@ -1,5 +1,7 @@
 require('dotenv').config();
 require('rootpath')();
+const livereload = require('livereload');
+const connectLiveReload = require("connect-livereload");
 const express = require('express');
 const admin = require("firebase-admin");
 const firebase = require("firebase/app");
@@ -8,7 +10,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const errorHandler = require('./_helpers/error-handler');
 
-const httpServer = require('http').createServer({}, app);
+//const httpServer = require('http').createServer({}, app);
 const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : (process.env.PORT || 8080);
 
 
@@ -31,7 +33,6 @@ admin.initializeApp({
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(errorHandler);
 
 /** controllers */
 app.use('/api/v1/users', require('./controllers/users.controller'));
@@ -40,7 +41,21 @@ app.use('/api/v1/agencies', require('./controllers/agencies.controller'));
 app.use('/api/v1/campaigns', require('./controllers/campaigns.controller'));
 app.use('/api/v1/categories', require('./controllers/categories.controller'));
 app.use('/api/v1/nominations', require('./controllers/nominations.controller'));
+app.use('/admin', require('./controllers/admin.views.controller'));
+app.use(express.static(__dirname + '/views'));
+app.use(errorHandler);
 
-httpServer.listen(PORT, function () {
+if (process.env.NODE_ENV !== 'production') {
+    const livereloadServer = livereload.createServer();
+    livereloadServer.watch(__dirname + "/views/Admin/pages");
+    livereloadServer.server.once("connection", () => {
+        setTimeout(() => {
+            livereloadServer.refresh("/");
+        }, 100);
+    });
+    app.use(connectLiveReload());
+}
+
+app.listen(PORT, function () {
     console.log('Server listening on port: ' + PORT);
 });

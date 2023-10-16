@@ -1,0 +1,8 @@
+nav {
+	display: flex;
+	justify-content: space-between;
+	padding: var(--m-pm);
+	#logo {
+		font-weight: bold;
+	}
+}

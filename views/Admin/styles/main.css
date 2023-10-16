@@ -1,0 +1,34 @@
+@import './login.css';
+@import './dash.css';
+:root {
+	--White: #ffffff;
+	--Black: #000000;
+	--Gold: #c99518;
+	--Bronze: #c99517;
+	--Error: #e04562;
+	--Gray: #404040;
+	--xs-pm: 3px;
+	--sm-pm: 5px;
+	--m-pm: 10px;
+	--lg-pm: 20px;
+	--xlg-pm: 40px;
+	--xs-font: 8px;
+	--sm-font: 10px;
+	--m-font: 12px;
+	--lg-font: 16px;
+	--title-font: 18px;
+	--subtitle-font: 16px;
+}
+html {
+	font-family: 'Poppins';
+}
+body {
+	margin: 0;
+	padding: 0;
+}
+.main-container {
+	display: flex;
+	position: relative;
+	flex-direction: row;
+	padding: var(--m-pm);
+}

@@ -1,0 +1,57 @@
+.login-container {
+	flex: 1;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 400px;
+	z-index: 1;
+	#error {
+		display: none;
+		color: var(--Error);
+		padding: var(--m-pm);
+	}
+	#title-text {
+		font-size: var(--title-font);
+		text-align: center;
+		font-weight: 700;
+	}
+	.login {
+		display: flex;
+		flex-direction: column;
+		margin: var(--lg-pm);
+		box-sizing: border-box;
+		.error {
+			border: 2px solid var(--Error);
+		}
+		#email,
+		#password {
+			width: 300px;
+			font-size: var(--lg-font);
+			padding: var(--m-pm);
+			border-radius: 5px;
+			box-sizing: border-box;
+			margin-bottom: var(--m-pm);
+		}
+		#submit {
+			width: 300px;
+			height: 50px;
+			font-size: var(--lg-font);
+			box-sizing: border-box;
+		}
+	}
+}
+#loading-overlay {
+	display: none;
+	z-index: 10;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	background-color: var(--White);
+	background-image: url('/Admin/images/loading.gif');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
