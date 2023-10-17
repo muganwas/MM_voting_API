@@ -56,6 +56,7 @@ const baseURL = 'http://localhost:8080';
         const responseJson = await response.json();
         if (responseJson.result) {
             win.localStorage.setItem('idToken', responseJson.data.idToken);
+            win.localStorage.setItem('uid', responseJson.data.uid);
             await renderDash(responseJson.data.idToken);
             overlay.style.display = 'none';
         }
@@ -67,6 +68,11 @@ const baseURL = 'http://localhost:8080';
 async function renderDash(idToken) {
     const errorContainer = document.getElementById('error');
     const overlay = document.getElementById('loading-overlay');
+    if (!idToken) {
+        errorContainer.style.display = 'none';
+        overlay.style.display = 'none';
+        return;
+    }
     const response = await fetch(baseURL + '/admin/dashboard', {
         method: 'GET',
         headers: {

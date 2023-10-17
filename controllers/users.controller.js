@@ -9,6 +9,11 @@ function authenticate(req, res, next) {
     usersService.authenticate(req.body).then(data => res.json(data)).catch(err => next(err));
 }
 
+async function revokeTokens(req, res, next) {
+    const { uid } = req.query;
+    usersService.revokeTokens({ uid }).then((data) => res.json(data)).catch(err => next(err));
+}
+
 async function createUser(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
@@ -53,6 +58,7 @@ router.post('/authenticate', authenticate);
 router.post('/create', createUser);
 router.put('/admin-verify-user', adminUserVerify);
 router.get('/', retrieveUsers);
+router.get('/revoke-tokens', revokeTokens);
 router.get('/:uid', retrieveUser);
 router.delete('/', deleteUser);
 

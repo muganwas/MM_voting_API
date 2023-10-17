@@ -47,7 +47,7 @@ app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'production') {
     const livereloadServer = livereload.createServer();
-    livereloadServer.watch(__dirname + "/views/Admin/pages");
+    livereloadServer.watch(__dirname + "/views");
     livereloadServer.server.once("connection", () => {
         setTimeout(() => {
             livereloadServer.refresh("/");

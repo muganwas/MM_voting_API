@@ -14,6 +14,15 @@ async function authenticate({ email, password }) {
         return { result: false, message: e.message };
     }
 }
+async function revokeTokens({ uid }) {
+    try {
+        await admin.auth().revokeRefreshTokens(uid);
+        return { result: true, message: messages.SUCCESS_LOGOUT }
+    } catch (e) {
+        console.log(e)
+        return { result: false, message: e.message };
+    }
+}
 async function createUser({ email, password }) {
     try {
         if (!email.match(regexes.EMAIL)) return { result: false, messages: messages.NOT_EMAIL };
@@ -74,5 +83,6 @@ module.exports = {
     adminVerifyUser,
     retrieveUsers,
     retrieveUser,
-    deleteUser
+    deleteUser,
+    revokeTokens
 }

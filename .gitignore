@@ -130,3 +130,4 @@ dist
 .env
 .env.development
 .env.production
+env.js

@@ -4,5 +4,11 @@ nav {
 	padding: var(--m-pm);
 	#logo {
 		font-weight: bold;
+		font-size: 20px;
+		color: var(--Gold);
+	}
+	#logout {
+		cursor: pointer;
+		font-weight: 700;
 	}
 }

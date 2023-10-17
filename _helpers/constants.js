@@ -20,6 +20,7 @@ const messages = {
     VER_SUCCESS: 'User verification updated.',
     USERS_RETRIEVED: 'Users successfully retrieved',
     USER_DELETED: 'User successfully deleted',
+    SUCCESS_LOGOUT: 'You signed out successfully',
     /** company messages */
     COMP_CREATED: 'New company created successfully',
     COMP_UPDATED: 'Company updated successfully',
