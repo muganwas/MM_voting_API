@@ -12,10 +12,21 @@
         <span id="logout">Logout</span>
     </nav>
     <main>
-        <div>Welcome Admin d</div>
-        <div>
-
-        </div>
+        <div>Welcome <span id="admin-name">Admin</span></div>
+        <div id="info-container" class="info-container">
+            <div id="tabs" class="tabs">
+                <span class="tab active">Users</span>
+            </div>
+            <div class="details-container">
+                <div id="users-container" class="details-sub active">
+                    <div id="user-info-labels">
+                        <span class="label">UID</span>
+                        <span class="label">Email Address</span>
+                        <span class="label">Action</span>
+                    </div>
+                    <div id="users-list"></div>
+                </div>
+            </div>
     </main>
     <script type="text/javascript" src="/Admin/scripts/dash.js"></script>
 </body>

@@ -8,6 +8,7 @@ const baseURL = 'http://localhost:8080';
     doc.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
         ':35729/livereload.js?snipver=1"></' + 'script>');
     /** End live reload */
+
     const login_form = doc.getElementById('login');
     const email = doc.getElementById('email');
     const password = doc.getElementById('password');
@@ -57,6 +58,9 @@ const baseURL = 'http://localhost:8080';
         if (responseJson.result) {
             win.localStorage.setItem('idToken', responseJson.data.idToken);
             win.localStorage.setItem('uid', responseJson.data.uid);
+            win.localStorage.setItem('username', responseJson.data.username);
+            win.localStorage.setItem('email', responseJson.data.email);
+            win.localStorage.setItem('refreshToken', responseJson.data.refreshToken);
             await renderDash(responseJson.data.idToken);
             overlay.style.display = 'none';
         }
