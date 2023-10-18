@@ -21,52 +21,175 @@ main {
 		#tabs {
 			.tab {
 				display: inline-block;
-				font-size: var(--title-font);
+				font-size: var(--subtitle-font);
 				color: var(--Gray);
-				font-weight: 600;
+				font-weight: 500;
 				padding: var(--sm-pm) var(--m-pm);
 				min-width: 100px;
+				border: thin solid var(--LLGray);
 				border-radius: 10px 10px 0 0;
 				cursor: pointer;
 			}
 			.tab.active {
-				border: thin solid rgba(0, 0, 0, 0.1);
-				box-shadow: 0px -5px 15px -10px rgba(0, 0, 0, 0.4);
+				font-weight: 600;
+				font-size: var(--title-font);
+				box-shadow: 0px -8px 20px -10px rgba(201, 149, 23, 0.4);
 			}
 		}
 		.details-container {
 			display: flex;
 			flex-direction: column;
 			.details-sub {
-				padding: var(--sm-pm) var(--m-pm);
-			}
-			.details-sub.active {
-				display: flex;
+				display: none;
 				flex-direction: column;
-				border: thin solid rgba(0, 0, 0, 0.1);
-				#user-info-labels {
-					display: flex;
-					.label {
+				border: thin solid var(--LLGray);
+				#users-info {
+					margin: 0 0 var(--m-pm) 0;
+					#user-info-labels {
 						display: flex;
-						flex: 1;
-					}
-				}
-				#users-list {
-					display: flex;
-					.user-info {
-						display: flex;
-						flex: 1;
-						.info {
+						background-color: var(--LGray);
+						padding: var(--sm-pm) var(--m-pm);
+						color: var(--White);
+						.label {
 							display: flex;
 							flex: 1;
-							.action {
-								color: var(--Gold);
-								cursor: pointer;
-								font-weight: 600;
+						}
+					}
+					#users-list {
+						display: flex;
+						flex-direction: column;
+						padding: var(--sm-pm) var(--m-pm);
+						.user-info {
+							display: flex;
+							border-bottom: thin solid var(--LLGray);
+							flex: 1;
+							.info {
+								display: flex;
+								flex: 1;
+								.action {
+									color: var(--Gold);
+									cursor: pointer;
+									font-weight: 600;
+								}
 							}
+						}
+						.user-info:last-of-type {
+							border-bottom: none;
 						}
 					}
 				}
+				#new-user {
+					display: flex;
+					flex-direction: column;
+					padding: var(--sm-pm) var(--m-pm);
+					.sub-sect-title {
+						margin: var(--m-pm) 0;
+						font-weight: 600;
+					}
+					#users-form {
+						display: flex;
+						flex-direction: column;
+						.error {
+							border: 2px solid var(--Error);
+						}
+						.input {
+							box-sizing: border-box;
+							font-size: var(--lg-font);
+							font-family: 'Poppins';
+							padding: var(--m-pm);
+							color: var(--Gray);
+							border-radius: 5px;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+						#submit-user {
+							height: 50px;
+							font-size: var(--lg-font);
+							cursor: pointer;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+					}
+				}
+				#categories-info {
+					margin: 0 0 var(--m-pm) 0;
+					#categories-info-labels {
+						display: flex;
+						background-color: var(--LGray);
+						padding: var(--sm-pm) var(--m-pm);
+						color: var(--White);
+						.label {
+							display: flex;
+							flex: 1;
+						}
+						.label.desc {
+							display: flex;
+							flex: 2;
+						}
+					}
+					#categories-list {
+						display: flex;
+						flex-direction: column;
+						padding: var(--sm-pm) var(--m-pm);
+						.category-info {
+							display: flex;
+							border-bottom: thin solid var(--LLGray);
+							flex: 1;
+							.info {
+								display: flex;
+								flex: 1;
+								.action {
+									color: var(--Gold);
+									cursor: pointer;
+									font-weight: 600;
+								}
+							}
+							.info.desc {
+								display: flex;
+								flex: 2;
+							}
+						}
+						.category-info:last-of-type {
+							border-bottom: none;
+						}
+					}
+				}
+				#new-category {
+					display: flex;
+					flex-direction: column;
+					padding: var(--sm-pm) var(--m-pm);
+					.sub-sect-title {
+						margin: var(--m-pm) 0;
+						font-weight: 600;
+					}
+					#categories-form {
+						display: flex;
+						flex-direction: column;
+						.error {
+							border: 2px solid var(--Error);
+						}
+						.input {
+							box-sizing: border-box;
+							font-size: var(--lg-font);
+							font-family: 'Poppins';
+							padding: var(--m-pm);
+							color: var(--Gray);
+							border-radius: 5px;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+						#submit-category {
+							height: 50px;
+							font-size: var(--lg-font);
+							cursor: pointer;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+					}
+				}
+			}
+			.details-sub.active {
+				display: flex;
 			}
 		}
 	}

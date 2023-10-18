@@ -8,6 +8,8 @@
 	--Error: #e04562;
 	--Pink: #f8e4e8;
 	--Gray: #404040;
+	--LGray: #525453;
+	--LLGray: rgba(0, 0, 0, 0.1);
 	--xs-pm: 3px;
 	--sm-pm: 5px;
 	--m-pm: 10px;
@@ -18,7 +20,7 @@
 	--m-font: 12px;
 	--lg-font: 16px;
 	--title-font: 18px;
-	--subtitle-font: 16px;
+	--subtitle-font: 14px;
 }
 html {
 	font-family: 'Poppins';

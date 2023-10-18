@@ -15,20 +15,6 @@ const baseURL = 'http://localhost:8080';
     const overlay = doc.getElementById('loading-overlay');
     const storedIdToken = win.localStorage.getItem('idToken');
     overlay.style.display = 'block';
-    const validateEmail = function (email) {
-        if (!email?.classList.contains('error') && (!email?.value || !email?.value.match(regexes.EMAIL)))
-            email.classList.add('error');
-        if (email?.classList.contains('error') && email?.value && email.value.match(regexes.EMAIL))
-            email.classList.remove('error');
-    }
-
-    const validatePassword = function (password) {
-        if (!password?.classList.contains('error') && (!password?.value || !password?.value.match(regexes.PASSWORD))) {
-            password.classList.add('error');
-        }
-        if (password?.classList.contains('error') && password?.value && password?.value.match(regexes.PASSWORD))
-            password.classList.remove('error');
-    }
 
     email.addEventListener('blur', function (e) {
         e.preventDefault();
@@ -68,6 +54,21 @@ const baseURL = 'http://localhost:8080';
     renderDash(storedIdToken);
 
 })(document, window);
+
+function validateEmail(email) {
+    if (!email?.classList.contains('error') && (!email?.value || !email?.value.match(regexes.EMAIL)))
+        email.classList.add('error');
+    if (email?.classList.contains('error') && email?.value && email.value.match(regexes.EMAIL))
+        email.classList.remove('error');
+}
+
+function validatePassword(password) {
+    if (!password?.classList.contains('error') && (!password?.value || !password?.value.match(regexes.PASSWORD))) {
+        password.classList.add('error');
+    }
+    if (password?.classList.contains('error') && password?.value && password?.value.match(regexes.PASSWORD))
+        password.classList.remove('error');
+}
 
 async function renderDash(idToken) {
     const errorContainer = document.getElementById('error');

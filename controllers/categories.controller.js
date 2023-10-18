@@ -9,7 +9,7 @@ async function createCategory(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { name, desc } = req.query;
+    const { name, desc } = req.body;
     categoriesService.createCategory({ name, desc }).then(data => res.json(data)).catch(err => next(err));
 }
 

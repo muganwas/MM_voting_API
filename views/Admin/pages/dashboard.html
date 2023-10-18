@@ -15,16 +15,77 @@
         <div>Welcome <span id="admin-name">Admin</span></div>
         <div id="info-container" class="info-container">
             <div id="tabs" class="tabs">
-                <span class="tab active">Users</span>
+                <span id="users-tab" class="tab">Users</span>
+                <span id="categories-tab" class="tab active">Categories</span>
+                <span id="agencies-tab" class="tab">Agencies</span>
+                <span id="campaigns-tab" class="tab">Campaigns</span>
+                <span id="companies-tab" class="tab">Companies</span>
+                <span id="nominations-tab" class="tab">Nominations</span>
             </div>
             <div class="details-container">
-                <div id="users-container" class="details-sub active">
-                    <div id="user-info-labels">
-                        <span class="label">UID</span>
-                        <span class="label">Email Address</span>
-                        <span class="label">Action</span>
+                <div id="users-container" class="details-sub">
+                    <div id="users-info">
+                        <div id="user-info-labels">
+                            <span class="label">UID</span>
+                            <span class="label">Email Address</span>
+                            <span class="label">Action</span>
+                        </div>
+                        <div id="users-list"></div>
                     </div>
-                    <div id="users-list"></div>
+                    <div id="new-user">
+                        <span class="sub-sect-title">Create New User</span>
+                        <form id="users-form">
+                            <input class="input" id="user-email" type="text" placeholder="Email"></input>
+                            <input class="input" id="user-password" type="password" placeholder="Password"></textarea>
+                            <input id="submit-user" type="submit"></input>
+                        </form>
+                    </div>
+                </div>
+                <div id="categories-container" class="details-sub active">
+                    <div id="categories-info">
+                        <div id="categories-info-labels">
+                            <span class="label">Category Name</span>
+                            <span class="label desc">Category Description</span>
+                        </div>
+                        <div id="categories-list"></div>
+                    </div>
+                    <div id="new-category">
+                        <span class="sub-sect-title">Create New Category</span>
+                        <form id="categories-form">
+                            <input class="input" id="category-name" type="text" placeholder="Category Name"></input>
+                            <textarea class="input" id="category-desc" rows="5"
+                                placeholder="Category Description"></textarea>
+                            <input id="submit-category" type="submit"></input>
+                        </form>
+                    </div>
+                </div>
+                <div id="agencies-container" class="details-sub">
+                    <div id="agencies-info-labels">
+                        <span class="label">ID</span>
+                        <span class="label">Agency Name</span>
+                    </div>
+                    <div id="agencies-list"></div>
+                </div>
+                <div id="campaigns-container" class="details-sub">
+                    <div id="campaigns-info-labels">
+                        <span class="label">ID</span>
+                        <span class="label">Campaign Name</span>
+                    </div>
+                    <div id="campaigns-list"></div>
+                </div>
+                <div id="companies-container" class="details-sub">
+                    <div id="companies-info-labels">
+                        <span class="label">ID</span>
+                        <span class="label">Company Name</span>
+                    </div>
+                    <div id="companies-list"></div>
+                </div>
+                <div id="nominations-container" class="details-sub">
+                    <div id="nominations-info-labels">
+                        <span class="label">ID</span>
+                        <span class="label">Campaign</span>
+                    </div>
+                    <div id="nominations-list"></div>
                 </div>
             </div>
     </main>
