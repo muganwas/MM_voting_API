@@ -44,6 +44,7 @@
                 <div id="categories-container" class="details-sub">
                     <div id="categories-info">
                         <div id="categories-info-labels">
+                            <span class="label">Category ID</span>
                             <span class="label">Category Name</span>
                             <span class="label desc">Category Description</span>
                         </div>
@@ -65,7 +66,7 @@
                             <span class="label">Agency ID</span>
                             <span class="label">Agency Name</span>
                             <span class="label">Email Address</span>
-                            <span class="label long">Email Address</span>
+                            <span class="label long">Agency Intro</span>
                         </div>
                         <div id="agencies-list"></div>
                     </div>
@@ -96,7 +97,11 @@
                         <span class="sub-sect-title">Create New Campaign</span>
                         <form id="campaigns-form">
                             <input class="input" id="campaign-name" type="text" placeholder="Campaign Name"></input>
-                            <input class="input" id="company-id" type="text" placeholder="Company Id"></input>
+                            <input id="company-id" type="text" hidden></input>
+                            <span class="input dropdown" id="company-drop-down">
+                                <span id="selected-company">Company</span>
+                                <span id="company-list" class="company-list"></span>
+                            </span>
                             <input class="input" id="brand-name" type="text" placeholder="Brand Name"></input>
                             <input class="input" id="agency-id" type="text" placeholder="Agency Id"></input>
                             <input class="input" id="contact-email" type="email"

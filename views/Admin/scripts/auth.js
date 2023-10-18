@@ -12,6 +12,7 @@ const baseURL = 'http://localhost:8080';
     const login_form = doc.getElementById('login');
     const email = doc.getElementById('email');
     const password = doc.getElementById('password');
+    const errorContainer = document.getElementById('error');
     const overlay = doc.getElementById('loading-overlay');
     const storedIdToken = win.localStorage.getItem('idToken');
     overlay.style.display = 'block';
@@ -30,7 +31,7 @@ const baseURL = 'http://localhost:8080';
 
     login_form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        if (!email.value || !password.value) return;
+        if (!validateEmail(email) || !validatePassword(password)) return;
         overlay.style.display = 'block';
         const response = await fetch(baseURL + '/api/v1/users/authenticate', {
             method: 'POST',
@@ -40,34 +41,43 @@ const baseURL = 'http://localhost:8080';
             },
             body: JSON.stringify({ email: email.value, password: password.value })
         });
-        const responseJson = await response.json();
-        if (responseJson.result) {
-            win.localStorage.setItem('idToken', responseJson.data.idToken);
-            win.localStorage.setItem('uid', responseJson.data.uid);
-            win.localStorage.setItem('username', responseJson.data.username);
-            win.localStorage.setItem('email', responseJson.data.email);
-            win.localStorage.setItem('refreshToken', responseJson.data.refreshToken);
-            await renderDash(responseJson.data.idToken);
-            overlay.style.display = 'none';
+        const { result, data, message } = await response.json();
+        if (result) {
+            win.localStorage.setItem('idToken', data.idToken);
+            win.localStorage.setItem('uid', data.uid);
+            win.localStorage.setItem('username', data.username);
+            win.localStorage.setItem('email', data.email);
+            win.localStorage.setItem('refreshToken', data.refreshToken);
+            await renderDash(data.idToken);
         }
+        overlay.style.display = 'none';
+        errorContainer.style.display = 'block';
+        errorContainer.innerText = message;
     });
     renderDash(storedIdToken);
 
 })(document, window);
 
 function validateEmail(email) {
-    if (!email?.classList.contains('error') && (!email?.value || !email?.value.match(regexes.EMAIL)))
-        email.classList.add('error');
-    if (email?.classList.contains('error') && email?.value && email.value.match(regexes.EMAIL))
-        email.classList.remove('error');
+    if ((!email?.value || !email?.value.match(regexes.EMAIL))) {
+        !email?.classList.contains('error') && email.classList.add('error');
+        return false;
+    }
+    if (email?.value && email.value.match(regexes.EMAIL)) {
+        email?.classList.contains('error') && email.classList.remove('error');
+        return true;
+    }
 }
 
 function validatePassword(password) {
-    if (!password?.classList.contains('error') && (!password?.value || !password?.value.match(regexes.PASSWORD))) {
-        password.classList.add('error');
+    if ((!password?.value || !password?.value.match(regexes.PASSWORD))) {
+        !password?.classList.contains('error') && password.classList.add('error');
+        return false;
     }
-    if (password?.classList.contains('error') && password?.value && password?.value.match(regexes.PASSWORD))
-        password.classList.remove('error');
+    if (password?.value && password?.value.match(regexes.PASSWORD)) {
+        password?.classList.contains('error') && password.classList.remove('error');
+        return true;
+    }
 }
 
 async function renderDash(idToken) {

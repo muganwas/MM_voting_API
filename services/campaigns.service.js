@@ -56,7 +56,15 @@ async function retrieveCampaigns({ limit = 10, page = 1 }) {
         const campaignCount = countResp.numChildren();
         const pages = (campaignCount - ((nPage - 1) * nLimit)) / nLimit;
         const data = resp.val();
-        const dataArray = Object.values(data);
+        const keysArray = Object.keys(data);
+        const dataArray = [];
+        /** include firebase key in data object */
+        for (let i = 0; i < keysArray.length; i++) {
+            const k = keysArray[i];
+            const newD = data[k];
+            newD['id'] = k;
+            dataArray.push(newD)
+        }
         return { result: true, message: messages.CAMPS_FETCHED, data: dataArray, metadata: { page, pages, limit } };
     } catch (e) {
         return { result: false, message: e.message };
