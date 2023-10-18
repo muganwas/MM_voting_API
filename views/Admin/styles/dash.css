@@ -43,6 +43,7 @@ main {
 				display: none;
 				flex-direction: column;
 				border: thin solid var(--LLGray);
+				/** user info */
 				#users-info {
 					margin: 0 0 var(--m-pm) 0;
 					#user-info-labels {
@@ -111,6 +112,7 @@ main {
 						}
 					}
 				}
+				/** categories */
 				#categories-info {
 					margin: 0 0 var(--m-pm) 0;
 					#categories-info-labels {
@@ -184,6 +186,282 @@ main {
 							cursor: pointer;
 							box-sizing: border-box;
 							margin: 0 0 var(--m-pm) 0;
+						}
+					}
+				}
+				/** agencies */
+				#agencies-info {
+					margin: 0 0 var(--m-pm) 0;
+					#agencies-info-labels {
+						display: flex;
+						background-color: var(--LGray);
+						padding: var(--sm-pm) var(--m-pm);
+						color: var(--White);
+						.label {
+							display: flex;
+							flex: 1;
+						}
+						.label.desc {
+							display: flex;
+							flex: 2;
+						}
+					}
+					#agencies-list {
+						display: flex;
+						flex-direction: column;
+						padding: var(--sm-pm) var(--m-pm);
+						.agency-info {
+							display: flex;
+							border-bottom: thin solid var(--LLGray);
+							flex: 1;
+							.info {
+								display: flex;
+								flex: 1;
+								.action {
+									color: var(--Gold);
+									cursor: pointer;
+									font-weight: 600;
+								}
+							}
+							.info.long {
+								display: flex;
+								flex: 2;
+							}
+						}
+						.agency-info:last-of-type {
+							border-bottom: none;
+						}
+					}
+				}
+				#new-agency {
+					display: flex;
+					flex-direction: column;
+					padding: var(--sm-pm) var(--m-pm);
+					.sub-sect-title {
+						margin: var(--m-pm) 0;
+						font-weight: 600;
+					}
+					#agencies-form {
+						display: flex;
+						flex-direction: column;
+						.error {
+							border: 2px solid var(--Error);
+						}
+						.input {
+							box-sizing: border-box;
+							font-size: var(--lg-font);
+							font-family: 'Poppins';
+							padding: var(--m-pm);
+							color: var(--Gray);
+							border-radius: 5px;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+						#submit-agency {
+							height: 50px;
+							font-size: var(--lg-font);
+							cursor: pointer;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+					}
+				}
+				/** companies */
+				#companies-info {
+					margin: 0 0 var(--m-pm) 0;
+					#companies-info-labels {
+						display: flex;
+						background-color: var(--LGray);
+						padding: var(--sm-pm) var(--m-pm);
+						color: var(--White);
+						.label {
+							display: flex;
+							flex: 1;
+						}
+						.label.desc {
+							display: flex;
+							flex: 2;
+						}
+					}
+					#companies-list {
+						display: flex;
+						flex-direction: column;
+						padding: var(--sm-pm) var(--m-pm);
+						.company-info {
+							display: flex;
+							border-bottom: thin solid var(--LLGray);
+							flex: 1;
+							.info {
+								display: flex;
+								flex: 1;
+								.action {
+									color: var(--Gold);
+									cursor: pointer;
+									font-weight: 600;
+								}
+							}
+							.info.long {
+								display: flex;
+								flex: 2;
+							}
+						}
+						.company-info:last-of-type {
+							border-bottom: none;
+						}
+					}
+				}
+				#new-company {
+					display: flex;
+					flex-direction: column;
+					padding: var(--sm-pm) var(--m-pm);
+					.sub-sect-title {
+						margin: var(--m-pm) 0;
+						font-weight: 600;
+					}
+					#companies-form {
+						display: flex;
+						flex-direction: column;
+						.error {
+							border: 2px solid var(--Error);
+						}
+						.input {
+							box-sizing: border-box;
+							font-size: var(--lg-font);
+							font-family: 'Poppins';
+							padding: var(--m-pm);
+							color: var(--Gray);
+							border-radius: 5px;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+						#submit-company {
+							height: 50px;
+							font-size: var(--lg-font);
+							cursor: pointer;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+					}
+				}
+				/** campaigns */
+				#campaigns-info {
+					margin: 0 0 var(--m-pm) 0;
+					#campaigns-info-labels {
+						display: flex;
+						background-color: var(--LGray);
+						padding: var(--sm-pm) var(--m-pm);
+						color: var(--White);
+						.label {
+							display: flex;
+							flex: 1;
+						}
+						.label.desc {
+							display: flex;
+							flex: 2;
+						}
+					}
+					#campaigns-list {
+						display: flex;
+						flex-direction: column;
+						padding: var(--sm-pm) var(--m-pm);
+						.campaign-info {
+							display: flex;
+							border-bottom: thin solid var(--LLGray);
+							flex: 1;
+							.info {
+								display: flex;
+								flex: 1;
+								.action {
+									color: var(--Gold);
+									cursor: pointer;
+									font-weight: 600;
+								}
+							}
+							.info.long {
+								display: flex;
+								flex: 2;
+							}
+						}
+						.campaign-info:last-of-type {
+							border-bottom: none;
+						}
+					}
+				}
+				#new-campaign {
+					display: flex;
+					flex-direction: column;
+					padding: var(--sm-pm) var(--m-pm);
+					.sub-sect-title {
+						margin: var(--m-pm) 0;
+						font-weight: 600;
+					}
+					#campaigns-form {
+						display: flex;
+						flex-direction: column;
+						.error {
+							border: 2px solid var(--Error);
+						}
+						.input {
+							box-sizing: border-box;
+							font-size: var(--lg-font);
+							font-family: 'Poppins';
+							padding: var(--m-pm);
+							color: var(--Gray);
+							border-radius: 5px;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+						#submit-campaign {
+							height: 50px;
+							font-size: var(--lg-font);
+							cursor: pointer;
+							box-sizing: border-box;
+							margin: 0 0 var(--m-pm) 0;
+						}
+					}
+				}
+				/** nominations */
+				#nominations-info {
+					margin: 0 0 var(--m-pm) 0;
+					#nominations-info-labels {
+						display: flex;
+						font-size: var(--m-font);
+						background-color: var(--LGray);
+						padding: var(--sm-pm) var(--m-pm);
+						color: var(--White);
+						.label {
+							display: flex;
+							flex: 1;
+						}
+						.label.desc {
+							display: flex;
+							flex: 2;
+						}
+					}
+					#nominations-list {
+						display: flex;
+						flex-direction: column;
+						padding: var(--sm-pm) var(--m-pm);
+						.nomination-info {
+							display: flex;
+							border-bottom: thin solid var(--LLGray);
+							flex: 1;
+							.info {
+								display: flex;
+								flex: 1;
+								.action {
+									color: var(--Gold);
+									cursor: pointer;
+									font-weight: 600;
+								}
+							}
+							.info.long {
+								display: flex;
+								flex: 2;
+							}
+						}
+						.nomination-info:last-of-type {
+							border-bottom: none;
 						}
 					}
 				}

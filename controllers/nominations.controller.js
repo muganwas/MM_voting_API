@@ -9,8 +9,8 @@ async function createNomination(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { judgeId, campaignId, idea, insight, community_integration, kpis_impact, execution, comment } = req.body;
-    nominationsService.createNomination({ judgeId, campaignId, idea, insight, community_integration, kpis_impact, execution, comment }).then(data => res.json(data)).catch(err => next(err));
+    const { judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment } = req.body;
+    nominationsService.createNomination({ judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateNomination(req, res, next) {
