@@ -91,9 +91,6 @@ main {
 					#users-form {
 						display: flex;
 						flex-direction: column;
-						.error {
-							border: 2px solid var(--Error);
-						}
 						.input {
 							box-sizing: border-box;
 							font-family: 'Poppins';
@@ -102,6 +99,9 @@ main {
 							border-radius: 5px;
 							box-sizing: border-box;
 							margin: 0 0 var(--m-pm) 0;
+						}
+						.input.error {
+							border: 2px solid var(--Error);
 						}
 						#submit-user {
 							height: 50px;
@@ -167,9 +167,6 @@ main {
 					#categories-form {
 						display: flex;
 						flex-direction: column;
-						.error {
-							border: 2px solid var(--Error);
-						}
 						.input {
 							box-sizing: border-box;
 							font-family: 'Poppins';
@@ -178,6 +175,9 @@ main {
 							border-radius: 5px;
 							box-sizing: border-box;
 							margin: 0 0 var(--m-pm) 0;
+						}
+						.input.error {
+							border: 2px solid var(--Error);
 						}
 						#submit-category {
 							height: 50px;
@@ -243,9 +243,6 @@ main {
 					#agencies-form {
 						display: flex;
 						flex-direction: column;
-						.error {
-							border: 2px solid var(--Error);
-						}
 						.input {
 							box-sizing: border-box;
 							font-family: 'Poppins';
@@ -254,6 +251,9 @@ main {
 							border-radius: 5px;
 							box-sizing: border-box;
 							margin: 0 0 var(--m-pm) 0;
+						}
+						.input.error {
+							border: 2px solid var(--Error);
 						}
 						#submit-agency {
 							height: 50px;
@@ -319,9 +319,6 @@ main {
 					#companies-form {
 						display: flex;
 						flex-direction: column;
-						.error {
-							border: 2px solid var(--Error);
-						}
 						.input {
 							box-sizing: border-box;
 							font-family: 'Poppins';
@@ -330,6 +327,9 @@ main {
 							border-radius: 5px;
 							box-sizing: border-box;
 							margin: 0 0 var(--m-pm) 0;
+						}
+						.input.error {
+							border: 2px solid var(--Error);
 						}
 						#submit-company {
 							height: 50px;
@@ -387,9 +387,6 @@ main {
 					#campaigns-form {
 						display: flex;
 						flex-direction: column;
-						.error {
-							border: 2px solid var(--Error);
-						}
 						#brand-drop-down {
 							display: none;
 						}
@@ -432,6 +429,9 @@ main {
 								left: 0px;
 								z-index: 1;
 							}
+						}
+						.input.error {
+							border: 2px solid var(--Error);
 						}
 						.input.dropdown {
 							cursor: pointer;
