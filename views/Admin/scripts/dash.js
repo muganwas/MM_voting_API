@@ -4,6 +4,7 @@ var campaigns;
 var companies;
 var nominations;
 var users;
+var selectedCompBrands = [];
 (async function (doc, win) {
     /** Live reload */
     doc.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
@@ -27,10 +28,20 @@ var users;
     const compEmail = doc.getElementById('company-email');
     const newUserEmail = doc.getElementById('user-email');
     const newUserPassword = doc.getElementById('user-password');
+    const campName = document.getElementById('campaign-name');
+    const compId = document.getElementById('company-id');
+    const brandName = document.getElementById('brand-name');
+    const agId = document.getElementById('agency-id');
+    const conEmail = document.getElementById('contact-email');
+
     const companyDD = doc.getElementById('company-drop-down');
+    const agencyDD = doc.getElementById('agency-drop-down');
+    const brandDD = document.getElementById('brand-drop-down');
+    const categoryDD = document.getElementById('category-drop-down');
 
     const categoriesForm = doc.getElementById('categories-form');
     const companiesForm = doc.getElementById('companies-form');
+    const campaignsForm = doc.getElementById('campaigns-form');
     const agenciesForm = doc.getElementById('agencies-form');
     const usersForm = doc.getElementById('users-form');
 
@@ -42,6 +53,8 @@ var users;
     await renderCategories(doc, idToken);
     await renderAgencies(doc, idToken);
     await renderCompanies(doc, idToken);
+    await renderCampaigns(doc, idToken);
+
     Array.from(tabs).forEach(e => {
         e.addEventListener('click', onTabClick)
     });
@@ -52,6 +65,9 @@ var users;
     });
 
     companyDD.addEventListener('click', toggleCompanyDD);
+    agencyDD.addEventListener('click', toggleAgencyDD);
+    brandDD.addEventListener('click', toggleBrandDD);
+    categoryDD.addEventListener('click', toggleCategoryDD);
 
     newUserEmail.addEventListener('blur', (e) => validateEmail(e.target));
     newUserPassword.addEventListener('blur', (e) => validatePassword(e.target));
@@ -64,11 +80,17 @@ var users;
     compName.addEventListener('blur', errorOnNoValue);
     compEmail.addEventListener('blur', (e) => validateEmail(e.target));
     compBrands.addEventListener('blur', errorOnNoValue);
+    campName.addEventListener('blur', errorOnNoValue);
+    compId.addEventListener('blur', errorOnNoValue);
+    brandName.addEventListener('blur', errorOnNoValue);
+    agId.addEventListener('blur', errorOnNoValue);
+    conEmail.addEventListener('blur', (e) => validateEmail(e.target));
 
     categoriesForm.addEventListener('submit', submitCategory);
     companiesForm.addEventListener('submit', submitCompany);
     agenciesForm.addEventListener('submit', submitAgency);
     usersForm.addEventListener('submit', createUser);
+    campaignsForm.addEventListener('submit', submitCampaign);
 
 })(document, window);
 
@@ -113,12 +135,87 @@ async function signOut(win) {
     }
 }
 
+function toggleCategoryDD(e) {
+    e.preventDefault();
+    const categoryList = document.getElementById('category-list');
+    const categoryId = document.getElementById('category-id');
+    const selectedCategory = document.getElementById('selected-category');
+    if (categoryList.classList.contains('active')) {
+        return categoryList.classList.remove('active');
+    }
+    if (categories && Array.isArray(categories)) {
+        categoryList.innerHTML = "";
+        categories.forEach(c => {
+            const br = document.createElement('span');
+            br.className = 'item';
+            br.innerText = c.name;
+            br.addEventListener('click', () => {
+                selectedCategory.innerText = c.name;
+                categoryId.value = c.id;
+            });
+            categoryList.appendChild(br);
+        });
+        categoryList.classList.add('active');
+    }
+}
+
+function toggleBrandDD(e) {
+    e.preventDefault();
+    const brandList = document.getElementById('brand-list');
+    const brandName = document.getElementById('brand-name');
+    const selectedBrand = document.getElementById('selected-brand');
+    if (brandList.classList.contains('active')) {
+        return brandList.classList.remove('active');
+    }
+    if (selectedCompBrands && Array.isArray(selectedCompBrands)) {
+        brandList.innerHTML = "";
+        selectedCompBrands.forEach(b => {
+            const br = document.createElement('span');
+            br.className = 'item';
+            br.innerText = b;
+            br.addEventListener('click', () => {
+                selectedBrand.innerText = b;
+                brandName.value = b;
+            });
+            brandList.appendChild(br);
+        });
+        brandList.classList.add('active');
+    }
+}
+
+function toggleAgencyDD(e) {
+    e.preventDefault();
+    const agencyList = document.getElementById('agency-list');
+    const agencyId = document.getElementById('agency-id');
+    const selectedAg = document.getElementById('selected-agency');
+    if (agencyList.classList.contains('active')) {
+        return agencyList.classList.remove('active');
+    }
+    if (agencies && Array.isArray(agencies)) {
+        agencyList.innerHTML = "";
+        agencies.forEach(a => {
+            const ag = document.createElement('span');
+            ag.className = 'item';
+            ag.innerText = a.name;
+            ag.addEventListener('click', () => {
+                selectedAg.innerText = a.name;
+                agencyId.value = a.id;
+            });
+            agencyList.appendChild(ag);
+        });
+        agencyList.classList.add('active');
+    }
+}
+
 function toggleCompanyDD(e) {
     e.preventDefault();
     const companyList = document.getElementById('company-list');
-    //const companyDD = document.getElementById('company-drop-down');
     const companyId = document.getElementById('company-id');
     const selectedComp = document.getElementById('selected-company');
+    const selectedBrand = document.getElementById('selected-brand');
+    const brandDD = document.getElementById('brand-drop-down');
+    const brandNameInput = document.getElementById('brand-name');
+    const brandList = document.getElementById('brand-list');
     if (companyList.classList.contains('active')) {
         return companyList.classList.remove('active');
     }
@@ -131,10 +228,121 @@ function toggleCompanyDD(e) {
             comp.addEventListener('click', () => {
                 selectedComp.innerText = c.name;
                 companyId.value = c.id;
+                selectedBrand.innerText = "Select Brand";
+                selectedCompBrands = c.brands;
+                if (selectedCompBrands && Array.isArray(selectedCompBrands)) {
+                    brandNameInput.style.display = "none";
+                    brandDD.style.display = "flex";
+                    brandList.innerHTML = null;
+                    /** add brands to drop list */
+                    selectedCompBrands.forEach(b => {
+                        const bName = document.createElement('span');
+                        bName.className = "item";
+                        bName.innerText = b;
+                        brandList.appendChild(bName);
+                    });
+
+                } else {
+                    brandNameInput.removeAttribute('hidden');
+                    brandDD.style.display = "none";
+                }
             });
             companyList.appendChild(comp);
         });
         companyList.classList.add('active');
+    }
+}
+
+/** Campaings */
+
+async function submitCampaign(e) {
+    e.preventDefault();
+    const idToken = window.localStorage.getItem('idToken');
+    const children = e.target.children;
+    const campName = Array.from(children).find(c => c.id === 'campaign-name');
+    const compId = Array.from(children).find(c => c.id === 'company-id');
+    const catId = Array.from(children).find(c => c.id === 'category-id');
+    const brandName = Array.from(children).find(c => c.id === 'brand-name');
+    const agId = Array.from(children).find(c => c.id === 'agency-id');
+    const email = Array.from(children).find(c => c.id === 'contact-email');
+    const selComp = document.getElementById('selected-company');
+    const selBrand = document.getElementById('selected-brand');
+    const selAg = document.getElementById('selected-agency');
+    if (!campName.value || !catId.value || !agId.value || !compId.value || !brandName.value || !validateEmail(email)) return alert('Fill all fields');
+    const response = await fetch(baseURL + '/api/v1/campaigns/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + idToken
+        },
+        body: JSON.stringify({ name: campName.value, categoryId: catId.value, companyId: compId.value, brandName: brandName.value, agencyId: agId.value, emailAddress: email.value })
+    });
+    const { result, message } = await response.json();
+    if (result) {
+        campName.value = "";
+        compId.value = "";
+        brandName.value = "";
+        agId.value = "";
+        email.value = "";
+        selComp.innerText = "Select Company";
+        selBrand.innerText = "Select Brand";
+        selAg.innerText = "Select Agency";
+        return renderCampaigns(document, idToken);
+    }
+    return alert(message);
+}
+
+async function fetchCampaigns(idToken) {
+    const response = await fetch(baseURL + '/api/v1/campaigns', {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, data } = await response.json();
+    if (result) return data;
+    return null;
+}
+
+async function renderCampaigns(doc, idToken) {
+    campaigns = await fetchCampaigns(idToken);
+    if (campaigns && Array.isArray(campaigns)) {
+        const campListContainer = doc.getElementById('campaigns-list');
+        campListContainer.innerHTML = null;
+        campaigns.forEach(comp => {
+            const newDiv = doc.createElement('div');
+            newDiv.className = 'campaign-info'
+            const span_1 = doc.createElement('span');
+            const span_2 = doc.createElement('span');
+            const span_3 = doc.createElement('span');
+            const span_4 = doc.createElement('span');
+            const span_5 = doc.createElement('span');
+            const span_6 = doc.createElement('span');
+
+            span_1.innerText = comp.id;
+            span_2.innerText = comp.name;
+            span_3.innerText = categories.find(c => comp.categoryId == c.id)?.name;
+            span_4.innerText = comp.brandName;
+            span_5.innerText = agencies.find(a => comp.agencyId == a.id)?.name;
+            span_6.innerText = comp.emailAddress;
+
+            span_1.className = 'info';
+            span_2.className = 'info';
+            span_3.className = 'info';
+            span_4.className = 'info';
+            span_5.className = 'info';
+            span_6.className = 'info';
+
+            newDiv.appendChild(span_1);
+            newDiv.appendChild(span_2);
+            newDiv.appendChild(span_3);
+            newDiv.appendChild(span_4);
+            newDiv.appendChild(span_5);
+            newDiv.appendChild(span_6);
+            campListContainer.append(newDiv);
+        });
     }
 }
 
@@ -285,6 +493,7 @@ async function renderAgencies(doc, idToken) {
 }
 
 /** Categories */
+
 async function submitCategory(e) {
     e.preventDefault();
     const idToken = window.localStorage.getItem('idToken');

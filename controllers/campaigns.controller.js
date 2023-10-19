@@ -9,8 +9,8 @@ async function createCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { name, companyId, brandName, agencyId, emailAddress } = req.body;
-    campaignsService.createCampaign({ name, companyId, brandName, agencyId, emailAddress }).then(data => res.json(data)).catch(err => next(err));
+    const { name, companyId, categoryId, brandName, agencyId, emailAddress } = req.body;
+    campaignsService.createCampaign({ name, companyId, categoryId, brandName, agencyId, emailAddress }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateCampaign(req, res, next) {

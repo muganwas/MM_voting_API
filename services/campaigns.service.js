@@ -4,9 +4,9 @@ const { messages } = require('../_helpers/constants');
 const { database } = require('firebase-admin');
 const db = database();
 
-async function createCampaign({ name, companyId, brandName, agencyId, emailAddress }) {
+async function createCampaign({ name, categoryId, companyId, brandName, agencyId, emailAddress }) {
     try {
-        if (!name || !emailAddress || !companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED };
+        if (!name || !emailAddress || !categoryId || !companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
@@ -16,8 +16,8 @@ async function createCampaign({ name, companyId, brandName, agencyId, emailAddre
             campaignRef.push({ name, companyId, brandName, agencyId, emailAddress, timeStamp })
         }
         else
-            baseRef.child('campaigns').push({ name, companyId, brandName, agencyId, emailAddress, timeStamp });
-        return { result: true, message: messages.CAMP_CREATED, data: { name, companyId, brandName, agencyId, emailAddress, timeStamp } };
+            baseRef.child('campaigns').push({ name, companyId, categoryId, brandName, agencyId, emailAddress, timeStamp });
+        return { result: true, message: messages.CAMP_CREATED, data: { name, companyId, categoryId, brandName, agencyId, emailAddress, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };

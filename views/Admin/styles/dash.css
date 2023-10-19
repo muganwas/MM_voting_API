@@ -352,10 +352,6 @@ main {
 							display: flex;
 							flex: 1;
 						}
-						.label.desc {
-							display: flex;
-							flex: 2;
-						}
 					}
 					#campaigns-list {
 						display: flex;
@@ -373,10 +369,6 @@ main {
 									cursor: pointer;
 									font-weight: 600;
 								}
-							}
-							.info.long {
-								display: flex;
-								flex: 2;
 							}
 						}
 						.campaign-info:last-of-type {
@@ -398,6 +390,9 @@ main {
 						.error {
 							border: 2px solid var(--Error);
 						}
+						#brand-drop-down {
+							display: none;
+						}
 						.input {
 							display: inline-block;
 							position: relative;
@@ -409,7 +404,10 @@ main {
 							border-radius: 5px;
 							box-sizing: border-box;
 							margin: 0 0 var(--m-pm) 0;
-							.company-list {
+							.company-list,
+							.agency-list,
+							.brand-list,
+							.category-list {
 								display: none;
 								position: absolute;
 								padding: var(--lg-pm);
@@ -422,7 +420,10 @@ main {
 									margin-bottom: var(--sm-pm);
 								}
 							}
-							.company-list.active {
+							.company-list.active,
+							.agency-list.active,
+							.brand-list.active,
+							.category-list.active {
 								display: flex;
 								flex-direction: column;
 								background: var(--White);

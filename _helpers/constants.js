@@ -47,7 +47,7 @@ const messages = {
     CAMP_CREATED: 'New campaign created successfully',
     CAMP_UPDATED: 'Campaign updated successfully',
     CAMP_DELETED: 'Campaign deleted successfully',
-    CAMP_REQUIRED: 'Name, Company ID, Agency ID and Email Address are all required',
+    CAMP_REQUIRED: 'Name, Company ID, Category ID, Agency ID and Email Address are all required',
     CAMP_UPDATE_REQUIRED: 'Campaign ID and details object are required',
     NONEXISTENT_CAMP: 'Campaign does not exist',
     CAMP_UPDATE_SUCCESS: 'Campaign was updated successfully',

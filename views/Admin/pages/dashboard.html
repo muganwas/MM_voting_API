@@ -17,8 +17,8 @@
             <div id="tabs" class="tabs">
                 <span id="users-tab" class="tab">Users</span>
                 <span id="categories-tab" class="tab">Categories</span>
-                <span id="agencies-tab" class="tab active">Agencies</span>
-                <span id="campaigns-tab" class="tab">Campaigns</span>
+                <span id="agencies-tab" class="tab">Agencies</span>
+                <span id="campaigns-tab" class="tab active">Campaigns</span>
                 <span id="companies-tab" class="tab">Companies</span>
                 <span id="nominations-tab" class="tab">Nominations</span>
             </div>
@@ -60,7 +60,7 @@
                         </form>
                     </div>
                 </div>
-                <div id="agencies-container" class="details-sub active">
+                <div id="agencies-container" class="details-sub">
                     <div id="agencies-info">
                         <div id="agencies-info-labels">
                             <span class="label">Agency ID</span>
@@ -81,14 +81,14 @@
                         </form>
                     </div>
                 </div>
-                <div id="campaigns-container" class="details-sub">
+                <div id="campaigns-container" class="details-sub active">
                     <div id="campaigns-info">
                         <div id="campaigns-info-labels">
                             <span class="label">Campaign ID</span>
                             <span class="label">Campaign Name</span>
-                            <span class="label">Company Id</span>
+                            <span class="label">Nom. Category</span>
                             <span class="label">Brand Name</span>
-                            <span class="label">Agency Id</span>
+                            <span class="label">Agency</span>
                             <span class="label">Contact Email</span>
                         </div>
                         <div id="campaigns-list"></div>
@@ -97,13 +97,26 @@
                         <span class="sub-sect-title">Create New Campaign</span>
                         <form id="campaigns-form">
                             <input class="input" id="campaign-name" type="text" placeholder="Campaign Name"></input>
+                            <input id="category-id" type="text" hidden></input>
+                            <span class="input dropdown" id="category-drop-down">
+                                <span id="selected-category">Select Category</span>
+                                <span id="category-list" class="category-list"></span>
+                            </span>
                             <input id="company-id" type="text" hidden></input>
                             <span class="input dropdown" id="company-drop-down">
-                                <span id="selected-company">Company</span>
+                                <span id="selected-company">Select Company</span>
                                 <span id="company-list" class="company-list"></span>
                             </span>
                             <input class="input" id="brand-name" type="text" placeholder="Brand Name"></input>
-                            <input class="input" id="agency-id" type="text" placeholder="Agency Id"></input>
+                            <span class="input dropdown" id="brand-drop-down">
+                                <span id="selected-brand">Select Brand</span>
+                                <span id="brand-list" class="brand-list"></span>
+                            </span>
+                            <input id="agency-id" type="text" hidden></input>
+                            <span class="input dropdown" id="agency-drop-down">
+                                <span id="selected-agency">Select Agency</span>
+                                <span id="agency-list" class="agency-list"></span>
+                            </span>
                             <input class="input" id="contact-email" type="email"
                                 placeholder="Contact Email Address"></input>
                             <input id="submit-campaign" type="submit"></input>
