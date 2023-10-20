@@ -2,7 +2,7 @@ const regexes = {
     EMAIL: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
     PASSWORD: /[^\w\d]*(([0-9]+.*[A-Z]+.*)|[A-Z]+.*([0-9]+.*))/
 };
-const baseURL = 'http://localhost:8080';
+const baseURL = "";
 (function (doc, win) {
     /** Live reload */
     doc.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
