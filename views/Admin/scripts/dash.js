@@ -5,6 +5,8 @@ var companies;
 var nominations;
 var users;
 var selectedCompBrands = [];
+var selectedCategoryIds = [];
+const selectedCategoryNames = [];
 (async function (doc, win) {
     /** Live reload */
     doc.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
@@ -147,11 +149,22 @@ function toggleCategoryDD(e) {
         categoryList.innerHTML = "";
         categories.forEach(c => {
             const br = document.createElement('span');
-            br.className = 'item';
+            const selectedIndex = selectedCategoryIds.findIndex(id => id === c.id);
+            br.className = `item${selectedIndex > -1 ? ' active' : ''}`;
             br.innerText = c.name;
-            br.addEventListener('click', () => {
-                selectedCategory.innerText = c.name;
-                categoryId.value = c.id;
+            br.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (br.classList.contains('active')) {
+                    selectedCategoryIds.splice(selectedIndex, 1);
+                    selectedCategoryNames.splice(selectedIndex, 1);
+                    br.classList.remove('active');
+                } else {
+                    selectedCategoryIds.push(c.id);
+                    selectedCategoryNames.push(c.name);
+                    br.classList.add('active');
+                }
+                selectedCategory.innerText = selectedCategoryIds.length ? selectedCategoryNames.join(', ') : 'Select Categories(One or more)';
+                categoryId.value = JSON.stringify(selectedCategoryIds);
             });
             categoryList.appendChild(br);
         });
@@ -276,7 +289,7 @@ async function submitCampaign(e) {
             Accept: 'application/json',
             Authorization: 'Bearer ' + idToken
         },
-        body: JSON.stringify({ name: campName.value, categoryId: catId.value, companyId: compId.value, brandName: brandName.value, agencyId: agId.value, emailAddress: email.value })
+        body: JSON.stringify({ name: campName.value, categoryIds: selectedCategoryIds, companyId: compId.value, brandName: brandName.value, agencyId: agId.value, emailAddress: email.value })
     });
     const { result, message } = await response.json();
     if (result) {
@@ -321,9 +334,16 @@ async function renderCampaigns(doc, idToken) {
             const span_5 = doc.createElement('span');
             const span_6 = doc.createElement('span');
 
+            let categoryIdsString = '';
+            for (let i = 0; i < comp.categoryIds.length; i++) {
+                const categoryId = comp.categoryIds[i];
+                const cName = categories.find(c => categoryId == c.id)?.name;
+                if (cName && i < (comp.categoryIds.length - 1)) categoryIdsString = categoryIdsString + `${cName}, `;
+                else categoryIdsString = categoryIdsString + `${cName}.`;
+            }
             span_1.innerText = comp.id;
             span_2.innerText = comp.name;
-            span_3.innerText = categories.find(c => comp.categoryId == c.id)?.name;
+            span_3.innerText = categoryIdsString;
             span_4.innerText = comp.brandName;
             span_5.innerText = agencies.find(a => comp.agencyId == a.id)?.name;
             span_6.innerText = comp.emailAddress;

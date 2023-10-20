@@ -16,6 +16,7 @@ main {
 	display: flex;
 	flex-direction: column;
 	padding: var(--lg-pm);
+	flex-wrap: wrap;
 	.info-container {
 		margin: var(--lg-pm) 0;
 		#tabs {
@@ -428,6 +429,10 @@ main {
 								top: 45px;
 								left: 0px;
 								z-index: 1;
+								.item.active {
+									background-color: var(--LGray);
+									color: var(--White);
+								}
 							}
 						}
 						.input.error {
