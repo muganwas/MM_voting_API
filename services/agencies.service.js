@@ -11,13 +11,18 @@ async function createAgency({ name, introduction, emailAddress }) {
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
+        let currentAgency;
         if (baseVal && snapshot.hasChild('agencies')) {
             const agencyRef = baseRef.child('agencies');
             agencyRef.push({ name, introduction, emailAddress, timeStamp })
         }
         else
             baseRef.child('agencies').push({ name, introduction, emailAddress, timeStamp });
-        return { result: true, message: messages.AGEN_CREATED, data: { name, introduction, emailAddress, timeStamp } };
+        const { data, result } = await retrieveAgencies({});
+        if (result) {
+            currentAgency = data.find(c => c.timeStamp === timeStamp);
+        }
+        return { result: true, message: messages.AGEN_CREATED, data: currentAgency || { name, introduction, emailAddress, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };

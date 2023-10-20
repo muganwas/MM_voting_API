@@ -11,13 +11,18 @@ async function createCompany({ name, brands = [], emailAddress }) {
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
+        var currentCompany;
         if (baseVal && snapshot.hasChild('companies')) {
             const companyRef = baseRef.child('companies');
-            companyRef.push({ name, brands, emailAddress, timeStamp })
+            await companyRef.push({ name, brands, emailAddress, timeStamp })
         }
         else
-            baseRef.child('companies').push({ name, brands, emailAddress, timeStamp });
-        return { result: true, message: messages.COMP_CREATED, data: { name, brands, emailAddress, timeStamp } };
+            await baseRef.child('companies').push({ name, brands, emailAddress, timeStamp });
+        const { data, result } = await retrieveCompanies({});
+        if (result) {
+            currentCompany = data.find(c => c.timeStamp === timeStamp);
+        }
+        return { result: true, message: messages.COMP_CREATED, data: currentCompany || { name, brands, emailAddress, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };

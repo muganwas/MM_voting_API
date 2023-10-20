@@ -6,11 +6,8 @@ const campaignsService = require('../services/campaigns.service');
 const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_MESSAGE, UNAUTHORIZED_MESSAGE } } = require('../_helpers/constants');
 
 async function createCampaign(req, res, next) {
-    if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
-    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
-
-    const { name, companyId, categoryIds, brandName, agencyId, emailAddress } = req.body;
-    campaignsService.createCampaign({ name, companyId, categoryIds, brandName, agencyId, emailAddress }).then(data => res.json(data)).catch(err => next(err));
+    const { name, companyId, categoryIds, companyName, agencyName, brandName, intro, agencyId, emailAddress } = req.body;
+    campaignsService.createCampaign({ name, companyId, companyName, agencyName, intro, categoryIds, brandName, agencyId, emailAddress }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateCampaign(req, res, next) {

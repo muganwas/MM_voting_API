@@ -1,17 +1,38 @@
 require('dotenv').config();
 const moment = require('moment');
 const { messages } = require('../_helpers/constants');
+const { createCompany } = require('./companies.service');
+const { createAgency } = require('./agencies.service');
 const { database } = require('firebase-admin');
 const db = database();
 
-async function createCampaign({ name, categoryIds, companyId, brandName, agencyId, emailAddress }) {
+async function createCampaign({ name, categoryIds, companyName, intro, agencyName, companyId, brandName, agencyId, emailAddress }) {
     try {
-        if (!name || !emailAddress || !categoryIds || !companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED };
+        if (!name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_REQUIRED };
+        if ((!companyId || !agencyId) && (!agencyName || !companyName)) return { result: false, message: messages.CAMP_REQUIRED };
         if (!Array.isArray(categoryIds)) return { result: false, message: messages.CAMP_CAT_ID_TYPE };
+        /** create company if non-existent */
+        if (!companyId && companyName) {
+            const { data, result } = await createCompany({ name: companyName, brands: [brandName], emailAddress });
+            if (result)
+                companyId = data.id;
+            else return { result: false, message: messages.FAILURE };
+        }
+        /** end create company */
+        /** create agency if non-existent */
+        if (!agencyId && agencyName) {
+            const { data, result } = await createAgency({ name: agencyName, introduction: intro, emailAddress });
+            if (result)
+                agencyId = data.id;
+            else return { result: false, message: messages.FAILURE };
+        }
+        /** end create agency */
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
+        // default to company name if brandname not provided
+        brandName = brandName || companyName;
         if (baseVal && snapshot.hasChild('campaigns')) {
             const campaignRef = baseRef.child('campaigns');
             campaignRef.push({ name, companyId, categoryIds, brandName, agencyId, emailAddress, timeStamp })

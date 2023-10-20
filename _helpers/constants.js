@@ -21,6 +21,8 @@ const messages = {
     USERS_RETRIEVED: 'Users successfully retrieved',
     USER_DELETED: 'User successfully deleted',
     SUCCESS_LOGOUT: 'You signed out successfully',
+    /** generic */
+    FAILURE: 'Something went wrong, please try again shortly',
     /** company messages */
     COMP_CREATED: 'New company created successfully',
     COMP_UPDATED: 'Company updated successfully',
@@ -47,7 +49,8 @@ const messages = {
     CAMP_CREATED: 'New campaign created successfully',
     CAMP_UPDATED: 'Campaign updated successfully',
     CAMP_DELETED: 'Campaign deleted successfully',
-    CAMP_REQUIRED: 'Name, Company ID, Category IDs, Agency ID and Email Address are all required',
+    CAMP_REQUIRED: 'Name, Category IDs and Email Address are all required',
+    CAMP_REQUIRED_ALT: 'Name, Client Organisation name, Agency Name, Category IDs and Email Address are all required',
     CAMP_CAT_ID_TYPE: 'Category IDs should be an array of ids',
     CAMP_UPDATE_REQUIRED: 'Campaign ID and details object are required',
     NONEXISTENT_CAMP: 'Campaign does not exist',
