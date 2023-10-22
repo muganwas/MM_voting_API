@@ -8,11 +8,6 @@ var selectedCompBrands = [];
 var selectedCategoryIds = [];
 const selectedCategoryNames = [];
 (async function (doc, win) {
-    /** Live reload */
-    doc.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
-        ':35729/livereload.js?snipver=1"></' + 'script>');
-    /** End live reload */
-
     const username = win.localStorage.getItem('username');
     const idToken = win.localStorage.getItem('idToken');
 
