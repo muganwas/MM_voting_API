@@ -56,7 +56,7 @@ async function deleteUser(req, res, next) {
 
 router.post('/authenticate', authenticate);
 router.post('/create', createUser);
-router.put('/admin-verify-user', adminUserVerify);
+router.put('/public/Admin-verify-user', adminUserVerify);
 router.get('/', retrieveUsers);
 router.get('/revoke-tokens', revokeTokens);
 router.get('/:uid', retrieveUser);

@@ -1,7 +1,7 @@
 {
-	"name": "mm_voting_api",
+	"name": "umea_voting_api",
 	"version": "1.0.0",
-	"description": "NodeJS + MM Voting API",
+	"description": "NodeJS + UMEA Voting API",
 	"license": "MIT",
 	"repository": {
 		"type": "git"

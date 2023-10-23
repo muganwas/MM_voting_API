@@ -42,12 +42,12 @@ app.use('/api/v1/campaigns', require('./controllers/campaigns.controller'));
 app.use('/api/v1/categories', require('./controllers/categories.controller'));
 app.use('/api/v1/nominations', require('./controllers/nominations.controller'));
 app.use('/admin', require('./controllers/admin.views.controller'));
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/public'));
 app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'production') {
     const livereloadServer = livereload.createServer();
-    livereloadServer.watch(__dirname + "/views");
+    livereloadServer.watch(__dirname + "/public");
     livereloadServer.server.once("connection", () => {
         setTimeout(() => {
             livereloadServer.refresh("/");

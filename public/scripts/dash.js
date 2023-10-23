@@ -652,7 +652,7 @@ async function renderUsers(doc, idToken) {
 
 async function toggleVerification(uid, value, idToken) {
     if (!uid || value == undefined || !idToken) return null;
-    const response = await fetch(baseURL + '/api/v1/users/admin-verify-user', {
+    const response = await fetch(baseURL + '/api/v1/users/public/Admin-verify-user', {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
