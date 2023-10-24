@@ -52,7 +52,7 @@
 	bottom: 0;
 	top: 0;
 	background-color: var(--White);
-	background-image: url('/public/Admin/images/loading.gif');
+	background-image: url('/images/loading.gif');
 	background-repeat: no-repeat;
 	background-position: center center;
 }

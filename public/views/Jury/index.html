@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head>
+    <title>UMEAS JURY PANEL</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css" />
+    <script type="text/javascript">
+        document.write('<script src="' + location.protocol + '//' + (location.host || 'localhost').split(':')[0] +
+            ':35729/livereload.js?snipver=1"></' + 'script>');
+    </script>
+</head>
+
+<body>
+    <div class="main-container">
+        <div id="login-container" class="login-container">
+            <span id="title-text">Jury Login</span>
+            <span id="error"></span>
+            <form id="jury-login" class="login">
+                <input type="email" id="email" placeholder="Email Address" />
+                <input type="password" id="password" placeholder="Password" />
+                <input type="submit" id="submit" title="Login" />
+            </form>
+        </div>
+        <div id="loading-overlay"></div>
+    </div>
+    <script type="text/javascript" src="/scripts/jury-auth.js"></script>
+</body>
+
+</html>

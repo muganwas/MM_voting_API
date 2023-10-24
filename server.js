@@ -42,6 +42,7 @@ app.use('/api/v1/campaigns', require('./controllers/campaigns.controller'));
 app.use('/api/v1/categories', require('./controllers/categories.controller'));
 app.use('/api/v1/nominations', require('./controllers/nominations.controller'));
 app.use('/admin', require('./controllers/admin.views.controller'));
+app.use('/jury', require('./controllers/jury.views.controller'));
 app.use(express.static(__dirname + '/public'));
 app.use(errorHandler);
 

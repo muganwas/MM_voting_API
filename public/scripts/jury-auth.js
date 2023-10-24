@@ -4,7 +4,7 @@ const regexes = {
 };
 const baseURL = "";
 (function (doc, win) {
-    const login_form = doc.getElementById('login');
+    const login_form = doc.getElementById('jury-login');
     const email = doc.getElementById('email');
     const password = doc.getElementById('password');
     const errorContainer = document.getElementById('error');
@@ -40,7 +40,7 @@ const baseURL = "";
         if (result) {
             win.localStorage.setItem('idToken', data.idToken);
             win.localStorage.setItem('uid', data.uid);
-            win.localStorage.setItem('userType', 'Admin');
+            win.localStorage.setItem('userType', 'Jurer');
             win.localStorage.setItem('username', data.username);
             win.localStorage.setItem('email', data.email);
             win.localStorage.setItem('refreshToken', data.refreshToken);
@@ -84,7 +84,7 @@ async function renderDash(idToken) {
         overlay.style.display = 'none';
         return;
     }
-    const response = await fetch(baseURL + '/admin/dashboard', {
+    const response = await fetch(baseURL + '/jury/dashboard', {
         method: 'GET',
         headers: {
             Authorization: 'Bearer ' + idToken

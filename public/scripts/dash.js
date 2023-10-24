@@ -10,6 +10,7 @@ const selectedCategoryNames = [];
 (async function (doc, win) {
     const username = win.localStorage.getItem('username');
     const idToken = win.localStorage.getItem('idToken');
+    const userType = win.localStorage.getItem('userType');
 
     const adminName = doc.getElementById('admin-name');
     const tabs = doc.getElementsByClassName('tab');
@@ -41,6 +42,8 @@ const selectedCategoryNames = [];
     const campaignsForm = doc.getElementById('campaigns-form');
     const agenciesForm = doc.getElementById('agencies-form');
     const usersForm = doc.getElementById('users-form');
+
+    if (userType !== 'Admin') signOut();
 
     if (username && username !== 'null') {// use admins username
         adminName.innerText = username;
@@ -126,6 +129,7 @@ async function signOut(win) {
         win.localStorage.removeItem('idToken');
         win.localStorage.removeItem('username');
         win.localStorage.removeItem('email');
+        win.localStorage.removeItem('userType');
         win.localStorage.removeItem('refreshToken');
         win.location.reload();
         return;

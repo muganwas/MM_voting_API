@@ -17,6 +17,10 @@ main {
 	flex-direction: column;
 	padding: var(--lg-pm);
 	flex-wrap: wrap;
+	#admin-name,
+	#jurer-name {
+		font-weight: 600;
+	}
 	.info-container {
 		margin: var(--lg-pm) 0;
 		#tabs {
