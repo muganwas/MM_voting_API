@@ -290,6 +290,14 @@ async function submitCampaign(e) {
     formData.append('emailAddress', email.value);
     formData.append('file', Array.from(file.files)[0]);
     if (!campName.value || !catId.value || !agId.value || !compId.value || !brandName.value || !validateEmail(email)) return alert('Fill all fields');
+
+    if (file.files.length > 0) {
+        const fileSize = file.files.item(0).size;
+        const fileMb = fileSize / 1024 ** 2;
+        if (fileMb > 8)
+            return alert('Attached file is too large');
+    }
+
     const response = await fetch(baseURL + '/api/v1/campaigns/create', {
         method: 'POST',
         headers: {
