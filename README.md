@@ -6,7 +6,7 @@
 
 1 - send formData: { name: string, categoryIds: string, file, companyName: string, brandName: string, agencyName: string, intro: string, emailAddress: string }
 NOTE: categoryIds should be a comma separated string 
-2 - response format: { result: boolean, data?: { name: string, companyId: string, fileURL, categoryIds: string[], brandName: string, agencyId: string, emailAddress: string, timeStamp: string }, message: string }
+2 - response format: { result: boolean, data?: { name: string, companyId: string, fileURL:string, categoryIds: string[], brandName: string, agencyId: string, emailAddress: string, timeStamp: string }, message: string }
 
 # categoryIds should be fetched from API, see Fetch Categories section
 
