@@ -6,8 +6,10 @@
     <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet">
     <link rel="stylesheet" href="/styles/main.css" />
     <script type="text/javascript">
-        document.write('<script src="' + location.protocol + '//' + (location.host || 'localhost').split(':')[0] +
-            ':35729/livereload.js?snipver=1"></' + 'script>');
+        if (location.protocol === 'http:') {//only livereload on insecure connections
+            document.write('<script src="' + location.protocol + '//' + (location.host || 'localhost').split(':')[0] +
+                ':35729/livereload.js?snipver=1"></' + 'script>');
+        }
     </script>
 </head>
 
