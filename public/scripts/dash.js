@@ -280,15 +280,22 @@ async function submitCampaign(e) {
     const selComp = document.getElementById('selected-company');
     const selBrand = document.getElementById('selected-brand');
     const selAg = document.getElementById('selected-agency');
+    const file = document.getElementById('file');
+    const formData = new FormData();
+    formData.append('name', campName.value);
+    formData.append('categoryIds', selectedCategoryIds);
+    formData.append('companyId', compId.value);
+    formData.append('brandName', brandName.value);
+    formData.append('agencyId', agId.value);
+    formData.append('emailAddress', email.value);
+    formData.append('file', Array.from(file.files)[0]);
     if (!campName.value || !catId.value || !agId.value || !compId.value || !brandName.value || !validateEmail(email)) return alert('Fill all fields');
     const response = await fetch(baseURL + '/api/v1/campaigns/create', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             Accept: 'application/json',
-            Authorization: 'Bearer ' + idToken
         },
-        body: JSON.stringify({ name: campName.value, categoryIds: selectedCategoryIds, companyId: compId.value, brandName: brandName.value, agencyId: agId.value, emailAddress: email.value })
+        body: formData
     });
     const { result, message } = await response.json();
     if (result) {
@@ -340,7 +347,14 @@ async function renderCampaigns(doc, idToken) {
                 if (cName && i < (comp.categoryIds.length - 1)) categoryIdsString = categoryIdsString + `${cName}, `;
                 else categoryIdsString = categoryIdsString + `${cName}.`;
             }
-            span_1.innerText = comp.id;
+            if (comp.fileURL) {
+                const lnk = doc.createElement('a');
+                const txt = doc.createTextNode('Uploaded File');
+                lnk.append(txt);
+                lnk.title = 'uploaded file';
+                lnk.href = comp.fileURL;
+                span_1.appendChild(lnk);
+            }
             span_2.innerText = comp.name;
             span_3.innerText = categoryIdsString;
             span_4.innerText = comp.brandName;

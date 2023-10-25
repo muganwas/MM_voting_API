@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
+
 const { validateFirebaseAdmin } = require('../_helpers/functions');
 const campaignsService = require('../services/campaigns.service');
 
@@ -7,7 +10,7 @@ const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_
 
 async function createCampaign(req, res, next) {
     const { name, companyId, categoryIds, companyName, agencyName, brandName, intro, agencyId, emailAddress } = req.body;
-    campaignsService.createCampaign({ name, companyId, companyName, agencyName, intro, categoryIds, brandName, agencyId, emailAddress }).then(data => res.json(data)).catch(err => next(err));
+    campaignsService.createCampaign({ name, companyId, companyName, agencyName, intro, catIds: categoryIds, brandName, agencyId, emailAddress }, req.file).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateCampaign(req, res, next) {
@@ -42,7 +45,7 @@ async function deleteCampaign(req, res, next) {
     campaignsService.deleteCampaign({ campaignId }).then(data => res.json(data)).catch(err => next(err));
 }
 
-router.post('/create', createCampaign);
+router.post('/create', upload.single('file'), createCampaign);
 router.put('/update', updateCampaign);
 router.get('/', retrieveCampaigns);
 router.get('/:campaignId', retrieveCampaign);

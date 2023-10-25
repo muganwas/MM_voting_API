@@ -84,7 +84,7 @@
                 <div id="campaigns-container" class="details-sub">
                     <div id="campaigns-info">
                         <div id="campaigns-info-labels">
-                            <span class="label">Campaign ID</span>
+                            <span class="label">File</span>
                             <span class="label">Campaign Name</span>
                             <span class="label">Nom. Category</span>
                             <span class="label">Brand Name</span>
@@ -95,7 +95,7 @@
                     </div>
                     <div id="new-campaign">
                         <span class="sub-sect-title">Create New Campaign</span>
-                        <form id="campaigns-form">
+                        <form id="campaigns-form" enctype="multipart/form-data">
                             <input class="input" id="campaign-name" type="text" placeholder="Campaign Name"></input>
                             <input id="category-id" type="text" hidden></input>
                             <span class="input dropdown" id="category-drop-down">
@@ -116,6 +116,10 @@
                             <span class="input dropdown" id="agency-drop-down">
                                 <span id="selected-agency">Select Agency</span>
                                 <span id="agency-list" class="agency-list"></span>
+                            </span>
+                            <span class="input dropdown" id="company-drop-down">
+                                <span id="selected-company">Select File</span>
+                                <input type="file" id="file" />
                             </span>
                             <input class="input" id="contact-email" type="email"
                                 placeholder="Contact Email Address"></input>

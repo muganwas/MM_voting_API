@@ -4,13 +4,28 @@ const { messages } = require('../_helpers/constants');
 const { createCompany } = require('./companies.service');
 const { createAgency } = require('./agencies.service');
 const { database } = require('firebase-admin');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
+
+const storage = getStorage();
 const db = database();
 
-async function createCampaign({ name, categoryIds, companyName, intro, agencyName, companyId, brandName, agencyId, emailAddress }) {
+async function createCampaign({ name, catIds, companyName, intro, agencyName, companyId, brandName, agencyId, emailAddress }, file) {
     try {
+        const categoryIds = catIds.split(',');
+        var fileURL = '';
         if (!name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_REQUIRED };
         if ((!companyId || !agencyId) && (!agencyName || !companyName)) return { result: false, message: messages.CAMP_REQUIRED };
         if (!Array.isArray(categoryIds)) return { result: false, message: messages.CAMP_CAT_ID_TYPE };
+        /** upload file if it exists */
+        if (file) {
+            const bucketName = name.replaceAll(' ', "_");
+            const storageRef = ref(storage, `submissions/${bucketName}`);
+            const metadata = {
+                contentType: file.mimetype
+            };
+            const snapShot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+            fileURL = await getDownloadURL(snapShot.ref);
+        }
         /** create company if non-existent */
         if (!companyId && companyName) {
             const { data, result } = await createCompany({ name: companyName, brands: [brandName], emailAddress });
@@ -35,11 +50,11 @@ async function createCampaign({ name, categoryIds, companyName, intro, agencyNam
         brandName = brandName || companyName;
         if (baseVal && snapshot.hasChild('campaigns')) {
             const campaignRef = baseRef.child('campaigns');
-            campaignRef.push({ name, companyId, categoryIds, brandName, agencyId, emailAddress, timeStamp })
+            campaignRef.push({ name, companyId, categoryIds, fileURL, brandName, agencyId, emailAddress, timeStamp })
         }
         else
-            baseRef.child('campaigns').push({ name, companyId, categoryIds, brandName, agencyId, emailAddress, timeStamp });
-        return { result: true, message: messages.CAMP_CREATED, data: { name, companyId, categoryIds, brandName, agencyId, emailAddress, timeStamp } };
+            baseRef.child('campaigns').push({ name, companyId, categoryIds, fileURL, brandName, agencyId, emailAddress, timeStamp });
+        return { result: true, message: messages.CAMP_CREATED, data: { name, companyId, fileURL, categoryIds, brandName, agencyId, emailAddress, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };
