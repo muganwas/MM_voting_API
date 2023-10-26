@@ -1,5 +1,6 @@
 @import './login.css';
 @import './dash.css';
+@import './j_dash.css';
 :root {
 	--White: #ffffff;
 	--Black: #000000;
@@ -8,6 +9,7 @@
 	--Error: #e04562;
 	--Pink: #f8e4e8;
 	--Gray: #404040;
+	--Green: #39c897;
 	--LGray: #525453;
 	--LLGray: rgba(0, 0, 0, 0.1);
 	--xs-pm: 3px;

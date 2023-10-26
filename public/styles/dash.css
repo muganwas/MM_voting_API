@@ -346,7 +346,8 @@ main {
 					}
 				}
 				/** campaigns */
-				#campaigns-info {
+				#campaigns-info,
+				#campaigns-info-u {
 					margin: 0 0 var(--m-pm) 0;
 					#campaigns-info-labels {
 						display: flex;
@@ -361,13 +362,16 @@ main {
 					#campaigns-list {
 						display: flex;
 						flex-direction: column;
+						justify-content: center;
 						padding: var(--sm-pm) var(--m-pm);
 						.campaign-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
+								align-items: center;
 								flex: 1;
 								.action {
 									color: var(--Gold);
@@ -389,7 +393,11 @@ main {
 						margin: var(--m-pm) 0;
 						font-weight: 600;
 					}
-					#campaigns-form {
+				}
+				#campaigns-info,
+				#new-campaign {
+					#campaigns-form,
+					#sort-campaigns {
 						display: flex;
 						flex-direction: column;
 						#brand-drop-down {

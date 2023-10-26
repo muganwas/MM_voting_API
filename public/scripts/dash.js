@@ -43,7 +43,7 @@ const selectedCategoryNames = [];
     const agenciesForm = doc.getElementById('agencies-form');
     const usersForm = doc.getElementById('users-form');
 
-    if (userType !== 'Admin') signOut();
+    if (userType !== 'Admin') signOut(win);
 
     if (username && username !== 'null') {// use admins username
         adminName.innerText = username;
@@ -110,29 +110,6 @@ function onTabClick(e) {
         });
         target.classList.add('active');
         container.classList.add('active');
-    }
-}
-
-function errorOnNoValue(e) {
-    e.preventDefault();
-    const t = e.target;
-    if (!t.value) t.classList.add('error');
-    else if (t.value && t.classList.contains('error')) t.classList.remove('error');
-}
-
-async function signOut(win) {
-    const uid = win.localStorage.getItem('uid');
-    const response = await fetch(baseURL + '/api/v1/users/revoke-tokens?uid=' + uid);
-    const responseJson = await response.json();
-    if (responseJson.result) {
-        win.localStorage.removeItem('uid');
-        win.localStorage.removeItem('idToken');
-        win.localStorage.removeItem('username');
-        win.localStorage.removeItem('email');
-        win.localStorage.removeItem('userType');
-        win.localStorage.removeItem('refreshToken');
-        win.location.reload();
-        return;
     }
 }
 
@@ -320,19 +297,6 @@ async function submitCampaign(e) {
     return alert(message);
 }
 
-async function fetchCampaigns(idToken) {
-    const response = await fetch(baseURL + '/api/v1/campaigns', {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + idToken
-        }
-    });
-    const { result, data } = await response.json();
-    if (result) return data;
-    return null;
-}
-
 async function renderCampaigns(doc, idToken) {
     campaigns = await fetchCampaigns(idToken);
     if (campaigns && Array.isArray(campaigns)) {
@@ -357,9 +321,9 @@ async function renderCampaigns(doc, idToken) {
             }
             if (comp.fileURL) {
                 const lnk = doc.createElement('a');
-                const txt = doc.createTextNode('Uploaded File');
+                const txt = doc.createTextNode('Uploaded Material');
                 lnk.append(txt);
-                lnk.title = 'uploaded file';
+                lnk.title = 'uploaded material';
                 lnk.href = comp.fileURL;
                 span_1.appendChild(lnk);
             }
@@ -558,19 +522,6 @@ async function submitCategory(e) {
         return renderCategories(document, idToken);
     }
     return alert(message);
-}
-
-async function fetchCategories(idToken) {
-    const response = await fetch(baseURL + '/api/v1/categories', {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            Authorization: 'Bearer ' + idToken
-        }
-    });
-    const { result, data } = await response.json();
-    if (result) return data;
-    return null;
 }
 
 async function renderCategories(doc, idToken) {

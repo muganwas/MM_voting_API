@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { validateFirebaseAdmin } = require('../_helpers/functions');
+const { validateFirebaseAdmin, validateFirebaseUser } = require('../_helpers/functions');
 const categoriesService = require('../services/categories.service');
 
 const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_MESSAGE, UNAUTHORIZED_MESSAGE } } = require('../_helpers/constants');
@@ -23,7 +23,7 @@ async function updateCategory(req, res, next) {
 
 async function retrieveCategories(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
-    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+    if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
     const { limit, page } = req.query;
     categoriesService.retrieveCategories({ limit, page }).then(data => res.json(data)).catch(err => next(err));
@@ -31,7 +31,7 @@ async function retrieveCategories(req, res, next) {
 
 async function retrieveCategory(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
-    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+    if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
     const { categoryId } = req.params;
     categoriesService.retrieveCategory({ categoryId }).then(data => res.json(data)).catch(err => next(err));

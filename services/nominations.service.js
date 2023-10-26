@@ -50,14 +50,16 @@ async function updateNomination({ nominationId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveNominations({ limit = 10, page = 1 }) {
+async function retrieveNominations({ limit = 10, page = 1, judgeId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);
         const nominationsRef = db.ref('nominations');
         var limitedRef = nominationsRef.orderByChild('timeStamp').limitToLast(nLimit);
+        if (judgeId) limitedRef = nominationsRef.orderByChild('judgeId').equalTo(judgeId);
         if (nPage > 1) {
-            const tempRef = nominationsRef.orderByChild('timeStamp').limitToLast(nLimit * (Number(page) - 1));
+            var tempRef = nominationsRef.orderByChild('timeStamp').limitToLast(nLimit * (Number(page) - 1));
+            if (judgeId) tempRef = nominationsRef.orderByChild('judgeId').equalTo(judgeId).limitToLast(nLimit * (Number(page) - 1));
             const tempResp = await tempRef.once('value');
             const tempRespVal = tempResp.val();
             const tempRespValArr = Object.keys(tempRespVal);
