@@ -68,8 +68,8 @@ async function fetchCategories(idToken) {
     return null;
 }
 
-async function fetchNominations(idToken, id) {
-    const response = await fetch('/api/v1/nominations?judgeId=' + id, {
+async function fetchNominations(idToken, id, catId) {
+    const response = await fetch('/api/v1/nominations?judgeId=' + id + "&catId=" + catId, {
         method: 'GET',
         headers: {
             Accept: 'application/json',

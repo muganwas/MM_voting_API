@@ -113,11 +113,11 @@ function toggleCategoryDD(e) {
 async function renderCampaigns(idToken, selectedCategoryId) {
     const uid = window.localStorage.getItem('j_uid');
     campaigns = await fetchCampaigns(idToken, selectedCategoryId);
-    nominations = await fetchNominations(idToken, uid);
+    nominations = await fetchNominations(idToken, uid, selectedCategoryId);
     const categorySelector = document.getElementById('selected-category');
     const listContainer = document.getElementById('campaigns-list');
     listContainer.innerHTML = null;
-    categorySelector.innerText = categories.find(c => c.id == selectedCategoryId)['name'];
+    categorySelector.innerText = categories.find(c => c.id == selectedCategoryId)?.name;
     if (Array.isArray(campaigns)) {
         campaigns.forEach((c, i) => {
             const newDiv = document.createElement('div');
@@ -125,7 +125,7 @@ async function renderCampaigns(idToken, selectedCategoryId) {
             const span_1 = document.createElement('span');
             const span_2 = document.createElement('span');
             const span_3 = document.createElement('span');
-            const nom = nominations.find(n => n.campaignId === c.id);
+            const nom = nominations?.find(n => n.campaignId === c.id && n.categoryId === selectedCategoryId);
             span_1.className = 'info';
             span_2.className = 'info';
             span_3.className = 'info';
@@ -139,7 +139,7 @@ async function renderCampaigns(idToken, selectedCategoryId) {
                 span_1.appendChild(lnk);
             }
             const btn = document.createElement('span');
-            btn.className = `button ${nom ? 'submitted' : ''} tgl-modal`;
+            btn.className = `button ${nom && nom.categoryId === selectedCategoryId ? 'submitted' : ''} tgl-modal`;
             btn.id = c.id;
             btn.addEventListener('click', () => {
                 toggleNominationModal(c.id);
@@ -167,14 +167,34 @@ function toggleNominationModal(campaignId) {
     const kpis_impact = document.getElementById('kpis_impact');
     const execution = document.getElementById('execution');
     const comment = document.getElementById('comment');
+    const nCatName = document.getElementById('nom-category-name');
     const titlePre = document.getElementById('title-pre');
     const submitDisabled = submit.getAttribute('disabled');
+
+    if (!campaignId || submitDisabled) {
+        titlePre.innerText = "Rate ";
+        submit.removeAttribute('disabled');
+        idea.removeAttribute('disabled');
+        insight.removeAttribute('disabled');
+        communications_integration.removeAttribute('disabled');
+        kpis_impact.removeAttribute('disabled');
+        execution.removeAttribute('disabled');
+        comment.removeAttribute('disabled');
+
+        idea.value = null;
+        insight.value = null;
+        communications_integration.value = null;
+        kpis_impact.value = null;
+        execution.value = null;
+        comment.value = null;
+    }
     if (modal.classList.contains('active')) {
         return modal.classList.remove('active');
     }
+    nCatName.innerText = categories?.find(c => selectedCategoryId === c.id)?.name;
     if (campaignId) {
-        activeCampaign = campaigns.find(c => c.id === campaignId);
-        const nom = nominations.find(n => n.campaignId === campaignId);
+        activeCampaign = campaigns?.find(c => c.id === campaignId);
+        const nom = nominations?.find(n => n.campaignId === campaignId && n.categoryId === selectedCategoryId);
         if (nom) {
             idea.value = nom.idea;
             idea.classList.contains('error') && idea.classList.remove('error');
@@ -198,27 +218,10 @@ function toggleNominationModal(campaignId) {
             comment.setAttribute('disabled', true);
 
         }
-        else if (!nom && submitDisabled) {
-            titlePre.innerText = "Rate ";
-            submit.removeAttribute('disabled');
-            idea.removeAttribute('disabled');
-            insight.removeAttribute('disabled');
-            communications_integration.removeAttribute('disabled');
-            kpis_impact.removeAttribute('disabled');
-            execution.removeAttribute('disabled');
-            comment.removeAttribute('disabled');
-
-            idea.value = null;
-            insight.value = null;
-            communications_integration.value = null;
-            kpis_impact.value = null;
-            execution.value = null;
-            comment.value = null;
-
-        }
         modal.classList.add('active');
         campaignName.innerText = activeCampaign.name;
     }
+
 }
 
 async function submitNomination(e) {
@@ -245,7 +248,7 @@ async function submitNomination(e) {
             Accept: 'application/json',
             Authorization: 'Bearer ' + idToken
         },
-        body: JSON.stringify({ judgeId, campaignId, idea: idea.value, insight: insight.value, communications_integration: communications_integration.value, kpis_impact: kpis_impact.value, execution: execution.value, comment: comment.value })
+        body: JSON.stringify({ judgeId, campaignId, categoryId: selectedCategoryId, idea: idea.value, insight: insight.value, communications_integration: communications_integration.value, kpis_impact: kpis_impact.value, execution: execution.value, comment: comment.value })
     });
     const { result, message } = await response.json();
     toggleNominationModal();

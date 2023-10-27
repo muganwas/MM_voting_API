@@ -6,6 +6,7 @@ var nominations;
 var users;
 var selectedCompBrands = [];
 var selectedCategoryIds = [];
+var selectedCategoryId;
 const selectedCategoryNames = [];
 (async function (doc, win) {
     const username = win.localStorage.getItem('username');
@@ -54,6 +55,7 @@ const selectedCategoryNames = [];
     await renderAgencies(doc, idToken);
     await renderCompanies(doc, idToken);
     await renderCampaigns(doc, idToken);
+    await renderNominations(doc, idToken);
 
     Array.from(tabs).forEach(e => {
         e.addEventListener('click', onTabClick)
@@ -526,6 +528,7 @@ async function submitCategory(e) {
 
 async function renderCategories(doc, idToken) {
     categories = await fetchCategories(idToken);
+    selectedCategoryId = categories[0]?.id;
     if (categories && Array.isArray(categories)) {
         const catListContainer = doc.getElementById('categories-list');
         catListContainer.innerHTML = null;
@@ -548,6 +551,15 @@ async function renderCategories(doc, idToken) {
             catListContainer.append(newDiv);
         });
     }
+
+}
+
+/** nominations */
+
+async function renderNominations(doc, idToken) {
+    nominations = await fetchNominations(idToken, '', selectedCategoryId);
+    const selectedCat = doc.getElementById('nom-selected-category');
+    selectedCat.innerText = categories.find(c => c.id === selectedCategoryId)?.name || 'No Categories Available';
 
 }
 

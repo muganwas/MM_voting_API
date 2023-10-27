@@ -100,7 +100,7 @@ async function retrieveCampaigns({ limit = 20, page = 1, catId }) {
             const k = keysArray[i];
             const newD = data[k];
             newD['id'] = k;
-            if (catId && catId != 'null') {
+            if (catId && catId !== 'null' && catId !== 'undefined') {
                 if (newD['categoryIds'].includes(catId)) {
                     dataArray.push(newD);
                 }

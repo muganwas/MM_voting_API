@@ -9,8 +9,8 @@ async function createNomination(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment } = req.body;
-    nominationsService.createNomination({ judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment }).then(data => res.json(data)).catch(err => next(err));
+    const { judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, comment } = req.body;
+    nominationsService.createNomination({ judgeId, campaignId, categoryId, idea, insight, communications_integration, kpis_impact, execution, comment }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateNomination(req, res, next) {
@@ -25,8 +25,8 @@ async function retrieveNominations(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { limit, page, judgeId } = req.query;
-    nominationsService.retrieveNominations({ limit, page, judgeId }).then(data => res.json(data)).catch(err => next(err));
+    const { limit, page, judgeId, catId } = req.query;
+    nominationsService.retrieveNominations({ limit, page, judgeId, catId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveNomination(req, res, next) {
