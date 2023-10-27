@@ -15,15 +15,15 @@
         <div id="welcome">Welcome <span id="admin-name">Admin</span></div>
         <div id="info-container" class="info-container">
             <div id="tabs" class="tabs">
-                <span id="users-tab" class="tab active">Users</span>
+                <span id="users-tab" class="tab">Users</span>
                 <span id="categories-tab" class="tab">Categories</span>
                 <span id="agencies-tab" class="tab">Agencies</span>
                 <span id="campaigns-tab" class="tab">Campaigns</span>
                 <span id="companies-tab" class="tab">Companies</span>
-                <span id="nominations-tab" class="tab">Nominations</span>
+                <span id="nominations-tab" class="tab active">Nominations</span>
             </div>
             <div class="details-container">
-                <div id="users-container" class="details-sub active">
+                <div id="users-container" class="details-sub">
                     <div id="users-info">
                         <div id="user-info-labels">
                             <span class="label">UID</span>
@@ -84,7 +84,7 @@
                 <div id="campaigns-container" class="details-sub">
                     <div id="campaigns-info">
                         <div id="campaigns-info-labels">
-                            <span class="label">File</span>
+                            <span class="label">Material</span>
                             <span class="label">Campaign Name</span>
                             <span class="label">Nom. Category</span>
                             <span class="label">Brand Name</span>
@@ -149,7 +149,19 @@
                         </form>
                     </div>
                 </div>
-                <div id="nominations-container" class="details-sub">
+                <div id="nominations-container" class="details-sub active">
+                    <div class="details-container">
+                        <div class="title">Nomination Category</div>
+                        <div id="campaigns-info">
+                            <div id="sort-campaigns">
+                                <input id="nom-category-id" type="text" hidden></input>
+                                <span class="input dropdown" id="nom-category-drop-down">
+                                    <span id="nom-selected-category"></span>
+                                    <span id="nom-category-list" class="category-list"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div id="nominations-info">
                         <div id="nominations-info-labels">
                             <span class="label">Judge ID</span>

@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
-const { validateFirebaseAdmin } = require('../_helpers/functions');
+const { validateFirebaseAdmin, validateFirebaseUser } = require('../_helpers/functions');
 const campaignsService = require('../services/campaigns.service');
 
 const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_MESSAGE, UNAUTHORIZED_MESSAGE } } = require('../_helpers/constants');
@@ -23,15 +23,15 @@ async function updateCampaign(req, res, next) {
 
 async function retrieveCampaigns(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
-    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+    if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { limit, page } = req.query;
-    campaignsService.retrieveCampaigns({ limit, page }).then(data => res.json(data)).catch(err => next(err));
+    const { limit, page, catId } = req.query;
+    campaignsService.retrieveCampaigns({ limit, page, catId }).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
-    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+    if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
     const { campaignId } = req.params;
     campaignsService.retrieveCampaign({ campaignId }).then(data => res.json(data)).catch(err => next(err));

@@ -5,9 +5,9 @@ const { database } = require('firebase-admin');
 const { retrieveCampaign } = require('./campaigns.service');
 const db = database();
 
-async function createNomination({ judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment }) {
+async function createNomination({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, comment }) {
     try {
-        if (!judgeId || !campaignId || !idea || !insight || !communications_integration || !kpis_impact || !execution || !comment) return { result: false, message: messages.NOM_REQUIRED };
+        if (!judgeId || !campaignId || !idea || !insight || !communications_integration || !categoryId || !kpis_impact || !execution || !comment) return { result: false, message: messages.NOM_REQUIRED };
         if (
             typeof Number(idea) !== 'number' ||
             typeof Number(insight) !== 'number' ||
@@ -24,13 +24,14 @@ async function createNomination({ judgeId, campaignId, idea, insight, communicat
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
+        const total = Number(idea) + Number(insight) + Number(communications_integration) + Number(kpis_impact) + Number(execution);
         if (baseVal && snapshot.hasChild('nominations')) {
             const nominationRef = baseRef.child('nominations');
-            nominationRef.push({ judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment, timeStamp })
+            nominationRef.push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, total, comment, timeStamp })
         }
         else
-            baseRef.child('nominations').push({ judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment, timeStamp });
-        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, idea, insight, communications_integration, kpis_impact, execution, comment, timeStamp } };
+            baseRef.child('nominations').push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, total, comment, timeStamp });
+        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, idea, categoryId, insight, communications_integration, kpis_impact, total, execution, comment, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };
@@ -50,14 +51,16 @@ async function updateNomination({ nominationId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveNominations({ limit = 10, page = 1 }) {
+async function retrieveNominations({ limit = 10, page = 1, judgeId, catId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);
         const nominationsRef = db.ref('nominations');
         var limitedRef = nominationsRef.orderByChild('timeStamp').limitToLast(nLimit);
+        if (judgeId && judgeId !== 'undefined' && judgeId !== 'null') limitedRef = nominationsRef.orderByChild('judgeId').equalTo(judgeId);
         if (nPage > 1) {
-            const tempRef = nominationsRef.orderByChild('timeStamp').limitToLast(nLimit * (Number(page) - 1));
+            var tempRef = nominationsRef.orderByChild('timeStamp').limitToLast(nLimit * (Number(page) - 1));
+            if (judgeId && judgeId !== 'undefined' && judgeId !== 'null') tempRef = nominationsRef.orderByChild('judgeId').equalTo(judgeId).limitToLast(nLimit * (Number(page) - 1));
             const tempResp = await tempRef.once('value');
             const tempRespVal = tempResp.val();
             const tempRespValArr = Object.keys(tempRespVal);
@@ -69,7 +72,11 @@ async function retrieveNominations({ limit = 10, page = 1 }) {
         const nominationCount = countResp.numChildren();
         const pages = (nominationCount - ((nPage - 1) * nLimit)) / nLimit;
         const data = resp.val();
-        const dataArray = Object.values(data);
+        var dataArray = Object.values(data);
+        if (catId && catId !== 'undefined' && catId !== 'null') {
+            dataArray = dataArray.filter(n => n.categoryId === catId);
+            dataArray.sort((n, nn) => nn.total - n.total);
+        }
         return { result: true, message: messages.NOMS_FETCHED, data: dataArray, metadata: { page, pages, limit } };
     } catch (e) {
         return { result: false, message: e.message };

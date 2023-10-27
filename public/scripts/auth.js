@@ -54,28 +54,6 @@ const baseURL = "";
 
 })(document, window);
 
-function validateEmail(email) {
-    if ((!email?.value || !email?.value.match(regexes.EMAIL))) {
-        !email?.classList.contains('error') && email.classList.add('error');
-        return false;
-    }
-    if (email?.value && email.value.match(regexes.EMAIL)) {
-        email?.classList.contains('error') && email.classList.remove('error');
-        return true;
-    }
-}
-
-function validatePassword(password) {
-    if ((!password?.value || !password?.value.match(regexes.PASSWORD))) {
-        !password?.classList.contains('error') && password.classList.add('error');
-        return false;
-    }
-    if (password?.value && password?.value.match(regexes.PASSWORD)) {
-        password?.classList.contains('error') && password.classList.remove('error');
-        return true;
-    }
-}
-
 async function renderDash(idToken) {
     const errorContainer = document.getElementById('error');
     const overlay = document.getElementById('loading-overlay');

@@ -14,7 +14,49 @@
     <main>
         <div id="welcome">Welcome <span id="jurer-name">Jurer</span></div>
         <div class="info-container">
-
+            <div class="details-container">
+                <div class="details-sub active">
+                    <div class="title">Nomination Category</div>
+                    <div id="campaigns-info">
+                        <div id="sort-campaigns">
+                            <input id="category-id" type="text" hidden></input>
+                            <span class="input dropdown" id="category-drop-down">
+                                <span id="selected-category"></span>
+                                <span id="category-list" class="category-list"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="title">Submitted Campaigns</div>
+                    <div id="campaigns-info-u">
+                        <div id="campaigns-info-labels">
+                            <span class="label">Material</span>
+                            <span class="label">Campaign Name(Click To Open)</span>
+                            <span class="label">Brand Name</span>
+                        </div>
+                        <div id="campaigns-list"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="nomination-modal" class="modal">
+                <div id="nomination-container" class="nomination-container">
+                    <div class="title"><span id="title-pre">Rate</span> <span id="campaign-name" class="title"></span>
+                        campaign for
+                        <span id="nom-category-name"></span>
+                    </div>
+                    <form id="nomination">
+                        <input class="input" id="idea" type="number" placeholder="Campaign idea ie. Maximum is 10" />
+                        <input class="input" id="insight" type="number"
+                            placeholder="Insight driving the idea ie. Maximum is 15" />
+                        <input class="input" id="communications_integration" type="number"
+                            placeholder="Integration of communications ie. Maximum is 10" />
+                        <input class="input" id="kpis_impact" type="number"
+                            placeholder="KPIS and IMPACT ie. Maximum is 30" />
+                        <input class="input" id="execution" type="number" placeholder="Execution ie. Maximum is 35" />
+                        <textarea class="input" id="comment" rows="5" placeholder="Comment"></textarea>
+                        <input class="input" id="submit-nomination" type="submit"></input>
+                    </form>
+                </div>
+            </div>
         </div>
     </main>
     <script type="text/javascript" src="/scripts/jury-dash.js"></script>

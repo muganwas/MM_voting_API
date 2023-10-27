@@ -9,7 +9,7 @@ const baseURL = "";
     const password = doc.getElementById('password');
     const errorContainer = document.getElementById('error');
     const overlay = doc.getElementById('loading-overlay');
-    const storedIdToken = win.localStorage.getItem('idToken');
+    const storedIdToken = win.localStorage.getItem('j_idToken');
     overlay.style.display = 'block';
 
     email.addEventListener('blur', function (e) {
@@ -38,12 +38,12 @@ const baseURL = "";
         });
         const { result, data, message } = await response.json();
         if (result) {
-            win.localStorage.setItem('idToken', data.idToken);
-            win.localStorage.setItem('uid', data.uid);
-            win.localStorage.setItem('userType', 'Jurer');
-            win.localStorage.setItem('username', data.username);
-            win.localStorage.setItem('email', data.email);
-            win.localStorage.setItem('refreshToken', data.refreshToken);
+            win.localStorage.setItem('j_idToken', data.idToken);
+            win.localStorage.setItem('j_uid', data.uid);
+            win.localStorage.setItem('j_userType', 'Jurer');
+            win.localStorage.setItem('j_username', data.username);
+            win.localStorage.setItem('j_email', data.email);
+            win.localStorage.setItem('j_refreshToken', data.refreshToken);
             await renderDash(data.idToken);
         }
         overlay.style.display = 'none';
@@ -53,28 +53,6 @@ const baseURL = "";
     renderDash(storedIdToken);
 
 })(document, window);
-
-function validateEmail(email) {
-    if ((!email?.value || !email?.value.match(regexes.EMAIL))) {
-        !email?.classList.contains('error') && email.classList.add('error');
-        return false;
-    }
-    if (email?.value && email.value.match(regexes.EMAIL)) {
-        email?.classList.contains('error') && email.classList.remove('error');
-        return true;
-    }
-}
-
-function validatePassword(password) {
-    if ((!password?.value || !password?.value.match(regexes.PASSWORD))) {
-        !password?.classList.contains('error') && password.classList.add('error');
-        return false;
-    }
-    if (password?.value && password?.value.match(regexes.PASSWORD)) {
-        password?.classList.contains('error') && password.classList.remove('error');
-        return true;
-    }
-}
 
 async function renderDash(idToken) {
     const errorContainer = document.getElementById('error');

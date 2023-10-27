@@ -74,7 +74,7 @@ async function updateCampaign({ campaignId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveCampaigns({ limit = 10, page = 1 }) {
+async function retrieveCampaigns({ limit = 20, page = 1, catId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);
@@ -100,7 +100,13 @@ async function retrieveCampaigns({ limit = 10, page = 1 }) {
             const k = keysArray[i];
             const newD = data[k];
             newD['id'] = k;
-            dataArray.push(newD)
+            if (catId && catId !== 'null' && catId !== 'undefined') {
+                if (newD['categoryIds'].includes(catId)) {
+                    dataArray.push(newD);
+                }
+            } else {
+                dataArray.push(newD)
+            }
         }
         return { result: true, message: messages.CAMPS_FETCHED, data: dataArray, metadata: { page, pages, limit } };
     } catch (e) {
