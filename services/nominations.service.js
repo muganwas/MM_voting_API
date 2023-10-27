@@ -24,13 +24,14 @@ async function createNomination({ judgeId, campaignId, idea, insight, categoryId
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
+        const total = Number(idea) + Number(insight) + Number(communications_integration) + Number(kpis_impact) + Number(execution);
         if (baseVal && snapshot.hasChild('nominations')) {
             const nominationRef = baseRef.child('nominations');
-            nominationRef.push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, comment, timeStamp })
+            nominationRef.push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, total, comment, timeStamp })
         }
         else
-            baseRef.child('nominations').push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, comment, timeStamp });
-        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, idea, categoryId, insight, communications_integration, kpis_impact, execution, comment, timeStamp } };
+            baseRef.child('nominations').push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, total, comment, timeStamp });
+        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, idea, categoryId, insight, communications_integration, kpis_impact, total, execution, comment, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };
@@ -74,6 +75,7 @@ async function retrieveNominations({ limit = 10, page = 1, judgeId, catId }) {
         var dataArray = Object.values(data);
         if (catId && catId !== 'undefined' && catId !== 'null') {
             dataArray = dataArray.filter(n => n.categoryId === catId);
+            dataArray.sort((n, nn) => nn.total - n.total);
         }
         return { result: true, message: messages.NOMS_FETCHED, data: dataArray, metadata: { page, pages, limit } };
     } catch (e) {

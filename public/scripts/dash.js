@@ -37,6 +37,7 @@ const selectedCategoryNames = [];
     const agencyDD = doc.getElementById('agency-drop-down');
     const brandDD = document.getElementById('brand-drop-down');
     const categoryDD = document.getElementById('category-drop-down');
+    const nomCategoryDD = document.getElementById('nom-category-drop-down');
 
     const categoriesForm = doc.getElementById('categories-form');
     const companiesForm = doc.getElementById('companies-form');
@@ -55,7 +56,7 @@ const selectedCategoryNames = [];
     await renderAgencies(doc, idToken);
     await renderCompanies(doc, idToken);
     await renderCampaigns(doc, idToken);
-    await renderNominations(doc, idToken);
+    await renderNominations(doc, idToken, selectedCategoryId);
 
     Array.from(tabs).forEach(e => {
         e.addEventListener('click', onTabClick)
@@ -70,6 +71,7 @@ const selectedCategoryNames = [];
     agencyDD.addEventListener('click', toggleAgencyDD);
     brandDD.addEventListener('click', toggleBrandDD);
     categoryDD.addEventListener('click', toggleCategoryDD);
+    nomCategoryDD.addEventListener('click', toggleNomCategoryDD);
 
     newUserEmail.addEventListener('blur', (e) => validateEmail(e.target));
     newUserPassword.addEventListener('blur', (e) => validatePassword(e.target));
@@ -112,6 +114,39 @@ function onTabClick(e) {
         });
         target.classList.add('active');
         container.classList.add('active');
+    }
+}
+
+function toggleNomCategoryDD(e) {
+    e.preventDefault();
+    const categoryList = document.getElementById('nom-category-list');
+    const categoryId = document.getElementById('nom-category-id');
+    const selectedCategory = document.getElementById('nom-selected-category');
+    if (categoryList.classList.contains('active')) {
+        return categoryList.classList.remove('active');
+    }
+    if (categories && Array.isArray(categories)) {
+        categoryList.innerHTML = "";
+        categories.forEach(c => {
+            const br = document.createElement('span');
+            br.innerText = c.name;
+            br.className = `item${selectedCategoryId == c.id ? ' active' : ''}`;
+            br.addEventListener('click', async (e) => {
+                e.preventDefault();
+                if (br.classList.contains('active')) {
+                    br.classList.remove('active');
+                } else {
+                    br.classList.add('active');
+                }
+                selectedCategory.innerText = c.name;
+                categoryId.value = JSON.stringify(selectedCategoryId);
+                selectedCategoryId = c.id;
+                const idToken = window.localStorage.getItem('idToken');
+                await renderNominations(document, idToken, selectedCategoryId);
+            });
+            categoryList.appendChild(br);
+        });
+        categoryList.classList.add('active');
     }
 }
 
@@ -556,11 +591,61 @@ async function renderCategories(doc, idToken) {
 
 /** nominations */
 
-async function renderNominations(doc, idToken) {
+async function renderNominations(doc, idToken, selectedCategoryId) {
     nominations = await fetchNominations(idToken, '', selectedCategoryId);
     const selectedCat = doc.getElementById('nom-selected-category');
+    const nomListContainer = doc.getElementById('nominations-list');
+    nomListContainer.innerHTML = null;
     selectedCat.innerText = categories.find(c => c.id === selectedCategoryId)?.name || 'No Categories Available';
+    nominations?.forEach(n => {
+        const newDiv = doc.createElement('div');
+        newDiv.className = 'nomination-info';/** change class name */
+        const span_1 = doc.createElement('span');
+        const span_2 = doc.createElement('span');
+        const span_3 = doc.createElement('span');
+        const span_4 = doc.createElement('span');
+        const span_5 = doc.createElement('span');
+        const span_6 = doc.createElement('span');
+        const span_7 = doc.createElement('span');
+        const span_8 = doc.createElement('span');
 
+        span_1.id = 'judge-id';
+        span_2.id = 'campaign-id';
+        span_3.id = 'big-idea-r';
+        span_4.id = 'insight-r';
+        span_5.id = 'comm-integration-r';
+        span_6.id = 'kpis_impact-r';
+        span_7.id = 'execution-r';
+        span_8.id = 'total-r';
+
+        span_1.className = 'info';
+        span_2.className = 'info';
+        span_3.className = 'info';
+        span_4.className = 'info';
+        span_5.className = 'info';
+        span_6.className = 'info';
+        span_7.className = 'info';
+        span_8.className = 'info';
+
+        span_1.innerText = n.judgeId.substring(0, 12) + '..';
+        span_2.innerText = campaigns?.find(c => c.id === n.campaignId)?.name;
+        span_3.innerText = n.idea;
+        span_4.innerText = n.insight;
+        span_5.innerText = n.communications_integration;
+        span_6.innerText = n.kpis_impact;
+        span_7.innerText = n.execution;
+        span_8.innerText = n.total;
+
+        newDiv.appendChild(span_1);
+        newDiv.appendChild(span_2);
+        newDiv.appendChild(span_3);
+        newDiv.appendChild(span_4);
+        newDiv.appendChild(span_5);
+        newDiv.appendChild(span_6);
+        newDiv.appendChild(span_7);
+        newDiv.appendChild(span_8);
+        nomListContainer.appendChild(newDiv);
+    });
 }
 
 /** Users */
