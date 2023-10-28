@@ -7,6 +7,7 @@ var users;
 var selectedCompBrands = [];
 var selectedCategoryIds = [];
 var selectedCategoryId;
+var editCatId;
 const selectedCategoryNames = [];
 (async function (doc, win) {
     const username = win.localStorage.getItem('username');
@@ -561,6 +562,32 @@ async function submitCategory(e) {
     return alert(message);
 }
 
+async function updateCategory(e) {
+    e.preventDefault();
+    const idToken = window.localStorage.getItem('idToken');
+    const children = e.target.children;
+    const catName = Array.from(children).find(c => c.id === 'category-name');
+    const catDesc = Array.from(children).find(c => c.id === 'category-desc');
+    if (!catName.value || !catDesc.value || !editCatId) return null;
+    if (!confirm('Are you sure you want to update category?')) return null;
+    const response = await fetch(baseURL + '/api/v1/categories/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + idToken
+        },
+        body: JSON.stringify({ categoryId: editCatId, details: { name: catName.value, desc: catDesc.value } })
+    });
+    const { result, message } = await response.json();
+    if (result) {
+        catName.value = "";
+        catDesc.value = "";
+        return renderCategories(document, idToken);
+    }
+    return alert(message);
+}
+
 async function renderCategories(doc, idToken) {
     categories = await fetchCategories(idToken);
     selectedCategoryId = categories[0]?.id;
@@ -573,20 +600,56 @@ async function renderCategories(doc, idToken) {
             const span_1 = doc.createElement('span');
             const span_2 = doc.createElement('span');
             const span_3 = doc.createElement('span');
+            const span_4 = doc.createElement('span');
             span_1.innerText = cat.id;
             span_2.innerText = cat.name;
             span_3.innerText = cat.desc;
-
+            const btn = document.createElement('span');
+            btn.className = 'button';
+            btn.id = cat.id;
+            btn.addEventListener('click', () => {
+                toggleEditCategoryModal(cat.id);
+            });
+            btn.innerText = 'Edit Category';
+            span_4.appendChild(btn);
             span_1.className = 'info';
             span_2.className = 'info';
             span_3.className = 'info desc';
+            span_4.className = 'info';
             newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
+            newDiv.appendChild(span_4);
             catListContainer.append(newDiv);
         });
     }
 
+}
+
+function toggleEditCategoryModal(id) {
+    const editContainer = document.getElementById('new-category');
+    const editContainerSub = document.getElementById('new-category-sub');
+    const newCatTitle = document.getElementById('new-cat-title');
+    const catName = document.getElementById('category-name');
+    const catForm = document.getElementById('categories-form');
+    const catDesc = document.getElementById('category-desc');
+    editCatId = id;
+    if (id) {
+        editContainer.classList.add('modal');
+        editContainerSub.classList.add('edit');
+        newCatTitle.innerText = 'Edit Category';
+        const cat = categories.find(c => c.id === id);
+        catName.value = cat.name;
+        catDesc.value = cat.desc;
+        catForm.removeEventListener('submit', submitCategory);
+        catForm.addEventListener('submit', updateCategory);
+    } else {
+        editContainer.classList.remove('modal');
+        editContainerSub.classList.remove('edit');
+        newCatTitle.innerText = 'Create New Category';
+        catForm.removeEventListener('submit', updateCategory);
+        catForm.addEventListener('submit', submitCategory);
+    }
 }
 
 /** nominations */
