@@ -80,6 +80,8 @@ main {
 							.info {
 								display: flex;
 								flex: 1;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -152,6 +154,8 @@ main {
 							.info {
 								display: flex;
 								flex: 1;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -228,6 +232,8 @@ main {
 							.info {
 								display: flex;
 								flex: 1;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -304,6 +310,8 @@ main {
 							.info {
 								display: flex;
 								flex: 1;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -364,6 +372,10 @@ main {
 						.label {
 							display: flex;
 							flex: 1;
+							box-sizing: border-box;
+						}
+						.label.long {
+							flex: 2;
 						}
 					}
 					#campaigns-list {
@@ -379,12 +391,17 @@ main {
 							.info {
 								display: flex;
 								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								flex: 1;
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
 									font-weight: 600;
 								}
+							}
+							.info.long {
+								flex: 2;
 							}
 						}
 						.campaign-info:last-of-type {
@@ -497,6 +514,8 @@ main {
 							.info {
 								display: flex;
 								flex: 1;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;

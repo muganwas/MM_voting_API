@@ -374,7 +374,7 @@ async function renderCampaigns(doc, idToken) {
 
             span_1.className = 'info';
             span_2.className = 'info';
-            span_3.className = 'info';
+            span_3.className = 'info long';
             span_4.className = 'info';
             span_5.className = 'info';
             span_6.className = 'info';
