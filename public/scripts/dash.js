@@ -8,6 +8,7 @@ var selectedCompBrands = [];
 var selectedCategoryIds = [];
 var selectedCategoryId;
 var editCatId;
+var editAgId;
 const selectedCategoryNames = [];
 (async function (doc, win) {
     const username = win.localStorage.getItem('username');
@@ -492,6 +493,34 @@ async function submitAgency(e) {
     return alert(message);
 }
 
+async function updateAgency(e) {
+    e.preventDefault();
+    const idToken = window.localStorage.getItem('idToken');
+    const agName = document.getElementById('agency-name');
+    const agEmail = document.getElementById('agency-email');
+    const agIntro = document.getElementById('agency-intro');
+    if (!agName.value || !agEmail.value || !agIntro.value || !editAgId) return;
+    if (!confirm('Are you sure you want to update agency?')) return null;
+    const response = await fetch(baseURL + '/api/v1/agencies/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + idToken
+        },
+        body: JSON.stringify({ agencyId: editAgId, details: { name: agName.value, introduction: agIntro.value, emailAddress: agEmail.value } })
+    });
+    const { result, message } = await response.json();
+    if (result) {
+        agName.value = "";
+        agEmail.value = "";
+        agIntro.value = "";
+        toggleEditAgencyModal();
+        return renderAgencies(document, idToken);
+    }
+    return alert(message);
+}
+
 async function fetchAgencies(idToken) {
     const response = await fetch(baseURL + '/api/v1/agencies', {
         method: 'GET',
@@ -517,21 +546,65 @@ async function renderAgencies(doc, idToken) {
             const span_2 = doc.createElement('span');
             const span_3 = doc.createElement('span');
             const span_4 = doc.createElement('span');
-            span_1.innerText = ag.id;
-            span_2.innerText = ag.name;
-            span_3.innerText = ag.emailAddress;
-            span_4.innerText = ag.introduction;
-
+            span_1.innerText = ag.name;
+            span_2.innerText = ag.emailAddress;
+            span_3.innerText = ag.introduction;
+            const btn = document.createElement('span');
+            btn.className = 'button';
+            btn.id = ag.id;
+            btn.addEventListener('click', () => {
+                toggleEditAgencyModal(ag.id);
+            });
+            btn.innerText = 'Edit Agency';
             span_1.className = 'info';
             span_2.className = 'info';
-            span_3.className = 'info';
-            span_4.className = 'info long';
+            span_3.className = 'info long';
+            span_4.className = 'info';
+            span_4.appendChild(btn);
             newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
             newDiv.appendChild(span_4);
             agListContainer.append(newDiv);
         });
+    }
+}
+
+function toggleEditAgencyModal(id) {
+    const editContainer = document.getElementById('new-agency');
+    const editContainerSub = document.getElementById('new-agency-sub');
+    const newAgTitle = document.getElementById('new-ag-title');
+    const agName = document.getElementById('agency-name');
+    const agForm = document.getElementById('agencies-form');
+    const agSubmit = document.getElementById('submit-agency');
+    const agEmail = document.getElementById('agency-email');
+    const agIntro = document.getElementById('agency-intro');
+    if (id && typeof id === 'string') {
+        editAgId = id;
+        editContainer.classList.add('modal');
+        editContainerSub.classList.add('edit');
+        newAgTitle.innerText = 'Edit Agency';
+        const ag = agencies.find(a => a.id === id);
+        agName.value = ag.name;
+        agEmail.value = ag.emailAddress;
+        agIntro.value = ag.introduction;
+        agForm.removeEventListener('submit', submitAgency);
+        agForm.addEventListener('submit', updateAgency);
+        editContainerSub.addEventListener('click', preventPropagation);
+        editContainer.addEventListener('click', toggleEditAgencyModal);
+        agSubmit.addEventListener('click', updateAgency);
+    } else {
+        editContainer.removeEventListener('click', toggleEditAgencyModal);
+        editContainerSub.removeEventListener('click', preventPropagation);
+        agSubmit.removeEventListener('click', updateAgency);
+        editContainer.classList.remove('modal');
+        editContainerSub.classList.remove('edit');
+        newAgTitle.innerText = 'Create New Agency';
+        agName.value = null;
+        agEmail.value = null;
+        agIntro.value = null;
+        agForm.removeEventListener('submit', updateAgency);
+        agForm.addEventListener('submit', submitAgency);
     }
 }
 
@@ -565,9 +638,8 @@ async function submitCategory(e) {
 async function updateCategory(e) {
     e.preventDefault();
     const idToken = window.localStorage.getItem('idToken');
-    const children = e.target.children;
-    const catName = Array.from(children).find(c => c.id === 'category-name');
-    const catDesc = Array.from(children).find(c => c.id === 'category-desc');
+    const catName = document.getElementById('category-name');
+    const catDesc = document.getElementById('category-desc');
     if (!catName.value || !catDesc.value || !editCatId) return null;
     if (!confirm('Are you sure you want to update category?')) return null;
     const response = await fetch(baseURL + '/api/v1/categories/update', {
@@ -583,6 +655,7 @@ async function updateCategory(e) {
     if (result) {
         catName.value = "";
         catDesc.value = "";
+        toggleEditCategoryModal();
         return renderCategories(document, idToken);
     }
     return alert(message);
@@ -631,10 +704,11 @@ function toggleEditCategoryModal(id) {
     const editContainerSub = document.getElementById('new-category-sub');
     const newCatTitle = document.getElementById('new-cat-title');
     const catName = document.getElementById('category-name');
-    const catForm = document.getElementById('categories-form');
+    const catForm = document.getElementById('submit-category');
+    const catSubmit = document.getElementById('submit-category')
     const catDesc = document.getElementById('category-desc');
-    editCatId = id;
-    if (id) {
+    if (id && typeof id === 'string') {
+        editCatId = id;
         editContainer.classList.add('modal');
         editContainerSub.classList.add('edit');
         newCatTitle.innerText = 'Edit Category';
@@ -643,10 +717,18 @@ function toggleEditCategoryModal(id) {
         catDesc.value = cat.desc;
         catForm.removeEventListener('submit', submitCategory);
         catForm.addEventListener('submit', updateCategory);
+        catSubmit.addEventListener('click', updateCategory);
+        editContainerSub.addEventListener('click', preventPropagation);
+        editContainer.addEventListener('click', toggleEditCategoryModal);
     } else {
+        editContainer.removeEventListener('click', toggleEditCategoryModal);
+        editContainerSub.removeEventListener('click', preventPropagation);
         editContainer.classList.remove('modal');
         editContainerSub.classList.remove('edit');
         newCatTitle.innerText = 'Create New Category';
+        catName.value = null;
+        catDesc.value = null;
+        catSubmit.removeEventListener('click', updateCategory);
         catForm.removeEventListener('submit', updateCategory);
         catForm.addEventListener('submit', submitCategory);
     }
