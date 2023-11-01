@@ -83,7 +83,6 @@ async function updateCampaign({ id, name, companyId, catIds, fileURL, brandName,
         return { result: true, message: messages.CAMP_UPDATE_SUCCESS, data: updates };
 
     } catch (e) {
-        console.log(e)
         return { result: false, message: e.message };
     }
 }

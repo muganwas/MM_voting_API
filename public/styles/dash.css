@@ -75,11 +75,13 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.user-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
 								overflow: scroll;
 								padding: var(--sm-pm);
 								.action {
@@ -149,11 +151,13 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.category-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
 								overflow: scroll;
 								padding: var(--sm-pm);
 								.action {
@@ -227,11 +231,13 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.agency-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
 								overflow: scroll;
 								padding: var(--sm-pm);
 								.action {
@@ -305,11 +311,13 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.company-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
 								overflow: scroll;
 								padding: var(--sm-pm);
 								.action {
@@ -509,11 +517,13 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.nomination-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
 								overflow: scroll;
 								padding: var(--sm-pm);
 								.action {

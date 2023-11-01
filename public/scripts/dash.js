@@ -562,6 +562,31 @@ async function submitCompany(e) {
     return alert(message);
 }
 
+async function updateCompany(e) {
+    e.preventDefault();
+    const idToken = window.localStorage.getItem('idToken');
+    const children = e.target.children;
+    const compName = Array.from(children).find(c => c.id === 'company-name');
+    const compBrands = Array.from(children).find(c => c.id === 'company-brands');
+    const compEmail = Array.from(children).find(c => c.id === 'company-email');
+    if (!compName.value || !compBrands.value || !validateEmail(compEmail)) return;
+    const response = await fetch(baseURL + '/api/v1/companies/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + idToken
+        },
+        body: JSON.stringify({ companyId: editCompId, details: { name: compName.value, brands: compBrands.value.split(","), emailAddress: compEmail.value } })
+    });
+    const { result, message } = await response.json();
+    if (result) {
+        toggleEditCompanyModal();
+        return renderCompanies(document, idToken);
+    }
+    return alert(message);
+}
+
 async function fetchCompanies(idToken) {
     const response = await fetch(baseURL + '/api/v1/companies', {
         method: 'GET',
@@ -588,10 +613,18 @@ async function renderCompanies(doc, idToken) {
             const span_3 = doc.createElement('span');
             const span_4 = doc.createElement('span');
 
-            span_1.innerText = comp.id;
-            span_2.innerText = comp.name;
-            span_3.innerText = comp.brands.join(', ');
-            span_4.innerText = comp.emailAddress;
+            span_1.innerText = comp.name;
+            span_2.innerText = comp.brands.join(', ');
+            span_3.innerText = comp.emailAddress;
+
+            const btn = document.createElement('span');
+            btn.className = 'button';
+            btn.id = comp.id;
+            btn.addEventListener('click', () => {
+                toggleEditCompanyModal(comp.id);
+            });
+            btn.innerText = 'Edit Company';
+            span_4.appendChild(btn);
 
             span_1.className = 'info';
             span_2.className = 'info';
@@ -604,6 +637,41 @@ async function renderCompanies(doc, idToken) {
             newDiv.appendChild(span_4);
             compListContainer.append(newDiv);
         });
+    }
+}
+
+function toggleEditCompanyModal(id) {
+    const editContainer = document.getElementById('new-company');
+    const editContainerSub = document.getElementById('new-company-sub');
+    const newCompTitle = document.getElementById('new-comp-title');
+    const compName = document.getElementById('company-name');
+    const compForm = document.getElementById('companies-form');
+    const compEmail = document.getElementById('company-email');
+    const compBrands = document.getElementById('company-brands');
+    if (id && typeof id === 'string') {
+        editCompId = id;
+        editContainer.classList.add('modal');
+        editContainerSub.classList.add('edit');
+        newCompTitle.innerText = 'Edit Company';
+        const comp = companies.find(c => c.id === id);
+        compName.value = comp.name;
+        compEmail.value = comp.emailAddress;
+        compBrands.value = comp.brands.join(',');
+        compForm.removeEventListener('submit', submitCompany);
+        compForm.addEventListener('submit', updateCompany);
+        editContainerSub.addEventListener('click', preventPropagation);
+        editContainer.addEventListener('click', toggleEditCompanyModal);
+    } else {
+        editContainer.removeEventListener('click', toggleEditCompanyModal);
+        editContainerSub.removeEventListener('click', preventPropagation);
+        editContainer.classList.remove('modal');
+        editContainerSub.classList.remove('edit');
+        newCompTitle.innerText = 'Create New Agency';
+        compName.value = null;
+        compEmail.value = null;
+        compBrands.value = null;
+        compForm.removeEventListener('submit', updateCompany);
+        compForm.addEventListener('submit', submitCompany);
     }
 }
 
