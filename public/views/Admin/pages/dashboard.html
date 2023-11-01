@@ -95,41 +95,44 @@
                             <span class="label">Brand Name</span>
                             <span class="label">Agency</span>
                             <span class="label">Contact Email</span>
+                            <span class="label"></span>
                         </div>
                         <div id="campaigns-list"></div>
                     </div>
                     <div id="new-campaign">
-                        <span class="sub-sect-title">Create New Campaign</span>
-                        <form id="campaigns-form" enctype="multipart/form-data">
-                            <input class="input" id="campaign-name" type="text" placeholder="Campaign Name"></input>
-                            <input id="category-id" type="text" hidden></input>
-                            <span class="input dropdown" id="category-drop-down">
-                                <span id="selected-category">Select Categories(One or more)</span>
-                                <span id="category-list" class="category-list"></span>
-                            </span>
-                            <input id="company-id" type="text" hidden></input>
-                            <span class="input dropdown" id="company-drop-down">
-                                <span id="selected-company">Select Company</span>
-                                <span id="company-list" class="company-list"></span>
-                            </span>
-                            <input class="input" id="brand-name" type="text" placeholder="Brand Name"></input>
-                            <span class="input dropdown" id="brand-drop-down">
-                                <span id="selected-brand">Select Brand</span>
-                                <span id="brand-list" class="brand-list"></span>
-                            </span>
-                            <input id="agency-id" type="text" hidden></input>
-                            <span class="input dropdown" id="agency-drop-down">
-                                <span id="selected-agency">Select Agency</span>
-                                <span id="agency-list" class="agency-list"></span>
-                            </span>
-                            <span class="input dropdown" id="company-drop-down">
-                                <span id="selected-company">Select File</span>
-                                <input type="file" id="file" />
-                            </span>
-                            <input class="input" id="contact-email" type="email"
-                                placeholder="Contact Email Address"></input>
-                            <input id="submit-campaign" type="submit"></input>
-                        </form>
+                        <div id="new-campaign-sub">
+                            <span class="sub-sect-title" id="new-camp-title">Create New Campaign</span>
+                            <form id="campaigns-form" enctype="multipart/form-data">
+                                <input class="input" id="campaign-name" type="text" placeholder="Campaign Name"></input>
+                                <input id="category-id" type="text" hidden></input>
+                                <span class="input dropdown" id="category-drop-down">
+                                    <span id="selected-category">Select Categories(One or more)</span>
+                                    <span id="category-list" class="category-list"></span>
+                                </span>
+                                <input id="company-id" type="text" hidden></input>
+                                <span class="input dropdown" id="company-drop-down">
+                                    <span id="selected-company">Select Company</span>
+                                    <span id="company-list" class="company-list"></span>
+                                </span>
+                                <input class="input" id="brand-name" type="text" placeholder="Brand Name"></input>
+                                <span class="input dropdown" id="brand-drop-down">
+                                    <span id="selected-brand">Select Brand</span>
+                                    <span id="brand-list" class="brand-list"></span>
+                                </span>
+                                <input id="agency-id" type="text" hidden></input>
+                                <span class="input dropdown" id="agency-drop-down">
+                                    <span id="selected-agency">Select Agency</span>
+                                    <span id="agency-list" class="agency-list"></span>
+                                </span>
+                                <span class="input dropdown" id="file-drop-down">
+                                    <span id="selected-company">Select File</span>
+                                    <input type="file" id="file" />
+                                </span>
+                                <input class="input" id="contact-email" type="email"
+                                    placeholder="Contact Email Address"></input>
+                                <input id="submit-campaign" type="submit"></input>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div id="companies-container" class="details-sub">

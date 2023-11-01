@@ -17,8 +17,8 @@ async function updateCampaign(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
-    const { campaignId, details } = req.body;
-    campaignsService.updateCampaign({ campaignId, details }).then(data => res.json(data)).catch(err => next(err));
+    const { id, name, companyId, fileURL, categoryIds, brandName, agencyId, emailAddress } = req.body;
+    campaignsService.updateCampaign({ id, name, companyId, fileURL, catIds: categoryIds, brandName, agencyId, emailAddress }, req.file).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCampaigns(req, res, next) {
@@ -46,7 +46,7 @@ async function deleteCampaign(req, res, next) {
 }
 
 router.post('/create', upload.single('file'), createCampaign);
-router.put('/update', updateCampaign);
+router.put('/update', upload.single('file'), updateCampaign);
 router.get('/', retrieveCampaigns);
 router.get('/:campaignId', retrieveCampaign);
 router.delete('/', deleteCampaign);

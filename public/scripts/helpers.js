@@ -21,7 +21,6 @@ function validatePassword(password) {
 }
 
 function preventPropagation(e) {
-    e.preventDefault();
     e.stopPropagation();
     /** prevent propagation on child click */
 }

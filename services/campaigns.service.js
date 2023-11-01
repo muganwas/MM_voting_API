@@ -14,10 +14,10 @@ async function createCampaign({ name, catIds, companyName, intro, agencyName, co
         const categoryIds = catIds.split(',');
         var fileURL = '';
         if (!name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_REQUIRED };
-        if ((!companyId || !agencyId) && (!agencyName || !companyName)) return { result: false, message: messages.CAMP_REQUIRED };
+        if ((!companyId || !agencyId) && (!agencyName || !companyName)) return { result: false, message: messages.CAMP_REQUIRED_ALT };
         if (!Array.isArray(categoryIds)) return { result: false, message: messages.CAMP_CAT_ID_TYPE };
         /** upload file if it exists */
-        if (file) {
+        if (typeof file !== 'undefined' || file !== 'undefined' || file !== 'null') {
             const bucketName = name.replaceAll(' ', "_");
             const storageRef = ref(storage, `submissions/${bucketName}`);
             const metadata = {
@@ -61,16 +61,29 @@ async function createCampaign({ name, catIds, companyName, intro, agencyName, co
     }
 }
 
-async function updateCampaign({ campaignId, details }) {
+async function updateCampaign({ id, name, companyId, catIds, fileURL, brandName, agencyId, emailAddress }, file) {
     try {
-        if (!campaignId || !details || typeof details !== 'object') return { result: false, message: messages.CAMP_UPDATE_REQUIRED };
-        const ref = db.ref(`campaigns/${campaignId}`);
-        const snapshot = await ref.once('value');
+        const categoryIds = catIds.split(',');
+        if (!id || !name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_UPDATE_REQUIRED };
+        if (!companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED_ALT };
+        /** upload file if it exists */
+        if (typeof file !== 'undefined' || file !== 'undefined' || file !== 'null') {
+            const bucketName = name.replaceAll(' ', "_");
+            const storageRef = ref(storage, `submissions/${bucketName}`);
+            const metadata = {
+                contentType: file.mimetype
+            };
+            const snapShot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+            fileURL = await getDownloadURL(snapShot.ref);
+        }
+        const dbRef = db.ref(`campaigns/${id}`);
+        const snapshot = await dbRef.once('value');
         if (!snapshot.val()) return { result: false, message: messages.NONEXISTENT_CAMP };
-        const updates = await ref.update(details);
+        const updates = await dbRef.update({ name, companyId, categoryIds, fileURL, brandName, agencyId, emailAddress });
         return { result: true, message: messages.CAMP_UPDATE_SUCCESS, data: updates };
 
     } catch (e) {
+        console.log(e)
         return { result: false, message: e.message };
     }
 }
