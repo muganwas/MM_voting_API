@@ -70,7 +70,7 @@ async function fetchCategories(idToken) {
     });
     const { result, data } = await response.json();
     if (result) return data;
-    return null;
+    return [];
 }
 
 async function fetchNominations(idToken, id, catId) {
@@ -83,7 +83,7 @@ async function fetchNominations(idToken, id, catId) {
     });
     const { result, data } = await response.json();
     if (result) return data;
-    return null;
+    return [];
 }
 
 async function fetchCampaigns(idToken, catId) {
@@ -96,5 +96,5 @@ async function fetchCampaigns(idToken, catId) {
     });
     const { result, data } = await response.json();
     if (result) return data;
-    return null;
+    return [];
 }
