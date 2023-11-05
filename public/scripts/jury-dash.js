@@ -53,11 +53,7 @@ var activeCampaign;
     categoryDD.addEventListener('click', toggleCategoryDD);
     nominationForm.addEventListener('submit', submitNomination);
     submit.addEventListener('click', submitNomination);
-    nominationContainer.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        /** prevent modal closing on form click */
-    });
+    nominationContainer.addEventListener('click', preventPropagation);
 
     categories = await fetchCategories(idToken);
     /** set default selectedCategoryId */

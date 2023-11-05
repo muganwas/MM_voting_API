@@ -20,6 +20,11 @@ function validatePassword(password) {
     }
 }
 
+function preventPropagation(e) {
+    e.stopPropagation();
+    /** prevent propagation on child click */
+}
+
 function validateInt(t, tV = 10) {
     const val = t.value;
     if ((!val || Number(val) < 0) || (val && Number(val) > tV)) {

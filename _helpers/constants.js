@@ -52,7 +52,7 @@ const messages = {
     CAMP_REQUIRED: 'Name, Category IDs and Email Address are all required',
     CAMP_REQUIRED_ALT: 'Name, Client Organisation name, Agency Name, Category IDs and Email Address are all required',
     CAMP_CAT_ID_TYPE: 'Category IDs should be an array of ids',
-    CAMP_UPDATE_REQUIRED: 'Campaign ID and details object are required',
+    CAMP_UPDATE_REQUIRED: 'Campaign ID,Name, Category IDs and Email Address are all required are all required',
     NONEXISTENT_CAMP: 'Campaign does not exist',
     CAMP_UPDATE_SUCCESS: 'Campaign was updated successfully',
     CAMPS_FETCHED: 'Campaigns fetched successfully',

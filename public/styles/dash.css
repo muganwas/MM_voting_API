@@ -1,3 +1,10 @@
+.modal {
+	.edit {
+		background-color: var(--White);
+		padding: 5%;
+		margin: 10%;
+	}
+}
 nav {
 	display: flex;
 	justify-content: space-between;
@@ -68,11 +75,15 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.user-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -140,11 +151,15 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.category-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -216,11 +231,15 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.agency-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -292,11 +311,15 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.company-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
@@ -357,6 +380,10 @@ main {
 						.label {
 							display: flex;
 							flex: 1;
+							box-sizing: border-box;
+						}
+						.label.long {
+							flex: 2;
 						}
 					}
 					#campaigns-list {
@@ -372,12 +399,17 @@ main {
 							.info {
 								display: flex;
 								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								flex: 1;
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
 									font-weight: 600;
 								}
+							}
+							.info.long {
+								flex: 2;
 							}
 						}
 						.campaign-info:last-of-type {
@@ -485,11 +517,15 @@ main {
 						padding: var(--sm-pm) var(--m-pm);
 						.nomination-info {
 							display: flex;
+							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
 							.info {
 								display: flex;
 								flex: 1;
+								align-items: center;
+								overflow: scroll;
+								padding: var(--sm-pm);
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
