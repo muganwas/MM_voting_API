@@ -1047,7 +1047,6 @@ async function renderUsers(doc, idToken) {
             const span_3 = doc.createElement('span');
             const span_4 = doc.createElement('span');
             const span_sub_3 = doc.createElement('span');
-            span_1.innerText = user.uid;
             span_2.innerText = user.email;
 
             span_sub_3.innerText = user.emailVerified ? "Unverify" : "Verify";
@@ -1060,22 +1059,31 @@ async function renderUsers(doc, idToken) {
                 toggleEditUserModal(user.uid);
             });
             btn.innerText = 'Edit User';
+            const btn1 = document.createElement('span');
+            btn1.className = 'button';
+            btn1.id = user.uid;
+            btn1.addEventListener('click', () => {
+                deleteUser(user.uid);
+            });
+            btn1.innerText = 'Delete User';
+
             span_sub_3.addEventListener('click', async function (e) {
                 e.preventDefault();
                 await toggleVerification(user.uid, !user.emailVerified, idToken);
                 return renderUsers(doc, idToken);
             });
 
-            span_1.className = 'info lng';
+            span_1.className = 'info';
             span_2.className = 'info lng';
             span_3.className = 'info';
             span_4.className = 'info';
             span_4.appendChild(btn);
+            span_1.appendChild(btn1);
             span_3.appendChild(span_sub_3);
-            newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
             newDiv.appendChild(span_4);
+            newDiv.appendChild(span_1);
             userListContainer.append(newDiv);
         });
     }
@@ -1138,7 +1146,7 @@ async function updateUser(e) {
         password = userPassword.value,
         idToken = window.localStorage.getItem('idToken');
     if (!uid || !validateEmail(userEmail) || !validatePassword(userPassword) || !idToken) return null;
-    const response = await fetch(baseURL + '/api/v1/users/update', {
+    const response = await fetch('/api/v1/users/update', {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -1153,4 +1161,24 @@ async function updateUser(e) {
     }
     alert(message);
     toggleEditUserModal();
+}
+
+async function deleteUser(uid) {
+    const idToken = window.localStorage.getItem('idToken');
+    if (!uid) return null;
+    if (!confirm('Are you sure you want to delete user?')) return null;
+    const response = await fetch('/api/v1/users?uid=' + uid, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, message } = await response.json();
+    if (!result && message.includes('auth')) {
+        return signOut(window);
+    }
+    alert(message);
+    renderUsers(document, idToken);
 }
