@@ -68,6 +68,10 @@ main {
 							display: flex;
 							flex: 1;
 						}
+						.label.lng {
+							display: flex;
+							flex: 2;
+						}
 					}
 					#users-list {
 						display: flex;
@@ -84,11 +88,15 @@ main {
 								align-items: center;
 								overflow: scroll;
 								padding: var(--sm-pm);
+
 								.action {
 									color: var(--Gold);
 									cursor: pointer;
 									font-weight: 600;
 								}
+							}
+							.info.lng {
+								flex: 2;
 							}
 						}
 						.user-info:last-of-type {

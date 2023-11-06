@@ -30,6 +30,14 @@ async function adminUserVerify(req, res, next) {
     usersService.adminVerifyUser({ uid, value }).then(data => res.json(data)).catch(err => next(err));
 }
 
+async function adminUserUpdate(req, res, next) {
+    if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
+    if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+
+    const { uid, email, password } = req.body;
+    usersService.updateUser({ uid, email, password }).then(data => res.json(data)).catch(err => next(err));
+}
+
 async function retrieveUsers(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
@@ -56,7 +64,8 @@ async function deleteUser(req, res, next) {
 
 router.post('/authenticate', authenticate);
 router.post('/create', createUser);
-router.put('/public/Admin-verify-user', adminUserVerify);
+router.put('/update', adminUserUpdate);
+router.put('/Admin-verify-user', adminUserVerify);
 router.get('/', retrieveUsers);
 router.get('/revoke-tokens', revokeTokens);
 router.get('/:uid', retrieveUser);
