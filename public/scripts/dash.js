@@ -865,6 +865,26 @@ async function updateCategory(e) {
     return alert(message);
 }
 
+async function deleteCategory(id) {
+    const idToken = window.localStorage.getItem('idToken');
+    if (!id) return null;
+    if (!confirm('Are you sure you want to delete Category?')) return null;
+    const response = await fetch('/api/v1/categories?categoryId=' + id, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, message } = await response.json();
+    if (!result && message.includes('auth')) {
+        return signOut(window);
+    }
+    alert(message);
+    renderCategories(document, idToken);
+}
+
 async function renderCategories(doc, idToken) {
     categories = await fetchCategories(idToken);
     selectedCategoryId = categories[0]?.id;
@@ -878,7 +898,6 @@ async function renderCategories(doc, idToken) {
             const span_2 = doc.createElement('span');
             const span_3 = doc.createElement('span');
             const span_4 = doc.createElement('span');
-            span_1.innerText = cat.id;
             span_2.innerText = cat.name;
             span_3.innerText = cat.desc;
             const btn = document.createElement('span');
@@ -888,15 +907,23 @@ async function renderCategories(doc, idToken) {
                 toggleEditCategoryModal(cat.id);
             });
             btn.innerText = 'Edit Category';
+            const btn1 = document.createElement('span');
+            btn1.className = 'button';
+            btn1.id = cat.id;
+            btn1.addEventListener('click', () => {
+                deleteCategory(cat.id);
+            });
+            btn1.innerText = 'Delete Category';
             span_4.appendChild(btn);
             span_1.className = 'info';
             span_2.className = 'info';
             span_3.className = 'info desc';
             span_4.className = 'info';
-            newDiv.appendChild(span_1);
+            span_1.appendChild(btn1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
             newDiv.appendChild(span_4);
+            newDiv.appendChild(span_1);
             catListContainer.append(newDiv);
         });
     }
