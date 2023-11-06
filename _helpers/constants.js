@@ -18,8 +18,10 @@ const messages = {
     NO_UID: 'User ID is required',
     NO_VERIFICATION_VALUE: 'Verification value should be boolean',
     VER_SUCCESS: 'User verification updated.',
+    UPDATE_SUCCESSFUL: 'User updated successfully',
     USERS_RETRIEVED: 'Users successfully retrieved',
     USER_DELETED: 'User successfully deleted',
+    UID_REQUIRED: 'User ID is required',
     SUCCESS_LOGOUT: 'You signed out successfully',
     /** generic */
     FAILURE: 'Something went wrong, please try again shortly',

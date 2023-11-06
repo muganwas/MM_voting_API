@@ -34,6 +34,18 @@ async function createUser({ email, password }) {
         return { result: false, message: e.message };
     }
 }
+async function updateUser({ uid, email, password }) {
+    try {
+        if (!uid) return { result: false, messages: messages.UID_REQUIRED };
+        const response = await admin.auth().updateUser(uid, {
+            email,
+            password
+        });
+        return { result: true, message: messages.UPDATE_SUCCESSFUL, data: response };
+    } catch (e) {
+        return { result: false, message: e.message };
+    }
+}
 async function adminVerifyUser({ uid, value }) {
     try {
         const verified = Boolean(value);
@@ -84,5 +96,6 @@ module.exports = {
     retrieveUsers,
     retrieveUser,
     deleteUser,
+    updateUser,
     revokeTokens
 }

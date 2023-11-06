@@ -11,6 +11,7 @@ var editCatId;
 var editAgId;
 var editCampId;
 var editCompId;
+var editUserId;
 const selectedCategoryNames = [];
 (async function (doc, win) {
     const username = win.localStorage.getItem('username');
@@ -1044,6 +1045,7 @@ async function renderUsers(doc, idToken) {
             const span_1 = doc.createElement('span');
             const span_2 = doc.createElement('span');
             const span_3 = doc.createElement('span');
+            const span_4 = doc.createElement('span');
             const span_sub_3 = doc.createElement('span');
             span_1.innerText = user.uid;
             span_2.innerText = user.email;
@@ -1051,27 +1053,68 @@ async function renderUsers(doc, idToken) {
             span_sub_3.innerText = user.emailVerified ? "Unverify" : "Verify";
             span_sub_3.className = 'action';
 
+            const btn = document.createElement('span');
+            btn.className = 'button';
+            btn.id = user.uid;
+            btn.addEventListener('click', () => {
+                toggleEditUserModal(user.uid);
+            });
+            btn.innerText = 'Edit User';
             span_sub_3.addEventListener('click', async function (e) {
                 e.preventDefault();
                 await toggleVerification(user.uid, !user.emailVerified, idToken);
                 return renderUsers(doc, idToken);
             });
 
-            span_1.className = 'info';
-            span_2.className = 'info';
+            span_1.className = 'info lng';
+            span_2.className = 'info lng';
             span_3.className = 'info';
+            span_4.className = 'info';
+            span_4.appendChild(btn);
             span_3.appendChild(span_sub_3);
             newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
+            newDiv.appendChild(span_4);
             userListContainer.append(newDiv);
         });
     }
 }
 
+function toggleEditUserModal(id) {
+    const editContainer = document.getElementById('new-user');
+    const editContainerSub = document.getElementById('new-user-sub');
+    const newUserTitle = document.getElementById('new-user-title');
+    const userForm = document.getElementById('users-form');
+    const userEmail = document.getElementById('user-email');
+    const userPassword = document.getElementById('user-password');
+    if (id && typeof id === 'string') {
+        editUserId = id;
+        editContainer.classList.add('modal');
+        editContainerSub.classList.add('edit');
+        newUserTitle.innerText = 'Edit User Information';
+        const user = users.find(u => u.uid === id);
+        userEmail.value = user.email;
+        userForm.removeEventListener('submit', createUser);
+        userForm.addEventListener('submit', updateUser);
+        editContainerSub.addEventListener('click', preventPropagation);
+        editContainer.addEventListener('click', toggleEditUserModal);
+    } else {
+        editContainer.removeEventListener('click', toggleEditUserModal);
+        editContainerSub.removeEventListener('click', preventPropagation);
+        editContainer.classList.remove('modal');
+        editContainerSub.classList.remove('edit');
+        newUserTitle.innerText = 'Create New User';
+        userEmail.value = null;
+        userPassword.value = null;
+        userForm.removeEventListener('submit', updateUser);
+        userForm.addEventListener('submit', createUser);
+    }
+}
+
 async function toggleVerification(uid, value, idToken) {
     if (!uid || value == undefined || !idToken) return null;
-    const response = await fetch(baseURL + '/api/v1/users/public/Admin-verify-user', {
+    const response = await fetch(baseURL + '/api/v1/users/Admin-verify-user', {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -1084,4 +1127,30 @@ async function toggleVerification(uid, value, idToken) {
     if (!responseJson.result && responseJson.message.includes('auth')) {
         return signOut(window);
     }
+}
+
+async function updateUser(e) {
+    e.preventDefault();
+    const userEmail = document.getElementById('user-email');
+    const userPassword = document.getElementById('user-password');
+    const uid = editUserId,
+        email = userEmail.value,
+        password = userPassword.value,
+        idToken = window.localStorage.getItem('idToken');
+    if (!uid || !validateEmail(userEmail) || !validatePassword(userPassword) || !idToken) return null;
+    const response = await fetch(baseURL + '/api/v1/users/update', {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + idToken
+        },
+        body: JSON.stringify({ uid, email, password })
+    });
+    const { result, message } = await response.json();
+    if (!result && message.includes('auth')) {
+        return signOut(window);
+    }
+    alert(message);
+    toggleEditUserModal();
 }
