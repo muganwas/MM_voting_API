@@ -9,22 +9,25 @@ const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('fireb
 const storage = getStorage();
 const db = database();
 
-async function createCampaign({ name, catIds, companyName, intro, agencyName, companyId, brandName, agencyId, emailAddress }, file) {
+async function createCampaign({ name, catIds, companyName, intro, agencyName, companyId, brandName, agencyId, emailAddress }, files) {
     try {
         const categoryIds = catIds.split(',');
-        var fileURL = '';
+        const fileURLs = [];
         if (!name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_REQUIRED };
-        if ((!companyId || !agencyId) && (!agencyName || !companyName)) return { result: false, message: messages.CAMP_REQUIRED_ALT };
+        if ((!companyId && !companyName)) return { result: false, message: messages.CAMP_REQUIRED_ALT };
         if (!Array.isArray(categoryIds)) return { result: false, message: messages.CAMP_CAT_ID_TYPE };
         /** upload file if it exists */
-        if (typeof file !== 'undefined' || file !== 'undefined' || file !== 'null') {
+        if (Array.isArray(files)) {
             const bucketName = name.replaceAll(' ', "_");
-            const storageRef = ref(storage, `submissions/${bucketName}`);
-            const metadata = {
-                contentType: file.mimetype
-            };
-            const snapShot = await uploadBytesResumable(storageRef, file.buffer, metadata);
-            fileURL = await getDownloadURL(snapShot.ref);
+            for (let i = 0; i < files.length; i++) {
+                const metadata = {
+                    contentType: files[i].mimetype
+                };
+                const storageRef = ref(storage, `submissions/${bucketName}/${files[i].fieldname}`);
+                const snapShot = await uploadBytesResumable(storageRef, files[i].buffer, metadata);
+                const fileURL = await getDownloadURL(snapShot.ref);
+                fileURLs.push(fileURL);
+            }
         }
         /** create company if non-existent */
         if (!companyId && companyName) {
@@ -47,14 +50,14 @@ async function createCampaign({ name, catIds, companyName, intro, agencyName, co
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
         // default to company name if brandname not provided
-        brandName = brandName || companyName;
+        brandName = brandName === 'undefined' || !brandName ? companyName : brandName;
         if (baseVal && snapshot.hasChild('campaigns')) {
             const campaignRef = baseRef.child('campaigns');
-            campaignRef.push({ name, companyId, categoryIds, fileURL, brandName, agencyId, emailAddress, timeStamp })
+            campaignRef.push({ name, companyId, categoryIds, fileURLs, brandName, agencyId, emailAddress, timeStamp })
         }
         else
-            baseRef.child('campaigns').push({ name, companyId, categoryIds, fileURL, brandName, agencyId, emailAddress, timeStamp });
-        return { result: true, message: messages.CAMP_CREATED, data: { name, companyId, fileURL, categoryIds, brandName, agencyId, emailAddress, timeStamp } };
+            baseRef.child('campaigns').push({ name, companyId, categoryIds, fileURLs, brandName, agencyId, emailAddress, timeStamp });
+        return { result: true, message: messages.CAMP_CREATED, data: { name, companyId, fileURLs, categoryIds, brandName, agencyId, emailAddress, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };

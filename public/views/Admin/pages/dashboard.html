@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <div id="loading-overlay"></div>
     <nav>
         <span id="logo">Admin Portal</span>
         <span id="logout">Logout</span>
@@ -18,9 +19,9 @@
                 <span id="users-tab" class="tab active">Users</span>
                 <span id="categories-tab" class="tab">Categories</span>
                 <span id="agencies-tab" class="tab">Agencies</span>
-                <span id="campaigns-tab" class="tab">Campaigns</span>
+                <span id="campaigns-tab" class="tab">Submissions</span>
                 <span id="companies-tab" class="tab">Companies</span>
-                <span id="nominations-tab" class="tab">Nominations</span>
+                <span id="nominations-tab" class="tab">Jury Assessment</span>
             </div>
             <div class="details-container">
                 <div id="users-container" class="details-sub active">
@@ -105,7 +106,7 @@
                     </div>
                     <div id="new-campaign">
                         <div id="new-campaign-sub">
-                            <span class="sub-sect-title" id="new-camp-title">Create New Campaign</span>
+                            <span class="sub-sect-title" id="new-camp-title">Create New Submission</span>
                             <form id="campaigns-form" enctype="multipart/form-data">
                                 <input class="input" id="campaign-name" type="text" placeholder="Campaign Name"></input>
                                 <input id="category-id" type="text" hidden></input>
@@ -130,7 +131,7 @@
                                 </span>
                                 <span class="input dropdown" id="file-drop-down">
                                     <span id="selected-company">Select File</span>
-                                    <input type="file" id="file" />
+                                    <input multiple type="file" id="file" />
                                 </span>
                                 <input class="input" id="contact-email" type="email"
                                     placeholder="Contact Email Address"></input>

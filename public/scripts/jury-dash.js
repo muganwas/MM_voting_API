@@ -17,12 +17,12 @@ var activeCampaign;
     const nominationForm = doc.getElementById('nomination');
     const nominationContainer = doc.getElementById('nomination-container');
     const modal = doc.getElementsByClassName('modal');
-    const idea = doc.getElementById('idea');
-    const insight = doc.getElementById('insight');
+    const alignment = doc.getElementById('alignment');
+    const objectives = doc.getElementById('objectives');
     const submit = doc.getElementById('submit-nomination');
-    const communications_integration = doc.getElementById('communications_integration');
-    const kpis_impact = doc.getElementById('kpis_impact');
-    const execution = doc.getElementById('execution');
+    const implementation = doc.getElementById('implementation');
+    const impact = doc.getElementById('impact');
+    const why_win = doc.getElementById('why_win');
     const comment = doc.getElementById('comment');
 
     const altUsername = email.split('@')[0];
@@ -33,19 +33,19 @@ var activeCampaign;
         return signOut(win, 'j_');
     });
     "blur change".split(" ").forEach(function (e) {
-        idea.addEventListener(e, (e) => validateInt(e.target, 10), false);
+        alignment.addEventListener(e, (e) => validateInt(e.target, 20), false);
     });
     "blur change".split(" ").forEach(function (e) {
-        insight.addEventListener(e, (e) => validateInt(e.target, 15), false);
+        objectives.addEventListener(e, (e) => validateInt(e.target, 15), false);
     });
     "blur change".split(" ").forEach(function (e) {
-        communications_integration.addEventListener(e, (e) => validateInt(e.target, 10), false);
+        implementation.addEventListener(e, (e) => validateInt(e.target, 30), false);
     });
     "blur change".split(" ").forEach(function (e) {
-        kpis_impact.addEventListener(e, (e) => validateInt(e.target, 30), false);
+        impact.addEventListener(e, (e) => validateInt(e.target, 30), false);
     });
     "blur change".split(" ").forEach(function (e) {
-        execution.addEventListener(e, (e) => validateInt(e.target, 35), false);
+        why_win.addEventListener(e, (e) => validateInt(e.target, 5), false);
     });
     "blur change".split(" ").forEach(function (e) {
         comment.addEventListener(e, errorOnNoValue, false);
@@ -126,13 +126,18 @@ async function renderCampaigns(idToken, selectedCategoryId) {
             span_2.className = 'info';
             span_3.className = 'info';
 
-            if (c.fileURL) {
-                const lnk = document.createElement('a');
-                const txt = document.createTextNode('Uploaded Material');
-                lnk.append(txt);
-                lnk.title = 'uploaded material';
-                lnk.href = c.fileURL;
-                span_1.appendChild(lnk);
+            if (c.fileURLs && Array.isArray(c.fileURLs)) {
+                const linkContainer = document.createElement('div');
+                linkContainer.className = 'link-container';
+                c.fileURLs.forEach((url, i) => {
+                    const lnk = document.createElement('a');
+                    const txt = document.createTextNode('Link ' + (i + 1));
+                    lnk.append(txt);
+                    lnk.title = 'uploaded material_' + i + 1;
+                    lnk.href = url;
+                    linkContainer.appendChild(lnk);
+                })
+                span_1.appendChild(linkContainer);
             }
             const btn = document.createElement('span');
             btn.className = `button ${nom && nom.categoryId === selectedCategoryId ? 'submitted' : ''} tgl-modal`;
@@ -156,12 +161,12 @@ async function renderCampaigns(idToken, selectedCategoryId) {
 function toggleNominationModal(campaignId) {
     const modal = document.getElementById('nomination-modal');
     const campaignName = document.getElementById('campaign-name');
-    const idea = document.getElementById('idea');
-    const insight = document.getElementById('insight');
+    const alignment = document.getElementById('alignment');
+    const objectives = document.getElementById('objectives');
     const submit = document.getElementById('submit-nomination');
-    const communications_integration = document.getElementById('communications_integration');
-    const kpis_impact = document.getElementById('kpis_impact');
-    const execution = document.getElementById('execution');
+    const implementation = document.getElementById('implementation');
+    const impact = document.getElementById('impact');
+    const why_win = document.getElementById('why_win');
     const comment = document.getElementById('comment');
     const nCatName = document.getElementById('nom-category-name');
     const titlePre = document.getElementById('title-pre');
@@ -170,18 +175,18 @@ function toggleNominationModal(campaignId) {
     if (!campaignId || submitDisabled) {
         titlePre.innerText = "Rate ";
         submit.removeAttribute('disabled');
-        idea.removeAttribute('disabled');
-        insight.removeAttribute('disabled');
-        communications_integration.removeAttribute('disabled');
-        kpis_impact.removeAttribute('disabled');
-        execution.removeAttribute('disabled');
+        alignment.removeAttribute('disabled');
+        objectives.removeAttribute('disabled');
+        implementation.removeAttribute('disabled');
+        impact.removeAttribute('disabled');
+        why_win.removeAttribute('disabled');
         comment.removeAttribute('disabled');
 
-        idea.value = null;
-        insight.value = null;
-        communications_integration.value = null;
-        kpis_impact.value = null;
-        execution.value = null;
+        alignment.value = null;
+        objectives.value = null;
+        implementation.value = null;
+        impact.value = null;
+        why_win.value = null;
         comment.value = null;
     }
     if (modal.classList.contains('active')) {
@@ -192,25 +197,25 @@ function toggleNominationModal(campaignId) {
         activeCampaign = campaigns?.find(c => c.id === campaignId);
         const nom = nominations?.find(n => n.campaignId === campaignId && n.categoryId === selectedCategoryId);
         if (nom) {
-            idea.value = nom.idea;
-            idea.classList.contains('error') && idea.classList.remove('error');
-            insight.value = nom.insight;
-            insight.classList.contains('error') && insight.classList.remove('error');
-            communications_integration.value = nom.communications_integration;
-            communications_integration.classList.contains('error') && communications_integration.classList.remove('error');
-            kpis_impact.value = nom.kpis_impact;
-            kpis_impact.classList.contains('error') && kpis_impact.classList.remove('error');
-            execution.value = nom.execution;
-            execution.classList.contains('error') && execution.classList.remove('error');
+            alignment.value = nom.alignment;
+            alignment.classList.contains('error') && alignment.classList.remove('error');
+            objectives.value = nom.objectives;
+            objectives.classList.contains('error') && objectives.classList.remove('error');
+            implementation.value = nom.implementation;
+            implementation.classList.contains('error') && implementation.classList.remove('error');
+            impact.value = nom.impact;
+            impact.classList.contains('error') && impact.classList.remove('error');
+            why_win.value = nom.why_win;
+            why_win.classList.contains('error') && why_win.classList.remove('error');
             comment.value = nom.comment;
             comment.classList.contains('error') && comment.classList.remove('error');
             titlePre.innerText = "Ratings of ";
             submit.setAttribute('disabled', true);
-            idea.setAttribute('disabled', true);
-            insight.setAttribute('disabled', true);
-            communications_integration.setAttribute('disabled', true);
-            kpis_impact.setAttribute('disabled', true);
-            execution.setAttribute('disabled', true);
+            alignment.setAttribute('disabled', true);
+            objectives.setAttribute('disabled', true);
+            implementation.setAttribute('disabled', true);
+            impact.setAttribute('disabled', true);
+            why_win.setAttribute('disabled', true);
             comment.setAttribute('disabled', true);
 
         }
@@ -225,14 +230,16 @@ async function submitNomination(e) {
     const judgeId = window.localStorage.getItem('j_uid');
     const idToken = window.localStorage.getItem('j_idToken');
     const campaignId = activeCampaign.id;
-    const idea = document.getElementById('idea');
-    const insight = document.getElementById('insight');
-    const communications_integration = document.getElementById('communications_integration');
-    const kpis_impact = document.getElementById('kpis_impact');
-    const execution = document.getElementById('execution');
+    const alignment = document.getElementById('alignment');
+    const objectives = document.getElementById('objectives');
+    const implementation = document.getElementById('implementation');
+    const impact = document.getElementById('impact');
+    const why_win = document.getElementById('why_win');
     const comment = document.getElementById('comment');
 
-    if (!validateInt(idea, 10) || !validateInt(insight, 15) || !validateInt(communications_integration, 10) || !validateInt(kpis_impact, 30) || !validateInt(execution, 35) || !comment.value)
+    { judgeId, campaignId, categoryId, alignment, objectives, implementation, impact, why_win, comment }
+
+    if (!validateInt(alignment, 20) || !validateInt(objectives, 15) || !validateInt(implementation, 30) || !validateInt(impact, 30) || !validateInt(why_win, 5) || !comment.value)
         return alert('Fill all fields');
 
     if (!confirm('Are you statisfied will all ratings?')) return false; // don't submit if user cancels
@@ -244,7 +251,9 @@ async function submitNomination(e) {
             Accept: 'application/json',
             Authorization: 'Bearer ' + idToken
         },
-        body: JSON.stringify({ judgeId, campaignId, categoryId: selectedCategoryId, idea: idea.value, insight: insight.value, communications_integration: communications_integration.value, kpis_impact: kpis_impact.value, execution: execution.value, comment: comment.value })
+        body: JSON.stringify({
+            judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment
+        })
     });
     const { result, message } = await response.json();
     toggleNominationModal();

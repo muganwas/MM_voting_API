@@ -404,6 +404,11 @@ main {
 							align-items: center;
 							border-bottom: 1px solid var(--LLGray);
 							flex: 1;
+							.link-container {
+								display: flex;
+								flex-direction: column;
+								font-size: var(--md-font);
+							}
 							.info {
 								display: flex;
 								align-items: center;

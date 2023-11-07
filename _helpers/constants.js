@@ -52,7 +52,7 @@ const messages = {
     CAMP_UPDATED: 'Campaign updated successfully',
     CAMP_DELETED: 'Campaign deleted successfully',
     CAMP_REQUIRED: 'Name, Category IDs and Email Address are all required',
-    CAMP_REQUIRED_ALT: 'Name, Client Organisation name, Agency Name, Category IDs and Email Address are all required',
+    CAMP_REQUIRED_ALT: 'Name, Client Organisation name, Category IDs and Email Address are all required',
     CAMP_CAT_ID_TYPE: 'Category IDs should be an array of ids',
     CAMP_UPDATE_REQUIRED: 'Campaign ID,Name, Category IDs and Email Address are all required are all required',
     NONEXISTENT_CAMP: 'Campaign does not exist',
