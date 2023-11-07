@@ -5,15 +5,15 @@ const { database } = require('firebase-admin');
 const { retrieveCampaign } = require('./campaigns.service');
 const db = database();
 
-async function createNomination({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, comment }) {
+async function createNomination({ judgeId, campaignId, categoryId, alignment, objectives, implementation, impact, why_win, comment }) {
     try {
-        if (!judgeId || !campaignId || !idea || !insight || !communications_integration || !categoryId || !kpis_impact || !execution || !comment) return { result: false, message: messages.NOM_REQUIRED };
+        if (!judgeId || !campaignId || !alignment || !objectives || !implementation || !categoryId || !impact || !why_win || !comment) return { result: false, message: messages.NOM_REQUIRED };
         if (
-            typeof Number(idea) !== 'number' ||
-            typeof Number(insight) !== 'number' ||
-            typeof Number(communications_integration) !== 'number' ||
-            typeof Number(kpis_impact) !== 'number' ||
-            typeof Number(execution) !== 'number'
+            typeof Number(alignment) !== 'number' ||
+            typeof Number(objectives) !== 'number' ||
+            typeof Number(implementation) !== 'number' ||
+            typeof Number(impact) !== 'number' ||
+            typeof Number(why_win) !== 'number'
         )
             return { result: false, message: messages.NOM_RATING_FORMAT };
 
@@ -24,14 +24,14 @@ async function createNomination({ judgeId, campaignId, idea, insight, categoryId
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
-        const total = Number(idea) + Number(insight) + Number(communications_integration) + Number(kpis_impact) + Number(execution);
+        const total = Number(alignment) + Number(objectives) + Number(implementation) + Number(impact) + Number(why_win);
         if (baseVal && snapshot.hasChild('nominations')) {
             const nominationRef = baseRef.child('nominations');
-            nominationRef.push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, total, comment, timeStamp })
+            nominationRef.push({ judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, timeStamp })
         }
         else
-            baseRef.child('nominations').push({ judgeId, campaignId, idea, insight, categoryId, communications_integration, kpis_impact, execution, total, comment, timeStamp });
-        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, idea, categoryId, insight, communications_integration, kpis_impact, total, execution, comment, timeStamp } };
+            baseRef.child('nominations').push({ judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, timeStamp });
+        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };

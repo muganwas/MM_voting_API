@@ -10,7 +10,7 @@ const { enums: { VALIDATION_ERROR, UNAUTHORIZED_ERROR }, messages: { VALIDATION_
 
 async function createCampaign(req, res, next) {
     const { name, companyId, categoryIds, companyName, agencyName, brandName, intro, agencyId, emailAddress } = req.body;
-    campaignsService.createCampaign({ name, companyId, companyName, agencyName, intro, catIds: categoryIds, brandName, agencyId, emailAddress }, req.file).then(data => res.json(data)).catch(err => next(err));
+    campaignsService.createCampaign({ name, companyId, companyName, agencyName, intro, catIds: categoryIds, brandName, agencyId, emailAddress }, req.files).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function updateCampaign(req, res, next) {
@@ -18,7 +18,7 @@ async function updateCampaign(req, res, next) {
     if (!await validateFirebaseAdmin(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
 
     const { id, name, companyId, fileURL, categoryIds, brandName, agencyId, emailAddress } = req.body;
-    campaignsService.updateCampaign({ id, name, companyId, fileURL, catIds: categoryIds, brandName, agencyId, emailAddress }, req.file).then(data => res.json(data)).catch(err => next(err));
+    campaignsService.updateCampaign({ id, name, companyId, fileURL, catIds: categoryIds, brandName, agencyId, emailAddress }, req.files).then(data => res.json(data)).catch(err => next(err));
 }
 
 async function retrieveCampaigns(req, res, next) {
@@ -45,8 +45,8 @@ async function deleteCampaign(req, res, next) {
     campaignsService.deleteCampaign({ campaignId }).then(data => res.json(data)).catch(err => next(err));
 }
 
-router.post('/create', upload.single('file'), createCampaign);
-router.put('/update', upload.single('file'), updateCampaign);
+router.post('/create', upload.any('files'), createCampaign);
+router.put('/update', upload.any('files'), updateCampaign);
 router.get('/', retrieveCampaigns);
 router.get('/:campaignId', retrieveCampaign);
 router.delete('/', deleteCampaign);

@@ -34,8 +34,8 @@ const selectedCategoryNames = [];
     const newUserPassword = doc.getElementById('user-password');
     const campName = document.getElementById('campaign-name');
     const compId = document.getElementById('company-id');
-    const brandName = document.getElementById('brand-name');
-    const agId = document.getElementById('agency-id');
+    // const brandName = document.getElementById('brand-name');
+    // const agId = document.getElementById('agency-id');
     const conEmail = document.getElementById('contact-email');
 
     const companyDD = doc.getElementById('company-drop-down');
@@ -91,8 +91,8 @@ const selectedCategoryNames = [];
     compBrands.addEventListener('blur', errorOnNoValue);
     campName.addEventListener('blur', errorOnNoValue);
     compId.addEventListener('blur', errorOnNoValue);
-    brandName.addEventListener('blur', errorOnNoValue);
-    agId.addEventListener('blur', errorOnNoValue);
+    // brandName.addEventListener('blur', errorOnNoValue);
+    // agId.addEventListener('blur', errorOnNoValue);
     conEmail.addEventListener('blur', (e) => validateEmail(e.target));
 
     categoriesForm.addEventListener('submit', submitCategory);
@@ -292,10 +292,10 @@ async function submitCampaign(e) {
     const children = e.target.children;
     const campName = Array.from(children).find(c => c.id === 'campaign-name');
     const compId = Array.from(children).find(c => c.id === 'company-id');
-    const catId = Array.from(children).find(c => c.id === 'category-id');
     const brandName = Array.from(children).find(c => c.id === 'brand-name');
     const agId = Array.from(children).find(c => c.id === 'agency-id');
     const email = Array.from(children).find(c => c.id === 'contact-email');
+    const overlay = document.getElementById('loading-overlay');
     const selComp = document.getElementById('selected-company');
     const selBrand = document.getElementById('selected-brand');
     const selAg = document.getElementById('selected-agency');
@@ -304,19 +304,23 @@ async function submitCampaign(e) {
     formData.append('name', campName.value);
     formData.append('categoryIds', selectedCategoryIds);
     formData.append('companyId', compId.value);
+    formData.append('companyName', selComp.innerText);
     formData.append('brandName', brandName.value);
     formData.append('agencyId', agId.value);
     formData.append('emailAddress', email.value);
-    formData.append('file', Array.from(file.files)[0]);
-    if (!campName.value || !catId.value || !agId.value || !compId.value || !brandName.value || !validateEmail(email)) return alert('Fill all fields');
+    if (!campName.value || !compId.value || !validateEmail(email)) return alert('Fill all fields');
 
     if (file.files.length > 0) {
-        const fileSize = file.files.item(0).size;
-        const fileMb = fileSize / 1024 ** 2;
-        if (fileMb > 8)
-            return alert('Attached file is too large');
-    }
+        Array.from(file.files).forEach((f, i) => {
+            const fileSize = f.size;
+            const fileMb = fileSize / 1024 ** 2;
+            if (fileMb > 8)
+                return alert(f.name + 'Attached file is too large');
+            formData.append(campName.value.replaceAll(' ', '_') + '_' + i, f);
+        });
 
+    }
+    overlay.style.display = 'block';
     const response = await fetch('/api/v1/campaigns/create', {
         method: 'POST',
         headers: {
@@ -325,6 +329,7 @@ async function submitCampaign(e) {
         body: formData
     });
     const { result, message } = await response.json();
+    overlay.style.display = 'none';
     if (result) {
         campName.value = "";
         compId.value = "";
@@ -346,6 +351,7 @@ async function updateCampaign(e) {
     const compId = document.getElementById('company-id');
     const catId = document.getElementById('category-id');
     const brandName = document.getElementById('brand-name');
+    const overlay = document.getElementById('loading-overlay');
     const agId = document.getElementById('agency-id');
     const email = document.getElementById('contact-email');
     const file = document.getElementById('file');
@@ -359,15 +365,19 @@ async function updateCampaign(e) {
     formData.append('brandName', brandName.value);
     formData.append('agencyId', agId.value);
     formData.append('emailAddress', email.value);
-    formData.append('file', Array.from(file.files)[0]);
     formData.append('fileURL', fileURL);
     if (file.files.length > 0) {
-        const fileSize = file.files.item(0).size;
-        const fileMb = fileSize / 1024 ** 2;
-        if (fileMb > 8)
-            return alert('Attached file is too large');
+        Array.from(file.files).forEach((f, i) => {
+            const fileSize = f.size;
+            const fileMb = fileSize / 1024 ** 2;
+            if (fileMb > 8)
+                return alert(f.name + 'Attached file is too large');
+            formData.append(campName.value.replaceAll(' ', '_') + '_' + i, f);
+        });
+
     }
     if (!confirm('Are you sure you want to update campaign?')) return null;
+    overlay.style.display = 'block';
     const response = await fetch('/api/v1/campaigns/update', {
         method: 'PUT',
         headers: {
@@ -377,8 +387,7 @@ async function updateCampaign(e) {
         body: formData
     });
     const { result, message } = await response.json();
-
-    console.log(result)
+    overlay.style.display = 'none';
     if (result) {
         toggleEditCampaignModal();
         return renderCampaigns(document, idToken);
@@ -409,13 +418,18 @@ async function renderCampaigns(doc, idToken) {
                 if (cName && i < (camp.categoryIds.length - 1)) categoryIdsString = categoryIdsString + `${cName}, `;
                 else categoryIdsString = categoryIdsString + `${cName}.`;
             }
-            if (camp.fileURL) {
-                const lnk = doc.createElement('a');
-                const txt = doc.createTextNode('Download');
-                lnk.append(txt);
-                lnk.title = 'uploaded material';
-                lnk.href = camp.fileURL;
-                span_1.appendChild(lnk);
+            if (camp.fileURLs && Array.isArray(camp.fileURLs)) {
+                const linkContainer = doc.createElement('div');
+                linkContainer.className = 'link-container';
+                camp.fileURLs.forEach((url, i) => {
+                    const lnk = doc.createElement('a');
+                    const txt = doc.createTextNode('Link ' + (i + 1));
+                    lnk.append(txt);
+                    lnk.title = 'uploaded material_' + i + 1;
+                    lnk.href = url;
+                    linkContainer.appendChild(lnk);
+                })
+                span_1.appendChild(linkContainer);
             }
             const btn = document.createElement('span');
             btn.className = 'button';
@@ -428,7 +442,7 @@ async function renderCampaigns(doc, idToken) {
             span_2.innerText = camp.name;
             span_3.innerText = categoryIdsString;
             span_4.innerText = camp.brandName;
-            span_5.innerText = agencies.find(a => camp.agencyId == a.id)?.name;
+            span_5.innerText = agencies?.find(a => camp.agencyId == a.id)?.name || 'No Agency';
             span_6.innerText = camp.emailAddress;
 
             span_1.className = 'info';
@@ -491,18 +505,23 @@ function toggleEditCampaignModal(id) {
         email.value = camp.emailAddress;
         brandNameInput.value = camp.brandName;
         brandNameInput.setAttribute('disabled', true);
-        selAg.innerText = agencies.find(a => a.id === camp.agencyId)?.name || 'Select Agency';
-        selComp.innerText = companies.find(c => c.id === camp.companyId)?.name || 'Select Company';
+        selAg.innerText = agencies?.find(a => a.id === camp.agencyId)?.name || 'Select Agency';
+        selComp.innerText = companies?.find(c => c.id === camp.companyId)?.name || 'Select Company';
         selBrand.innerText = camp.brandName;
         selCat.innerText = categoryIdsString;
-        if (camp.fileURL) {
-            const lnk = document.createElement('a');
-            const txt = document.createTextNode('Uploaded Content');
-            lnk.append(txt);
-            lnk.title = 'uploaded material';
-            lnk.href = camp.fileURL;
-            lnk.id = 'file-link'
-            fileInputCont.appendChild(lnk);
+        if (camp.fileURLs && Array.isArray(camp.fileURLs)) {
+            const linkContainer = document.createElement('div');
+            linkContainer.className = 'link-container';
+            linkContainer.id = 'file-link';
+            camp.fileURLs.forEach((url, i) => {
+                const lnk = document.createElement('a');
+                const txt = document.createTextNode('Link ' + (i + 1));
+                lnk.append(txt);
+                lnk.title = 'uploaded material_' + i + 1;
+                lnk.href = url;
+                linkContainer.appendChild(lnk);
+            })
+            fileInputCont.appendChild(linkContainer);
         }
         campForm.removeEventListener('submit', submitCampaign);
         campForm.addEventListener('submit', updateCampaign);
