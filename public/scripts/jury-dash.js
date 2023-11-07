@@ -250,7 +250,7 @@ async function submitNomination(e) {
             Authorization: 'Bearer ' + idToken
         },
         body: JSON.stringify({
-            judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment
+            judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment: comment.value
         })
     });
     const { result, message } = await response.json();
