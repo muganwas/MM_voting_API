@@ -1021,11 +1021,11 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
 
         span_1.innerText = n.judgeId.substring(0, 12) + '..';
         span_2.innerText = campaigns?.find(c => c.id === n.campaignId)?.name;
-        span_3.innerText = n.idea;
-        span_4.innerText = n.insight;
-        span_5.innerText = n.communications_integration;
-        span_6.innerText = n.kpis_impact;
-        span_7.innerText = n.execution;
+        span_3.innerText = n.alignment;
+        span_4.innerText = n.objectives;
+        span_5.innerText = n.implementation;
+        span_6.innerText = n.impact;
+        span_7.innerText = n.why_win;
         span_8.innerText = n.total;
 
         newDiv.appendChild(span_1);
