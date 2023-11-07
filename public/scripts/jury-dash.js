@@ -237,8 +237,6 @@ async function submitNomination(e) {
     const why_win = document.getElementById('why_win');
     const comment = document.getElementById('comment');
 
-    { judgeId, campaignId, categoryId, alignment, objectives, implementation, impact, why_win, comment }
-
     if (!validateInt(alignment, 20) || !validateInt(objectives, 15) || !validateInt(implementation, 30) || !validateInt(impact, 30) || !validateInt(why_win, 5) || !comment.value)
         return alert('Fill all fields');
 
@@ -252,7 +250,7 @@ async function submitNomination(e) {
             Authorization: 'Bearer ' + idToken
         },
         body: JSON.stringify({
-            judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment
+            judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment: comment.value
         })
     });
     const { result, message } = await response.json();
