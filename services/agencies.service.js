@@ -6,7 +6,7 @@ const db = database();
 
 async function createAgency({ name, introduction, emailAddress }) {
     try {
-        if (!name || !emailAddress || !introduction) return { result: false, message: messages.AGEN_REQUIRED };
+        if (!name || !emailAddress) return { result: false, message: messages.AGEN_REQUIRED };
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
