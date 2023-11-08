@@ -51,7 +51,7 @@ async function updateNomination({ nominationId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveNominations({ limit = 10, page = 1, judgeId, catId }) {
+async function retrieveNominations({ limit = 100, page = 1, judgeId, catId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);

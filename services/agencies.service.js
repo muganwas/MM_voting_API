@@ -42,7 +42,7 @@ async function updateAgency({ agencyId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveAgencies({ limit = 10, page = 1 }) {
+async function retrieveAgencies({ limit = 40, page = 1 }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);

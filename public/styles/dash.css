@@ -466,6 +466,7 @@ main {
 								display: none;
 								position: absolute;
 								padding: var(--lg-pm);
+								overflow: scroll;
 								box-shadow: 1px 10px 30px 4px var(--LLGray);
 								z-index: -1;
 								.item {
