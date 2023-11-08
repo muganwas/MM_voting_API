@@ -34,8 +34,6 @@ const selectedCategoryNames = [];
     const newUserPassword = doc.getElementById('user-password');
     const campName = document.getElementById('campaign-name');
     const compId = document.getElementById('company-id');
-    // const brandName = document.getElementById('brand-name');
-    // const agId = document.getElementById('agency-id');
     const conEmail = document.getElementById('contact-email');
 
     const companyDD = doc.getElementById('company-drop-down');
@@ -91,8 +89,6 @@ const selectedCategoryNames = [];
     compBrands.addEventListener('blur', errorOnNoValue);
     campName.addEventListener('blur', errorOnNoValue);
     compId.addEventListener('blur', errorOnNoValue);
-    // brandName.addEventListener('blur', errorOnNoValue);
-    // agId.addEventListener('blur', errorOnNoValue);
     conEmail.addEventListener('blur', (e) => validateEmail(e.target));
 
     categoriesForm.addEventListener('submit', submitCategory);
@@ -312,10 +308,10 @@ async function submitCampaign(e) {
 
     if (file.files.length > 0) {
         Array.from(file.files).forEach((f, i) => {
-            const fileSize = f.size;
-            const fileMb = fileSize / 1024 ** 2;
-            if (fileMb > 8)
-                return alert(f.name + 'Attached file is too large');
+            // const fileSize = f.size;
+            // const fileMb = fileSize / 1024 ** 2;
+            // if (fileMb > 8)
+            //     return alert(f.name + 'Attached file is too large');
             formData.append(campName.value.replaceAll(' ', '_') + '_' + i, f);
         });
 
@@ -368,10 +364,10 @@ async function updateCampaign(e) {
     formData.append('fileURL', fileURL);
     if (file.files.length > 0) {
         Array.from(file.files).forEach((f, i) => {
-            const fileSize = f.size;
-            const fileMb = fileSize / 1024 ** 2;
-            if (fileMb > 8)
-                return alert(f.name + 'Attached file is too large');
+            // const fileSize = f.size;
+            // const fileMb = fileSize / 1024 ** 2;
+            // if (fileMb > 8)
+            //     return alert(f.name + 'Attached file is too large');
             formData.append(campName.value.replaceAll(' ', '_') + '_' + i, f);
         });
 
