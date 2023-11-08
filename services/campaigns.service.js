@@ -93,7 +93,7 @@ async function updateCampaign({ id, name, companyId, catIds, fileURL, brandName,
         return { result: false, message: e.message };
     }
 }
-async function retrieveCampaigns({ limit = 40, page = 1, catId }) {
+async function retrieveCampaigns({ limit = 200, page = 1, catId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);
