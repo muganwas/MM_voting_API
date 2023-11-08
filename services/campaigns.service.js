@@ -64,25 +64,29 @@ async function createCampaign({ name, catIds, companyName, intro, agencyName, co
     }
 }
 
-async function updateCampaign({ id, name, companyId, catIds, fileURL, brandName, agencyId, emailAddress }, file) {
+async function updateCampaign({ id, name, companyId, catIds, fileURL, brandName, agencyId, emailAddress }, files) {
     try {
         const categoryIds = catIds.split(',');
+        const fileURLs = [];
         if (!id || !name || !categoryIds) return { result: false, message: messages.CAMP_UPDATE_REQUIRED };
-        if (!companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED_ALT };
+        if (!companyId) return { result: false, message: messages.CAMP_REQUIRED_ALT };
         /** upload file if it exists */
-        if (typeof file !== 'undefined' || file !== 'undefined' || file !== 'null') {
+        if (Array.isArray(files)) {
             const bucketName = name.replaceAll(' ', "_");
-            const storageRef = ref(storage, `submissions/${bucketName}`);
-            const metadata = {
-                contentType: file.mimetype
-            };
-            const snapShot = await uploadBytesResumable(storageRef, file.buffer, metadata);
-            fileURL = await getDownloadURL(snapShot.ref);
+            for (let i = 0; i < files.length; i++) {
+                const metadata = {
+                    contentType: files[i].mimetype
+                };
+                const storageRef = ref(storage, `submissions/${bucketName}/${files[i].fieldname}`);
+                const snapShot = await uploadBytesResumable(storageRef, files[i].buffer, metadata);
+                const fileURL = await getDownloadURL(snapShot.ref);
+                fileURLs.push(fileURL);
+            }
         }
         const dbRef = db.ref(`campaigns/${id}`);
         const snapshot = await dbRef.once('value');
         if (!snapshot.val()) return { result: false, message: messages.NONEXISTENT_CAMP };
-        const updates = await dbRef.update({ name, companyId, categoryIds, fileURL, brandName, agencyId, emailAddress });
+        const updates = await dbRef.update({ name, companyId, categoryIds, fileURLs, brandName, agencyId, emailAddress });
         return { result: true, message: messages.CAMP_UPDATE_SUCCESS, data: updates };
 
     } catch (e) {
