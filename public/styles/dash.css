@@ -517,7 +517,18 @@ main {
 						color: var(--White);
 						.label {
 							display: flex;
+							color: var(--White);
 							flex: 1;
+						}
+						.label.outlined {
+							display: flex;
+							flex-direction: column;
+							overflow: scroll;
+							border: thin solid white;
+							.title {
+								color: var(--White);
+								font-weight: 700;
+							}
 						}
 						.label.desc {
 							display: flex;

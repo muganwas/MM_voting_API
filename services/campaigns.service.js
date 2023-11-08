@@ -13,7 +13,7 @@ async function createCampaign({ name, catIds, companyName, intro, agencyName, co
     try {
         const categoryIds = catIds.split(',');
         const fileURLs = [];
-        if (!name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_REQUIRED };
+        if (!name || !categoryIds) return { result: false, message: messages.CAMP_REQUIRED };
         if ((!companyId && !companyName)) return { result: false, message: messages.CAMP_REQUIRED_ALT };
         if (!Array.isArray(categoryIds)) return { result: false, message: messages.CAMP_CAT_ID_TYPE };
         /** upload file if it exists */
@@ -67,7 +67,7 @@ async function createCampaign({ name, catIds, companyName, intro, agencyName, co
 async function updateCampaign({ id, name, companyId, catIds, fileURL, brandName, agencyId, emailAddress }, file) {
     try {
         const categoryIds = catIds.split(',');
-        if (!id || !name || !emailAddress || !categoryIds) return { result: false, message: messages.CAMP_UPDATE_REQUIRED };
+        if (!id || !name || !categoryIds) return { result: false, message: messages.CAMP_UPDATE_REQUIRED };
         if (!companyId || !agencyId) return { result: false, message: messages.CAMP_REQUIRED_ALT };
         /** upload file if it exists */
         if (typeof file !== 'undefined' || file !== 'undefined' || file !== 'null') {

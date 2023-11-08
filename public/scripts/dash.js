@@ -304,7 +304,7 @@ async function submitCampaign(e) {
     formData.append('brandName', brandName.value);
     formData.append('agencyId', agId.value);
     formData.append('emailAddress', email.value);
-    if (!campName.value || !compId.value || !validateEmail(email)) return alert('Fill all fields');
+    if (!campName.value || !compId.value) return alert('Fill all fields');
 
     if (file.files.length > 0) {
         Array.from(file.files).forEach((f, i) => {
@@ -351,7 +351,7 @@ async function updateCampaign(e) {
     const agId = document.getElementById('agency-id');
     const email = document.getElementById('contact-email');
     const file = document.getElementById('file');
-    if (!campName.value || !catId.value || !agId.value || !compId.value || !brandName.value || !editCampId || !validateEmail(email)) return alert('Fill all fields');
+    if (!campName.value || !catId.value || !compId.value || !brandName.value || !editCampId) return alert('Fill all fields');
     const fileURL = campaigns.find(c => c.id === editCampId)?.fileURL;
     const formData = new FormData();
     formData.append('name', campName.value);
@@ -478,6 +478,7 @@ function toggleEditCampaignModal(id) {
     const brandNameInput = document.getElementById('brand-name');
     const selAg = document.getElementById('selected-agency');
     const fileInputCont = document.getElementById('file-drop-down');
+    const fileLink = document.getElementById('file-link')
     const file = document.getElementById('file');
     if (id && typeof id === 'string') {
         editCampId = id;
@@ -534,7 +535,7 @@ function toggleEditCampaignModal(id) {
         catId.value = null;
         brandName.value = null;
         brandNameInput.removeAttribute('disabled');
-        fileInputCont.removeChild(document.getElementById('file-link'));
+        fileLink && fileInputCont.removeChild(fileLink);
         file.value = null;
         file.remove
         agId.value = null;
@@ -558,7 +559,7 @@ async function submitCompany(e) {
     const compName = Array.from(children).find(c => c.id === 'company-name');
     const compBrands = Array.from(children).find(c => c.id === 'company-brands');
     const compEmail = Array.from(children).find(c => c.id === 'company-email');
-    if (!compName.value || !compBrands.value || !validateEmail(compEmail)) return;
+    if (!compName.value || !validateEmail(compEmail)) return;
     const response = await fetch(baseURL + '/api/v1/companies/create', {
         method: 'POST',
         headers: {
@@ -566,7 +567,7 @@ async function submitCompany(e) {
             Accept: 'application/json',
             Authorization: 'Bearer ' + idToken
         },
-        body: JSON.stringify({ name: compName.value, brands: compBrands.value.split(","), emailAddress: compEmail.value })
+        body: JSON.stringify({ name: compName.value, brands: compBrands.value?.split(","), emailAddress: compEmail.value })
     });
     const { result, message } = await response.json();
     if (result) {
@@ -700,7 +701,7 @@ async function submitAgency(e) {
     const agName = Array.from(children).find(c => c.id === 'agency-name');
     const agEmail = Array.from(children).find(c => c.id === 'agency-email');
     const agIntro = Array.from(children).find(c => c.id === 'agency-intro');
-    if (!agName.value || !agEmail.value || !agIntro.value) return;
+    if (!agName.value || !agEmail.value) return;
     const response = await fetch(baseURL + '/api/v1/agencies/create', {
         method: 'POST',
         headers: {
@@ -726,7 +727,7 @@ async function updateAgency(e) {
     const agName = document.getElementById('agency-name');
     const agEmail = document.getElementById('agency-email');
     const agIntro = document.getElementById('agency-intro');
-    if (!agName.value || !agEmail.value || !agIntro.value || !editAgId) return;
+    if (!agName.value || !agEmail.value || !editAgId) return;
     if (!confirm('Are you sure you want to update agency?')) return null;
     const response = await fetch(baseURL + '/api/v1/agencies/update', {
         method: 'PUT',
@@ -772,7 +773,7 @@ async function renderAgencies(doc, idToken) {
             const span_4 = doc.createElement('span');
             span_1.innerText = ag.name;
             span_2.innerText = ag.emailAddress;
-            span_3.innerText = ag.introduction;
+            span_3.innerText = ag?.introduction || '';
             const btn = document.createElement('span');
             btn.className = 'button';
             btn.id = ag.id;

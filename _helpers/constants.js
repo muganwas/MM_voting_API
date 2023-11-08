@@ -40,7 +40,7 @@ const messages = {
     AGEN_CREATED: 'New agency created successfully',
     AGEN_UPDATED: 'Agency updated successfully',
     AGEN_DELETED: 'Agency deleted successfully',
-    AGEN_REQUIRED: 'Name, Introduction and Email Address are all required',
+    AGEN_REQUIRED: 'Name and Email Address are both required',
     AGEN_UPDATE_REQUIRED: 'Agency ID and details object are required',
     NONEXISTENT_AGEN: 'Agency does not exist',
     AGEN_UPDATE_SUCCESS: 'Agency was updated successfully',
