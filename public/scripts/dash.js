@@ -3,6 +3,7 @@ var agencies;
 var campaigns;
 var companies;
 var nominations;
+var aggregatedNominations;
 var users;
 var selectedCompBrands = [];
 var selectedCategoryIds = [];
@@ -38,9 +39,10 @@ const selectedCategoryNames = [];
 
     const companyDD = doc.getElementById('company-drop-down');
     const agencyDD = doc.getElementById('agency-drop-down');
-    const brandDD = document.getElementById('brand-drop-down');
-    const categoryDD = document.getElementById('category-drop-down');
-    const nomCategoryDD = document.getElementById('nom-category-drop-down');
+    const brandDD = doc.getElementById('brand-drop-down');
+    const categoryDD = doc.getElementById('category-drop-down');
+    const nomCategoryDD = doc.getElementById('nom-category-drop-down');
+    const aggNameCont = doc.getElementsByClassName('agg-name');
 
     const categoriesForm = doc.getElementById('categories-form');
     const companiesForm = doc.getElementById('companies-form');
@@ -60,6 +62,7 @@ const selectedCategoryNames = [];
     await renderCompanies(doc, idToken);
     await renderCampaigns(doc, idToken);
     await renderNominations(doc, idToken, selectedCategoryId);
+    await renderAggregatedNominations(doc, idToken);
 
     Array.from(tabs).forEach(e => {
         e.addEventListener('click', onTabClick)
@@ -75,6 +78,17 @@ const selectedCategoryNames = [];
     brandDD.addEventListener('click', toggleBrandDD);
     categoryDD.addEventListener('click', toggleCategoryDD);
     nomCategoryDD.addEventListener('click', toggleNomCategoryDD);
+    Array.from(aggNameCont).forEach(aggCat => {
+        const parent = aggCat.parentNode;
+        const siblings = parent.childNodes;
+        aggCat.addEventListener('click', function (e) {
+            Array.from(siblings).forEach(s => {
+                if (s.classList.contains('agg-cats')) {
+                    s.classList.toggle('active');
+                }
+            })
+        });
+    });
 
     newUserEmail.addEventListener('blur', (e) => validateEmail(e.target));
     newUserPassword.addEventListener('blur', (e) => validatePassword(e.target));
@@ -1131,6 +1145,85 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
         newDiv.appendChild(span_8);
         newDiv.appendChild(span_9);
         nomListContainer.appendChild(newDiv);
+    });
+}
+
+async function renderAggregatedNominations(doc, idToken) {
+    aggregatedNominations = await fetchAggregatedNominations(idToken);
+    const nomListContainer = doc.getElementById('aggregated-info');
+    const usersContainer = doc.createElement('div');
+    usersContainer.className = 'users-agg-container';
+    aggregatedNominations?.forEach(n => {
+        const userContainer = doc.createElement('div');
+        const jNameContainer = doc.createElement('span');
+        const catsContainer = doc.createElement('span');
+        const clickTo = doc.createElement('span');
+        clickTo.className = 'click-to';
+        userContainer.className = 'user-agg-container';
+        catsContainer.className = 'agg-cats';
+        jNameContainer.className = 'agg-name';
+        clickTo.innerText = ' (Click to expand)';
+        jNameContainer.innerText = n.email;
+        jNameContainer.appendChild(clickTo);
+
+        const cats = n.categories;
+        if (cats && Array.isArray(cats)) {
+            cats.forEach(cat => {
+                const nomsContainer = doc.createElement('div');
+                const catContainer = doc.createElement('span');
+                const catNameCont = doc.createElement('span');
+                catNameCont.className = 'agg-cat-name';
+                catContainer.className = 'agg-cat';
+                nomsContainer.className = 'agg-noms';
+                catNameCont.innerText = cat.categoryName;
+                const nomins = cat.nominations;
+                if (nomins && Array.isArray(nomins)) {
+                    nomins.forEach(nom => {
+                        const nomContainer = doc.createElement('div');
+                        const campName = doc.createElement('span');
+                        const alCont = doc.createElement('span');
+                        const objBud = doc.createElement('span');
+                        const impl = doc.createElement('span');
+                        const impact = doc.createElement('span');
+                        const whyU = doc.createElement('span');
+                        const total = doc.createElement('span');
+
+                        campName.className = 'camp-name';
+                        alCont.className = 'rating';
+                        objBud.className = 'rating';
+                        impl.className = 'rating';
+                        impact.className = 'rating';
+                        whyU.className = 'rating';
+                        total.className = 'rating total';
+                        nomContainer.className = "agg-nom";
+
+                        campName.innerText = campaigns.find(c => c.id === nom.campaignId)?.name;
+                        alCont.innerText = nom.alignment ? 'Alignment to Strategy - ' + nom.alignment + '%' : 'Not availble';
+                        objBud.innerText = nom.objectives ? 'Objectives and Budget - ' + nom.objectives + '%' : 'Not availble';
+                        impl.innerText = nom.implementation ? 'Implementation - ' + nom.implementation + '%' : 'Not availble';
+                        impact.innerText = nom.impact ? 'Impact - ' + nom.impact + '%' : 'Not availble';
+                        whyU.innerText = nom.why_win ? 'Why your Campaign Should Win - ' + nom.why_win + '%' : 'Not availble';
+                        total.innerText = nom.total ? 'Total - ' + nom.total + '%' : 'Not availble';
+
+                        nomContainer.appendChild(campName);
+                        nomContainer.appendChild(alCont);
+                        nomContainer.appendChild(objBud);
+                        nomContainer.appendChild(impl);
+                        nomContainer.appendChild(impact);
+                        nomContainer.appendChild(whyU);
+                        nomContainer.appendChild(total);
+                        nomsContainer.appendChild(nomContainer);
+                    });
+                }
+                catContainer.appendChild(catNameCont);
+                catContainer.appendChild(nomsContainer);
+                catsContainer.appendChild(catContainer);
+            });
+        }
+        userContainer.appendChild(jNameContainer);
+        userContainer.appendChild(catsContainer);
+        usersContainer.appendChild(userContainer);
+        nomListContainer.appendChild(usersContainer);
     });
 }
 

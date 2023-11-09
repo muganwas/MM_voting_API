@@ -53,7 +53,7 @@ async function updateNomination({ nominationId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveNominations({ limit = 100, page = 1, judgeId, catId }) {
+async function retrieveNominations({ limit = 200, page = 1, judgeId, catId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);
@@ -95,12 +95,16 @@ async function aggregatedNomintations({ limit = 5 }) {
             for (let i = 0; i < users.data.length; i++) {
                 let currentUser = users.data[i];
                 let currentData = {
-                    email: currentUser.email
+                    email: currentUser.email,
+                    categories: []
                 }
                 if (categories.data && Array.isArray(categories.data)) {
                     for (let i = 0; i < categories.data.length; i++) {
                         let currentCategory = categories.data[i];
-                        currentData[currentCategory.name] = [];
+                        const currentCatObj = {
+                            categoryName: currentCategory.name,
+                            nominations: []
+                        }
                         if (nominations.data && Array.isArray(nominations.data)) {
                             const newNom = nominations.data.sort((n, nn) => nn.total - n.total);
                             let count = 1;
@@ -109,10 +113,11 @@ async function aggregatedNomintations({ limit = 5 }) {
                                 const currentNom = newNom[i];
                                 if (currentNom.categoryId === currentCategory.id && currentNom.judgeId === currentUser.uid) {
                                     count++;
-                                    currentData[currentCategory.name].push(currentNom);
+                                    currentCatObj.nominations.push(currentNom);
                                 }
                             }
                         }
+                        currentData.categories.push(currentCatObj)
                     }
                 }
                 data.push(currentData);

@@ -73,6 +73,19 @@ async function fetchCategories(idToken) {
     return [];
 }
 
+async function fetchAggregatedNominations(idToken, limit = 5) {
+    const response = await fetch('/api/v1/nominations/aggregated?limit=' + limit, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, data } = await response.json();
+    if (result) return data;
+    return [];
+}
+
 async function fetchNominations(idToken, id, catId) {
     const response = await fetch('/api/v1/nominations?judgeId=' + id + "&catId=" + catId, {
         method: 'GET',
