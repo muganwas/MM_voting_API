@@ -391,6 +391,26 @@ async function updateCampaign(e) {
     return alert(message);
 }
 
+async function deleteCampaign(id) {
+    const idToken = window.localStorage.getItem('idToken');
+    if (!id) return null;
+    if (!confirm('Are you sure you want to delete Submission?')) return null;
+    const response = await fetch('/api/v1/campaigns?campaignId=' + id, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, message } = await response.json();
+    if (!result && message.includes('auth')) {
+        return signOut(window);
+    }
+    alert(message);
+    renderCampaigns(document, idToken);
+}
+
 async function renderCampaigns(doc, idToken) {
     campaigns = await fetchCampaigns(idToken);
     if (campaigns && Array.isArray(campaigns)) {
@@ -406,6 +426,7 @@ async function renderCampaigns(doc, idToken) {
             const span_5 = doc.createElement('span');
             const span_6 = doc.createElement('span');
             const span_7 = doc.createElement('span');
+            const span_8 = doc.createElement('span');
 
             let categoryIdsString = '';
             for (let i = 0; i < camp.categoryIds.length; i++) {
@@ -434,7 +455,14 @@ async function renderCampaigns(doc, idToken) {
                 toggleEditCampaignModal(camp.id);
             });
             btn.innerText = 'Edit Campaign';
+            const btn1 = document.createElement('span');
+            btn1.className = 'button';
+            btn1.addEventListener('click', () => {
+                deleteCampaign(camp.id);
+            });
+            btn1.innerText = 'Delete Submission';
             span_7.appendChild(btn);
+            span_8.appendChild(btn1);
             span_2.innerText = camp.name;
             span_3.innerText = categoryIdsString;
             span_4.innerText = camp.brandName;
@@ -448,6 +476,7 @@ async function renderCampaigns(doc, idToken) {
             span_5.className = 'info';
             span_6.className = 'info';
             span_7.className = 'info';
+            span_8.className = 'info';
 
             newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
@@ -456,6 +485,7 @@ async function renderCampaigns(doc, idToken) {
             newDiv.appendChild(span_5);
             newDiv.appendChild(span_6);
             newDiv.appendChild(span_7);
+            newDiv.appendChild(span_8);
             campListContainer.append(newDiv);
         });
     }
@@ -617,6 +647,26 @@ async function fetchCompanies(idToken) {
     return null;
 }
 
+async function deleteCompany(id) {
+    const idToken = window.localStorage.getItem('idToken');
+    if (!id) return null;
+    if (!confirm('Are you sure you want to delete Company?')) return null;
+    const response = await fetch('/api/v1/companies?companyId=' + id, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, message } = await response.json();
+    if (!result && message.includes('auth')) {
+        return signOut(window);
+    }
+    alert(message);
+    renderCompanies(document, idToken);
+}
+
 async function renderCompanies(doc, idToken) {
     companies = await fetchCompanies(idToken);
     if (companies && Array.isArray(companies)) {
@@ -629,6 +679,7 @@ async function renderCompanies(doc, idToken) {
             const span_2 = doc.createElement('span');
             const span_3 = doc.createElement('span');
             const span_4 = doc.createElement('span');
+            const span_5 = doc.createElement('span');
 
             span_1.innerText = comp.name;
             span_2.innerText = comp.brands.join(', ');
@@ -641,17 +692,28 @@ async function renderCompanies(doc, idToken) {
                 toggleEditCompanyModal(comp.id);
             });
             btn.innerText = 'Edit Company';
+            const btn1 = document.createElement('span');
+            btn1.className = 'button';
+            btn1.addEventListener('click', () => {
+                deleteCompany(comp.id);
+            });
+
+            btn1.innerText = 'Delete Company';
+
+            span_5.appendChild(btn1);
             span_4.appendChild(btn);
 
             span_1.className = 'info';
             span_2.className = 'info';
             span_3.className = 'info';
             span_4.className = 'info';
+            span_5.className = 'info';
 
             newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
             newDiv.appendChild(span_4);
+            newDiv.appendChild(span_5);
             compListContainer.append(newDiv);
         });
     }
@@ -759,6 +821,26 @@ async function fetchAgencies(idToken) {
     return null;
 }
 
+async function deleteAgency(id) {
+    const idToken = window.localStorage.getItem('idToken');
+    if (!id) return null;
+    if (!confirm('Are you sure you want to delete Agency?')) return null;
+    const response = await fetch('/api/v1/agencies?agencyId=' + id, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + idToken
+        }
+    });
+    const { result, message } = await response.json();
+    if (!result && message.includes('auth')) {
+        return signOut(window);
+    }
+    alert(message);
+    renderAgencies(document, idToken);
+}
+
 async function renderAgencies(doc, idToken) {
     agencies = await fetchAgencies(idToken);
     if (agencies && Array.isArray(agencies)) {
@@ -771,6 +853,7 @@ async function renderAgencies(doc, idToken) {
             const span_2 = doc.createElement('span');
             const span_3 = doc.createElement('span');
             const span_4 = doc.createElement('span');
+            const span_5 = doc.createElement('span');
             span_1.innerText = ag.name;
             span_2.innerText = ag.emailAddress;
             span_3.innerText = ag?.introduction || '';
@@ -781,15 +864,24 @@ async function renderAgencies(doc, idToken) {
                 toggleEditAgencyModal(ag.id);
             });
             btn.innerText = 'Edit Agency';
+            const btn1 = document.createElement('span');
+            btn1.className = 'button';
+            btn1.addEventListener('click', () => {
+                deleteAgency(ag.id);
+            });
+            btn1.innerText = 'Delete Agency';
             span_1.className = 'info';
             span_2.className = 'info';
             span_3.className = 'info long';
             span_4.className = 'info';
+            span_5.className = 'info';
             span_4.appendChild(btn);
+            span_5.appendChild(btn1);
             newDiv.appendChild(span_1);
             newDiv.appendChild(span_2);
             newDiv.appendChild(span_3);
             newDiv.appendChild(span_4);
+            newDiv.appendChild(span_5);
             agListContainer.append(newDiv);
         });
     }
