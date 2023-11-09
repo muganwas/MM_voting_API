@@ -29,6 +29,13 @@ async function retrieveNominations(req, res, next) {
     nominationsService.retrieveNominations({ limit, page, judgeId, catId }).then(data => res.json(data)).catch(err => next(err));
 }
 
+async function retrieveAggregatedNominations(req, res, next) {
+    if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
+    if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
+    const { limit } = req.query;
+    nominationsService.aggregatedNomintations({ limit }).then(data => res.json(data)).catch(err => next(err));
+}
+
 async function retrieveNomination(req, res, next) {
     if (!req.headers.authorization) return next({ name: VALIDATION_ERROR, message: VALIDATION_MESSAGE }, req, res, next);
     if (!await validateFirebaseUser(req.headers.authorization)) return next({ name: UNAUTHORIZED_ERROR, message: UNAUTHORIZED_MESSAGE }, req, res, next);
@@ -48,6 +55,7 @@ async function deleteNomination(req, res, next) {
 router.post('/create', createNomination);
 router.put('/update', updateNomination);
 router.get('/', retrieveNominations);
+router.get('/aggregated', retrieveAggregatedNominations);
 router.get('/:nominationId', retrieveNomination);
 router.delete('/', deleteNomination);
 
