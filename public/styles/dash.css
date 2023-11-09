@@ -524,8 +524,10 @@ main {
 						.label.outlined {
 							display: flex;
 							flex-direction: column;
+							margin: 1px;
+							box-sizing: border-box;
 							overflow: scroll;
-							border: thin solid white;
+							border: thin solid var(--LLGray);
 							.title {
 								color: var(--White);
 								font-weight: 700;

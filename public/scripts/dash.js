@@ -1089,6 +1089,7 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
         const span_6 = doc.createElement('span');
         const span_7 = doc.createElement('span');
         const span_8 = doc.createElement('span');
+        const span_9 = doc.createElement('span');
 
         span_1.id = 'judge-id';
         span_2.id = 'campaign-id';
@@ -1098,6 +1099,7 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
         span_6.id = 'kpis_impact-r';
         span_7.id = 'execution-r';
         span_8.id = 'total-r';
+        span_9.id = 'comment-r';
 
         span_1.className = 'info';
         span_2.className = 'info';
@@ -1107,8 +1109,9 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
         span_6.className = 'info';
         span_7.className = 'info';
         span_8.className = 'info';
+        span_9.className = 'info';
 
-        span_1.innerText = n.judgeId.substring(0, 12) + '..';
+        span_1.innerText = users.find(u => u.uid === n.judgeId)?.email;
         span_2.innerText = campaigns?.find(c => c.id === n.campaignId)?.name;
         span_3.innerText = n.alignment;
         span_4.innerText = n.objectives;
@@ -1116,6 +1119,7 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
         span_6.innerText = n.impact;
         span_7.innerText = n.why_win;
         span_8.innerText = n.total;
+        span_9.innerText = n.comment;
 
         newDiv.appendChild(span_1);
         newDiv.appendChild(span_2);
@@ -1125,6 +1129,7 @@ async function renderNominations(doc, idToken, selectedCategoryId) {
         newDiv.appendChild(span_6);
         newDiv.appendChild(span_7);
         newDiv.appendChild(span_8);
+        newDiv.appendChild(span_9);
         nomListContainer.appendChild(newDiv);
     });
 }
