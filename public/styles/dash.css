@@ -569,6 +569,77 @@ main {
 						}
 					}
 				}
+
+				/** Aggregated nominations */
+				#aggregated-info {
+					display: flex;
+					margin: 0 0 var(--m-pm) 0;
+					.users-agg-container {
+						position: relative;
+						display: flex;
+						flex-wrap: wrap;
+						box-sizing: border-box;
+						justify-content: center;
+						/* flex-direction: column; */
+						padding: 10px;
+						flex: 1;
+						.user-agg-container {
+							position: relative;
+							z-index: 10;
+							display: flex;
+							box-sizing: border-box;
+							width: 100%;
+							height: auto;
+							flex-direction: column;
+							border: 2px solid var(--LLGray);
+							padding: 10px;
+							margin: 5px;
+							.agg-name {
+								position: relative;
+								z-index: 1;
+								font-size: var(--lg-font);
+								font-weight: 700;
+								cursor: pointer;
+								.click-to {
+									font-weight: 500;
+									font-size: var(--m-font);
+								}
+							}
+							.agg-cats {
+								display: none;
+								flex-direction: column;
+								.agg-cat {
+									padding: 5px;
+									border: thin solid var(--LLGray);
+									.agg-cat-name {
+										font-size: var(--lg-font);
+										color: var(--Gold);
+										font-weight: 600;
+									}
+									.agg-noms {
+										display: flex;
+										flex-direction: column;
+										.agg-nom {
+											display: flex;
+											flex-direction: column;
+											padding: 5px;
+											.camp-name {
+												font-size: var(--m-font);
+												background-color: var(--LLGray);
+												padding: 3px;
+												color: var(--Gray);
+												font-weight: 500;
+											}
+										}
+									}
+								}
+							}
+							.agg-cats.active {
+								display: flex;
+							}
+						}
+					}
+				}
 			}
 			.details-sub.active {
 				display: flex;

@@ -63,7 +63,8 @@ async function retrieveUsers({ limit = 20, nextPageToken }) {
         const nLimit = Number(limit);
         const aAuth = admin.auth();
         const response = await aAuth.listUsers(nLimit, nextPageToken);
-        return { result: true, message: messages.USERS_RETRIEVED, data: response.users, metaData: { limit, nextPageToken: response.pageToken } };
+        const usersProper = response.users.filter(u => u.email !== process.env.FIREBASE_ADMIN_EMAIL);
+        return { result: true, message: messages.USERS_RETRIEVED, data: usersProper, metaData: { limit, nextPageToken: response.pageToken } };
     } catch (e) {
         return { result: false, message: e.message };
     }

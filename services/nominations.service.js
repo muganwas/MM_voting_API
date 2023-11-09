@@ -3,6 +3,8 @@ const moment = require('moment');
 const { messages } = require('../_helpers/constants');
 const { database } = require('firebase-admin');
 const { retrieveCampaign } = require('./campaigns.service');
+const { retrieveCategories } = require('./categories.service');
+const { retrieveUsers } = require('./users.service');
 const db = database();
 
 async function createNomination({ judgeId, campaignId, categoryId, alignment, objectives, implementation, impact, why_win, comment }) {
@@ -51,7 +53,7 @@ async function updateNomination({ nominationId, details }) {
         return { result: false, message: e.message };
     }
 }
-async function retrieveNominations({ limit = 100, page = 1, judgeId, catId }) {
+async function retrieveNominations({ limit = 200, page = 1, judgeId, catId }) {
     try {
         const nLimit = Number(limit);
         const nPage = Number(page);
@@ -83,6 +85,51 @@ async function retrieveNominations({ limit = 100, page = 1, judgeId, catId }) {
     }
 }
 
+async function aggregatedNomintations({ limit = 5 }) {
+    try {
+        const categories = await retrieveCategories({});
+        const users = await retrieveUsers({});
+        const data = [];
+        const nominations = await retrieveNominations({});
+        if (users?.data && Array.isArray(users.data)) {
+            for (let i = 0; i < users.data.length; i++) {
+                let currentUser = users.data[i];
+                let currentData = {
+                    email: currentUser.email,
+                    categories: []
+                }
+                if (categories.data && Array.isArray(categories.data)) {
+                    for (let i = 0; i < categories.data.length; i++) {
+                        let currentCategory = categories.data[i];
+                        const currentCatObj = {
+                            categoryName: currentCategory.name,
+                            nominations: []
+                        }
+                        if (nominations.data && Array.isArray(nominations.data)) {
+                            const newNom = nominations.data.sort((n, nn) => nn.total - n.total);
+                            let count = 1;
+                            for (let i = 0; i < newNom.length; i++) {
+                                if (count === limit) break;
+                                const currentNom = newNom[i];
+                                if (currentNom.categoryId === currentCategory.id && currentNom.judgeId === currentUser.uid) {
+                                    count++;
+                                    currentCatObj.nominations.push(currentNom);
+                                }
+                            }
+                        }
+                        currentData.categories.push(currentCatObj)
+                    }
+                }
+                data.push(currentData);
+            }
+        }
+        return { result: true, data, message: messages.NOMS_FETCHED };
+
+    } catch (e) {
+        return { result: false, message: e.message };
+    }
+}
+
 async function retrieveNomination({ nominationId }) {
     try {
         if (!nominationId) return { result: false, message: messages.NO_NOM_ID };
@@ -109,6 +156,7 @@ module.exports = {
     createNomination,
     updateNomination,
     retrieveNominations,
+    aggregatedNomintations,
     retrieveNomination,
     deleteNomination
 }
