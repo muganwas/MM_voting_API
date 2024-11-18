@@ -46,7 +46,8 @@
 			font-weight: 700;
 		}
 	}
-	#nomination {
+	#nomination,
+	#nomination-ay {
 		display: flex;
 		flex: 1;
 		flex-direction: column;
@@ -103,14 +104,16 @@
 		.input.dropdown {
 			cursor: pointer;
 		}
-		#submit-nomination {
+		#submit-nomination,
+		#submit-nomination-ay {
 			height: 50px;
 			font-size: var(--lg-font);
 			cursor: pointer;
 			box-sizing: border-box;
 			margin: 0 0 var(--m-pm) 0;
 		}
-		#submit-nomination:disabled {
+		#submit-nomination:disabled,
+		#submit-nomination-ay:disabled {
 			cursor: not-allowed;
 		}
 	}

@@ -4,6 +4,9 @@ var categories;
 var nominations;
 var activeCampaign;
 (async function (doc, win) {
+    const categoryName = categories?.find(c => selectedCategoryId === c.id)?.name;
+    const isAgencyOfTheYear = (categoryName?.toLowerCase())?.includes('agency of the year');
+
     const username = win.localStorage.getItem('j_username');
     const idToken = win.localStorage.getItem('j_idToken');
     const email = win.localStorage.getItem('j_email');
@@ -15,15 +18,23 @@ var activeCampaign;
     const logoutButton = doc.getElementById('logout');
     const categoryDD = doc.getElementById('category-drop-down');
     const nominationForm = doc.getElementById('nomination');
+    const nominationFormAy = doc.getElementById('nomination-ay');
     const nominationContainer = doc.getElementById('nomination-container');
+    const nominationContainerAy = doc.getElementById('nomination-container-ay');
     const modal = doc.getElementsByClassName('modal');
     const alignment = doc.getElementById('alignment');
     const objectives = doc.getElementById('objectives');
     const submit = doc.getElementById('submit-nomination');
+    const submitAy = doc.getElementById('submit-nomination-ay');
     const implementation = doc.getElementById('implementation');
     const impact = doc.getElementById('impact');
     const why_win = doc.getElementById('why_win');
     const comment = doc.getElementById('comment');
+    /** Agency of the year */
+    const execution = doc.getElementById('execution');
+    const sustainability = doc.getElementById('sustainability');
+    const culture = doc.getElementById('culture');
+    const commentAy = doc.getElementById('comment-ay');
 
     const altUsername = email.split('@')[0];
     if (!username || username === 'null') name.innerText = altUsername;
@@ -50,10 +61,25 @@ var activeCampaign;
     "blur change".split(" ").forEach(function (e) {
         comment.addEventListener(e, errorOnNoValue, false);
     });
+    "blur change".split(" ").forEach(function (e) {
+        commentAy.addEventListener(e, errorOnNoValue, false);
+    });
+    "blur change".split(" ").forEach(function (e) {
+        execution.addEventListener(e, errorOnNoValue, false);
+    });
+    "blur change".split(" ").forEach(function (e) {
+        sustainability.addEventListener(e, errorOnNoValue, false);
+    });
+    "blur change".split(" ").forEach(function (e) {
+        culture.addEventListener(e, errorOnNoValue, false);
+    });
     categoryDD.addEventListener('click', toggleCategoryDD);
     nominationForm.addEventListener('submit', submitNomination);
+    nominationFormAy.addEventListener('submit', submitNomination);
     submit.addEventListener('click', submitNomination);
+    submitAy.addEventListener('click', submitNomination);
     nominationContainer.addEventListener('click', preventPropagation);
+    nominationContainerAy.addEventListener('click', preventPropagation);
 
     categories = await fetchCategories(idToken);
     /** set default selectedCategoryId */
@@ -159,18 +185,25 @@ async function renderCampaigns(idToken, selectedCategoryId) {
 }
 
 function toggleNominationModal(campaignId) {
-    const modal = document.getElementById('nomination-modal');
-    const campaignName = document.getElementById('campaign-name');
+    const categoryName = categories?.find(c => selectedCategoryId === c.id)?.name;
+    const isAgencyOfTheYear = (categoryName.toLowerCase()).includes('agency of the year');
+
+    const modal = isAgencyOfTheYear ? document.getElementById('nomination-modal-ay') : document.getElementById('nomination-modal');
+    const campaignName = isAgencyOfTheYear ? document.getElementById('campaign-name-ay') : document.getElementById('campaign-name');
     const alignment = document.getElementById('alignment');
     const objectives = document.getElementById('objectives');
-    const submit = document.getElementById('submit-nomination');
+    const submit = isAgencyOfTheYear ? document.getElementById('submit-nomination-ay') : document.getElementById('submit-nomination');
     const implementation = document.getElementById('implementation');
     const impact = document.getElementById('impact');
     const why_win = document.getElementById('why_win');
-    const comment = document.getElementById('comment');
-    const nCatName = document.getElementById('nom-category-name');
-    const titlePre = document.getElementById('title-pre');
+    const comment = isAgencyOfTheYear ? document.getElementById('comment-ay') : document.getElementById('comment');
+    const nCatName = isAgencyOfTheYear ? document.getElementById('nom-category-name-ay') : document.getElementById('nom-category-name');
+    const titlePre = isAgencyOfTheYear ? document.getElementById('title-pre-ay') : document.getElementById('title-pre');
     const submitDisabled = submit.getAttribute('disabled');
+    /** Agency of the year */
+    const execution = document.getElementById('execution');
+    const sustainability = document.getElementById('sustainability');
+    const culture = document.getElementById('culture');
 
     if (!campaignId || submitDisabled) {
         titlePre.innerText = "Rate ";
@@ -188,36 +221,61 @@ function toggleNominationModal(campaignId) {
         impact.value = null;
         why_win.value = null;
         comment.value = null;
+
+        /** Agency of the year */
+        execution.removeAttribute('disabled');
+        sustainability.removeAttribute('disabled');
+        culture.removeAttribute('disabled');
+
+        execution.value = null;
+        sustainability.value = null;
+        culture.value = null;
     }
     if (modal.classList.contains('active')) {
         return modal.classList.remove('active');
     }
-    nCatName.innerText = categories?.find(c => selectedCategoryId === c.id)?.name;
+    nCatName.innerText = categoryName;
     if (campaignId) {
         activeCampaign = campaigns?.find(c => c.id === campaignId);
         const nom = nominations?.find(n => n.campaignId === campaignId && n.categoryId === selectedCategoryId);
         if (nom) {
-            alignment.value = nom.alignment;
-            alignment.classList.contains('error') && alignment.classList.remove('error');
-            objectives.value = nom.objectives;
-            objectives.classList.contains('error') && objectives.classList.remove('error');
-            implementation.value = nom.implementation;
-            implementation.classList.contains('error') && implementation.classList.remove('error');
-            impact.value = nom.impact;
-            impact.classList.contains('error') && impact.classList.remove('error');
-            why_win.value = nom.why_win;
-            why_win.classList.contains('error') && why_win.classList.remove('error');
-            comment.value = nom.comment;
-            comment.classList.contains('error') && comment.classList.remove('error');
-            titlePre.innerText = "Ratings of ";
-            submit.setAttribute('disabled', true);
-            alignment.setAttribute('disabled', true);
-            objectives.setAttribute('disabled', true);
-            implementation.setAttribute('disabled', true);
-            impact.setAttribute('disabled', true);
-            why_win.setAttribute('disabled', true);
-            comment.setAttribute('disabled', true);
-
+            if (!isAgencyOfTheYear) {
+                alignment.value = nom.alignment;
+                alignment.classList.contains('error') && alignment.classList.remove('error');
+                objectives.value = nom.objectives;
+                objectives.classList.contains('error') && objectives.classList.remove('error');
+                implementation.value = nom.implementation;
+                implementation.classList.contains('error') && implementation.classList.remove('error');
+                impact.value = nom.impact;
+                impact.classList.contains('error') && impact.classList.remove('error');
+                why_win.value = nom.why_win;
+                why_win.classList.contains('error') && why_win.classList.remove('error');
+                comment.value = nom.comment;
+                comment.classList.contains('error') && comment.classList.remove('error');
+                titlePre.innerText = "Ratings of ";
+                submit.setAttribute('disabled', true);
+                alignment.setAttribute('disabled', true);
+                objectives.setAttribute('disabled', true);
+                implementation.setAttribute('disabled', true);
+                impact.setAttribute('disabled', true);
+                why_win.setAttribute('disabled', true);
+                comment.setAttribute('disabled', true);
+            }
+            if (isAgencyOfTheYear) {
+                /** Agency of the year */
+                execution.value = nom.execution;
+                execution.classList.contains('error') && execution.classList.remove('error');
+                sustainability.value = nom.sustainability;
+                sustainability.classList.contains('error') && sustainability.classList.remove('error');
+                culture.value = nom.culture;
+                culture.classList.contains('error') && culture.classList.remove('error');
+                comment.value = nom.comment;
+                comment.classList.contains('error') && comment.classList.remove('error');
+                execution.setAttribute('disabled', true);
+                sustainability.setAttribute('disabled', true);
+                culture.setAttribute('disabled', true);
+                comment.setAttribute('disabled', true);
+            }
         }
         modal.classList.add('active');
         campaignName.innerText = activeCampaign.name;
@@ -227,6 +285,10 @@ function toggleNominationModal(campaignId) {
 
 async function submitNomination(e) {
     e.preventDefault();
+
+    const categoryName = categories?.find(c => selectedCategoryId === c.id)?.name;
+    const isAgencyOfTheYear = (categoryName.toLowerCase()).includes('agency of the year');
+
     const judgeId = window.localStorage.getItem('j_uid');
     const idToken = window.localStorage.getItem('j_idToken');
     const campaignId = activeCampaign.id;
@@ -235,12 +297,26 @@ async function submitNomination(e) {
     const implementation = document.getElementById('implementation');
     const impact = document.getElementById('impact');
     const why_win = document.getElementById('why_win');
-    const comment = document.getElementById('comment');
+    const comment = isAgencyOfTheYear ? document.getElementById('comment-ay') : document.getElementById('comment');
 
-    if (!validateInt(alignment, 20) || !validateInt(objectives, 15) || !validateInt(implementation, 30) || !validateInt(impact, 30) || !validateInt(why_win, 5) || !comment.value)
+    /** Agency of the year */
+    const execution = document.getElementById('execution');
+    const sustainability = document.getElementById('sustainability');
+    const culture = document.getElementById('culture');
+
+
+    if (!isAgencyOfTheYear && (!validateInt(alignment, 20) || !validateInt(objectives, 15) || !validateInt(implementation, 30) || !validateInt(impact, 30) || !validateInt(why_win, 5) || !comment.value))
+        return alert('Fill all fields');
+    else if (isAgencyOfTheYear && (!validateInt(execution, 50) || !validateInt(sustainability, 20) || !validateInt(culture, 30) || !comment.value))
         return alert('Fill all fields');
 
     if (!confirm('Are you statisfied will all ratings?')) return false; // don't submit if user cancels
+
+    const body = isAgencyOfTheYear ? JSON.stringify({
+        judgeId, campaignId, categoryId: selectedCategoryId, execution: execution.value, sustainability: sustainability.value, culture: culture.value, comment: comment.value
+    }) : JSON.stringify({
+        judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment: comment.value
+    });
 
     const response = await fetch('/api/v1/nominations/create', {
         method: 'POST',
@@ -249,9 +325,7 @@ async function submitNomination(e) {
             Accept: 'application/json',
             Authorization: 'Bearer ' + idToken
         },
-        body: JSON.stringify({
-            judgeId, campaignId, categoryId: selectedCategoryId, alignment: alignment.value, objectives: objectives.value, implementation: implementation.value, impact: impact.value, why_win: why_win.value, comment: comment.value
-        })
+        body
     });
     const { result, message } = await response.json();
     toggleNominationModal();

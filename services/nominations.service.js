@@ -7,33 +7,27 @@ const { retrieveCategories } = require('./categories.service');
 const { retrieveUsers } = require('./users.service');
 const db = database();
 
-async function createNomination({ judgeId, campaignId, categoryId, alignment, objectives, implementation, impact, why_win, comment }) {
+async function createNomination({ judgeId, campaignId, categoryId, alignment, objectives, implementation, impact, why_win, execution, sustainability, culture, comment }) {
     try {
-        if (!judgeId || !campaignId || !alignment || !objectives || !implementation || !categoryId || !impact || !why_win || !comment) return { result: false, message: messages.NOM_REQUIRED };
-        if (
-            typeof Number(alignment) !== 'number' ||
-            typeof Number(objectives) !== 'number' ||
-            typeof Number(implementation) !== 'number' ||
-            typeof Number(impact) !== 'number' ||
-            typeof Number(why_win) !== 'number'
-        )
-            return { result: false, message: messages.NOM_RATING_FORMAT };
+        if (!judgeId || !campaignId || !categoryId) return { result: false, message: messages.NOM_REQUIRED };
 
         const { result, message } = await retrieveCampaign({ campaignId });
+
         if (!result) return { result, message }; //Campaign doesn't exist
 
         const baseRef = db.ref();
         const snapshot = await baseRef.once('value');
         const baseVal = snapshot.val();
         const timeStamp = moment.now();
-        const total = Number(alignment) + Number(objectives) + Number(implementation) + Number(impact) + Number(why_win);
+        const total = Number(alignment) + Number(objectives) + Number(implementation) + Number(impact) + Number(why_win) + Number(execution) + Number(sustainability) + Number(culture);
+
         if (baseVal && snapshot.hasChild('nominations')) {
             const nominationRef = baseRef.child('nominations');
-            nominationRef.push({ judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, timeStamp })
+            nominationRef.push({ judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, execution, sustainability, culture, comment, timeStamp })
         }
         else
-            baseRef.child('nominations').push({ judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, timeStamp });
-        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, timeStamp } };
+            baseRef.child('nominations').push({ judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, total, comment, execution, sustainability, culture, timeStamp });
+        return { result: true, message: messages.NOM_CREATED, data: { judgeId, campaignId, alignment, objectives, categoryId, implementation, impact, why_win, execution, sustainability, culture, total, comment, timeStamp } };
 
     } catch (e) {
         return { result: false, message: e.message };

@@ -122,6 +122,7 @@ function onTabClick(e) {
     const container = document.getElementById(containerId);
     const tabs = document.getElementsByClassName('tab');
     const containers = document.getElementsByClassName('details-sub');
+
     if (!target.classList.contains('active')) {
         Array.from(containers).forEach(e => e.classList.remove('active'));
         Array.from(tabs).forEach(e => {
@@ -157,6 +158,23 @@ function toggleNomCategoryDD(e) {
                 categoryId.value = JSON.stringify(selectedCategoryId);
                 selectedCategoryId = c.id;
                 const idToken = window.localStorage.getItem('idToken');
+
+                /** label update */
+
+                const categoryName = categories?.find(ct => c.id === ct.id)?.name;
+                const isAgencyOfTheYear = (categoryName.toLowerCase()).includes('agency of the year');
+
+                const ayLabels = document.getElementById("nominations-info-labels-ay");
+                const labels = document.getElementById("nominations-info-labels");
+
+                if (isAgencyOfTheYear) {
+                    labels.classList.remove('active');
+                    ayLabels.classList.add('active');
+                } else {
+                    !labels.classList.contains('active') && labels.classList.add('active');
+                    ayLabels.classList.contains('active') && ayLabels.classList.remove('active');
+                }
+
                 await renderNominations(document, idToken, selectedCategoryId);
             });
             categoryList.appendChild(br);
@@ -1087,65 +1105,115 @@ function toggleEditCategoryModal(id) {
 /** nominations */
 
 async function renderNominations(doc, idToken, selectedCategoryId) {
+    const categoryName = categories?.find(ct => selectedCategoryId === ct.id)?.name;
+    const isAgencyOfTheYear = (categoryName.toLowerCase()).includes('agency of the year');
+
     nominations = await fetchNominations(idToken, '', selectedCategoryId);
     const selectedCat = doc.getElementById('nom-selected-category');
     const nomListContainer = doc.getElementById('nominations-list');
     nomListContainer.innerHTML = null;
     selectedCat.innerText = categories.find(c => c.id === selectedCategoryId)?.name || 'No Categories Available';
-    nominations?.forEach(n => {
-        const newDiv = doc.createElement('div');
-        newDiv.className = 'nomination-info';/** change class name */
-        const span_1 = doc.createElement('span');
-        const span_2 = doc.createElement('span');
-        const span_3 = doc.createElement('span');
-        const span_4 = doc.createElement('span');
-        const span_5 = doc.createElement('span');
-        const span_6 = doc.createElement('span');
-        const span_7 = doc.createElement('span');
-        const span_8 = doc.createElement('span');
-        const span_9 = doc.createElement('span');
+    isAgencyOfTheYear ?
+        nominations?.forEach(n => {
+            const newDiv = doc.createElement('div');
+            newDiv.className = 'nomination-info';/** change class name */
+            const span_1 = doc.createElement('span');
+            const span_2 = doc.createElement('span');
+            const span_3 = doc.createElement('span');
+            const span_4 = doc.createElement('span');
+            const span_5 = doc.createElement('span');
+            const span_6 = doc.createElement('span');
+            const span_7 = doc.createElement('span');
+            const span_8 = doc.createElement('span');
+            const span_9 = doc.createElement('span');
 
-        span_1.id = 'judge-id';
-        span_2.id = 'campaign-id';
-        span_3.id = 'big-idea-r';
-        span_4.id = 'insight-r';
-        span_5.id = 'comm-integration-r';
-        span_6.id = 'kpis_impact-r';
-        span_7.id = 'execution-r';
-        span_8.id = 'total-r';
-        span_9.id = 'comment-r';
+            span_1.id = 'judge-id';
+            span_2.id = 'campaign-id';
+            span_3.id = 'exec-r';
+            span_4.id = 'sus-r';
+            span_5.id = 'cult-r';
+            span_6.id = 'total-r';
+            span_7.id = 'comment-r';
 
-        span_1.className = 'info';
-        span_2.className = 'info';
-        span_3.className = 'info';
-        span_4.className = 'info';
-        span_5.className = 'info';
-        span_6.className = 'info';
-        span_7.className = 'info';
-        span_8.className = 'info';
-        span_9.className = 'info';
+            span_1.className = 'info';
+            span_2.className = 'info';
+            span_3.className = 'info';
+            span_4.className = 'info';
+            span_5.className = 'info';
+            span_6.className = 'info';
+            span_7.className = 'info';
 
-        span_1.innerText = users.find(u => u.uid === n.judgeId)?.email;
-        span_2.innerText = campaigns?.find(c => c.id === n.campaignId)?.name;
-        span_3.innerText = n.alignment;
-        span_4.innerText = n.objectives;
-        span_5.innerText = n.implementation;
-        span_6.innerText = n.impact;
-        span_7.innerText = n.why_win;
-        span_8.innerText = n.total;
-        span_9.innerText = n.comment;
+            span_1.innerText = users.find(u => u.uid === n.judgeId)?.email;
+            span_2.innerText = campaigns?.find(c => c.id === n.campaignId)?.name;
+            span_3.innerText = n.execution;
+            span_4.innerText = n.sustainability;
+            span_5.innerText = n.culture;
+            span_6.innerText = n.total;
+            span_7.innerText = n.comment;
 
-        newDiv.appendChild(span_1);
-        newDiv.appendChild(span_2);
-        newDiv.appendChild(span_3);
-        newDiv.appendChild(span_4);
-        newDiv.appendChild(span_5);
-        newDiv.appendChild(span_6);
-        newDiv.appendChild(span_7);
-        newDiv.appendChild(span_8);
-        newDiv.appendChild(span_9);
-        nomListContainer.appendChild(newDiv);
-    });
+            newDiv.appendChild(span_1);
+            newDiv.appendChild(span_2);
+            newDiv.appendChild(span_3);
+            newDiv.appendChild(span_4);
+            newDiv.appendChild(span_5);
+            newDiv.appendChild(span_6);
+            newDiv.appendChild(span_7);
+            nomListContainer.appendChild(newDiv);
+        }) :
+        nominations?.forEach(n => {
+            const newDiv = doc.createElement('div');
+            newDiv.className = 'nomination-info';/** change class name */
+            const span_1 = doc.createElement('span');
+            const span_2 = doc.createElement('span');
+            const span_3 = doc.createElement('span');
+            const span_4 = doc.createElement('span');
+            const span_5 = doc.createElement('span');
+            const span_6 = doc.createElement('span');
+            const span_7 = doc.createElement('span');
+            const span_8 = doc.createElement('span');
+            const span_9 = doc.createElement('span');
+
+            span_1.id = 'judge-id';
+            span_2.id = 'campaign-id';
+            span_3.id = 'big-idea-r';
+            span_4.id = 'insight-r';
+            span_5.id = 'comm-integration-r';
+            span_6.id = 'kpis_impact-r';
+            span_7.id = 'execution-r';
+            span_8.id = 'total-r';
+            span_9.id = 'comment-r';
+
+            span_1.className = 'info';
+            span_2.className = 'info';
+            span_3.className = 'info';
+            span_4.className = 'info';
+            span_5.className = 'info';
+            span_6.className = 'info';
+            span_7.className = 'info';
+            span_8.className = 'info';
+            span_9.className = 'info';
+
+            span_1.innerText = users.find(u => u.uid === n.judgeId)?.email;
+            span_2.innerText = campaigns?.find(c => c.id === n.campaignId)?.name;
+            span_3.innerText = n.alignment;
+            span_4.innerText = n.objectives;
+            span_5.innerText = n.implementation;
+            span_6.innerText = n.impact;
+            span_7.innerText = n.why_win;
+            span_8.innerText = n.total;
+            span_9.innerText = n.comment;
+
+            newDiv.appendChild(span_1);
+            newDiv.appendChild(span_2);
+            newDiv.appendChild(span_3);
+            newDiv.appendChild(span_4);
+            newDiv.appendChild(span_5);
+            newDiv.appendChild(span_6);
+            newDiv.appendChild(span_7);
+            newDiv.appendChild(span_8);
+            newDiv.appendChild(span_9);
+            nomListContainer.appendChild(newDiv);
+        });
 }
 
 async function renderAggregatedNominations(doc, idToken) {
@@ -1178,42 +1246,74 @@ async function renderAggregatedNominations(doc, idToken) {
                 catNameCont.innerText = cat.categoryName;
                 const nomins = cat.nominations;
                 if (nomins && Array.isArray(nomins)) {
-                    nomins.forEach(nom => {
-                        const nomContainer = doc.createElement('div');
-                        const campName = doc.createElement('span');
-                        const alCont = doc.createElement('span');
-                        const objBud = doc.createElement('span');
-                        const impl = doc.createElement('span');
-                        const impact = doc.createElement('span');
-                        const whyU = doc.createElement('span');
-                        const total = doc.createElement('span');
 
-                        campName.className = 'camp-name';
-                        alCont.className = 'rating';
-                        objBud.className = 'rating';
-                        impl.className = 'rating';
-                        impact.className = 'rating';
-                        whyU.className = 'rating';
-                        total.className = 'rating total';
-                        nomContainer.className = "agg-nom";
+                    const isAgencyOfTheYear = (cat.categoryName).toLowerCase().includes('agency of the year');
 
-                        campName.innerText = campaigns.find(c => c.id === nom.campaignId)?.name;
-                        alCont.innerText = nom.alignment ? 'Alignment to Strategy - ' + nom.alignment + '%' : 'Not availble';
-                        objBud.innerText = nom.objectives ? 'Objectives and Budget - ' + nom.objectives + '%' : 'Not availble';
-                        impl.innerText = nom.implementation ? 'Implementation - ' + nom.implementation + '%' : 'Not availble';
-                        impact.innerText = nom.impact ? 'Impact - ' + nom.impact + '%' : 'Not availble';
-                        whyU.innerText = nom.why_win ? 'Why your Campaign Should Win - ' + nom.why_win + '%' : 'Not availble';
-                        total.innerText = nom.total ? 'Total - ' + nom.total + '%' : 'Not availble';
+                    isAgencyOfTheYear ?
+                        nomins.forEach(nom => {
+                            const nomContainer = doc.createElement('div');
+                            const campName = doc.createElement('span');
+                            const exec = doc.createElement('span');
+                            const sust = doc.createElement('span');
+                            const cult = doc.createElement('span');
+                            const total = doc.createElement('span');
 
-                        nomContainer.appendChild(campName);
-                        nomContainer.appendChild(alCont);
-                        nomContainer.appendChild(objBud);
-                        nomContainer.appendChild(impl);
-                        nomContainer.appendChild(impact);
-                        nomContainer.appendChild(whyU);
-                        nomContainer.appendChild(total);
-                        nomsContainer.appendChild(nomContainer);
-                    });
+                            campName.className = 'camp-name';
+                            exec.className = 'rating';
+                            sust.className = 'rating';
+                            cult.className = 'rating';
+                            total.className = 'rating total';
+                            nomContainer.className = "agg-nom";
+
+                            campName.innerText = campaigns.find(c => c.id === nom.campaignId)?.name;
+                            exec.innerText = nom.execution ? 'Work Executed - ' + nom.execution + '%' : 'Not availble';
+                            sust.innerText = nom.sustainability ? 'Sustainability - ' + nom.sustainability + '%' : 'Not availble';
+                            cult.innerText = nom.culture ? 'Culture - ' + nom.culture + '%' : 'Not availble';
+                            total.innerText = nom.total ? 'Total - ' + nom.total + '%' : 'Not availble';
+
+                            nomContainer.appendChild(campName);
+                            nomContainer.appendChild(exec);
+                            nomContainer.appendChild(sust);
+                            nomContainer.appendChild(cult);
+                            nomContainer.appendChild(total);
+                            nomsContainer.appendChild(nomContainer);
+                        }) :
+                        nomins.forEach(nom => {
+                            const nomContainer = doc.createElement('div');
+                            const campName = doc.createElement('span');
+                            const alCont = doc.createElement('span');
+                            const objBud = doc.createElement('span');
+                            const impl = doc.createElement('span');
+                            const impact = doc.createElement('span');
+                            const whyU = doc.createElement('span');
+                            const total = doc.createElement('span');
+
+                            campName.className = 'camp-name';
+                            alCont.className = 'rating';
+                            objBud.className = 'rating';
+                            impl.className = 'rating';
+                            impact.className = 'rating';
+                            whyU.className = 'rating';
+                            total.className = 'rating total';
+                            nomContainer.className = "agg-nom";
+
+                            campName.innerText = campaigns.find(c => c.id === nom.campaignId)?.name;
+                            alCont.innerText = nom.alignment ? 'Alignment to Strategy - ' + nom.alignment + '%' : 'Not availble';
+                            objBud.innerText = nom.objectives ? 'Objectives and Budget - ' + nom.objectives + '%' : 'Not availble';
+                            impl.innerText = nom.implementation ? 'Implementation - ' + nom.implementation + '%' : 'Not availble';
+                            impact.innerText = nom.impact ? 'Impact - ' + nom.impact + '%' : 'Not availble';
+                            whyU.innerText = nom.why_win ? 'Why your Campaign Should Win - ' + nom.why_win + '%' : 'Not availble';
+                            total.innerText = nom.total ? 'Total - ' + nom.total + '%' : 'Not availble';
+
+                            nomContainer.appendChild(campName);
+                            nomContainer.appendChild(alCont);
+                            nomContainer.appendChild(objBud);
+                            nomContainer.appendChild(impl);
+                            nomContainer.appendChild(impact);
+                            nomContainer.appendChild(whyU);
+                            nomContainer.appendChild(total);
+                            nomsContainer.appendChild(nomContainer);
+                        });
                 }
                 catContainer.appendChild(catNameCont);
                 catContainer.appendChild(nomsContainer);
