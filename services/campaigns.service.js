@@ -4,7 +4,7 @@ const { messages } = require('../_helpers/constants');
 const { createCompany } = require('./companies.service');
 const { createAgency } = require('./agencies.service');
 const { database } = require('firebase-admin');
-const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } = require('firebase/storage');
 
 const storage = getStorage();
 const db = database();
@@ -148,6 +148,7 @@ async function deleteCampaign({ campaignId }) {
     try {
         if (!campaignId) return { result: false, message: messages.NO_CAMP_ID };
         const campaignRef = db.ref(`campaigns/${campaignId}`);
+        /**TODO: delete entry files from storage */
         await campaignRef.remove();
         return { result: true, message: messages.CAMP_DELETED };
     } catch (e) {

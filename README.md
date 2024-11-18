@@ -1,3 +1,7 @@
+## Env set up
+1 - Recommended npm version v16.14.2 (please update if upgraged)
+2 - FIREBASE_ADMIN_PRIVATE_KEY should include next line commands (\n)
+
 ## Creat Campaign
 
 # URI: https://octagonal-ancient-feverfew.glitch.me/api/v1

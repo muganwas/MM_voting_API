@@ -511,8 +511,9 @@ main {
 				/** nominations */
 				#nominations-info {
 					margin: 0 0 var(--m-pm) 0;
-					#nominations-info-labels {
-						display: flex;
+					#nominations-info-labels,
+					#nominations-info-labels-ay {
+						display: none;
 						background-color: var(--LGray);
 						padding: var(--sm-pm) var(--m-pm);
 						color: var(--White);
@@ -537,6 +538,10 @@ main {
 							display: flex;
 							flex: 2;
 						}
+					}
+					#nominations-info-labels.active,
+					#nominations-info-labels-ay.active {
+						display: flex;
 					}
 					#nominations-list {
 						display: flex;
